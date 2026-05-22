@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Kettesben Itókás 💘</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0d0a0e;
+  --surface: #191223;
+  --card: #1e1630;
+  --romantic: #e8537a;
+  --funny: #f5a623;
+  --spicy: #ff4757;
+  --memories: #7c6fcd;
+  --gold: #d4af6a;
+  --text: #f0e8f5;
+  --muted: #6e5f82;
+  --border: rgba(212,175,106,0.15);
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  min-height: 100dvh;
+}
+
+.screen { display:none; flex-direction:column; align-items:center; min-height:100dvh; padding:24px 20px 40px; }
+.screen.active { display:flex; }
+
+/* ── START ── */
+#s-start { justify-content:center; gap:24px; text-align:center; }
+.logo-icon { font-size:58px; animation:float 3s ease-in-out infinite; }
+@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+.logo-title {
+  font-family:'Playfair Display',serif; font-size:30px; font-weight:700;
+  background:linear-gradient(135deg,var(--gold),var(--romantic));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  line-height:1.2; margin-top:8px;
+}
+.logo-sub { font-size:13px; color:var(--muted); font-style:italic; }
+
+.rules-card {
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:20px; padding:18px 20px; width:100%;
+  display:flex; flex-direction:column; gap:10px;
+}
+.rules-title { font-family:'Playfair Display',serif; font-size:14px; color:var(--gold); text-align:center; margin-bottom:2px; }
+.rule { display:flex; gap:10px; align-items:flex-start; font-size:13px; color:#b8a8c8; line-height:1.5; }
+.rule-icon { font-size:15px; flex-shrink:0; margin-top:1px; }
+
+/* ── CATEGORY ── */
+#s-category { gap:16px; justify-content:center; }
+.screen-title { font-family:'Playfair Display',serif; font-size:26px; color:var(--gold); text-align:center; }
+.screen-sub { font-size:13px; color:var(--muted); text-align:center; }
+.cat-list { width:100%; display:flex; flex-direction:column; gap:12px; margin-top:4px; }
+.cat-item {
+  width:100%; padding:18px 20px; border-radius:18px; border:1px solid;
+  cursor:pointer; display:flex; align-items:center; gap:14px;
+  transition:transform 0.15s; text-align:left;
+}
+.cat-item:active { transform:scale(0.97); }
+.cat-item.locked { opacity:0.4; pointer-events:none; }
+.cat-item.romantic { background:rgba(232,83,122,0.07); border-color:rgba(232,83,122,0.22); }
+.cat-item.funny    { background:rgba(245,166,35,0.07);  border-color:rgba(245,166,35,0.22); }
+.cat-item.spicy    { background:rgba(255,71,87,0.07);   border-color:rgba(255,71,87,0.22); }
+.cat-item.memories { background:rgba(124,111,205,0.07); border-color:rgba(124,111,205,0.22); }
+.cat-emoji { font-size:34px; }
+.cat-info { flex:1; }
+.cat-name { font-family:'Playfair Display',serif; font-size:17px; font-weight:700; }
+.cat-item.romantic .cat-name { color:var(--romantic); }
+.cat-item.funny    .cat-name { color:var(--funny); }
+.cat-item.spicy    .cat-name { color:var(--spicy); }
+.cat-item.memories .cat-name { color:var(--memories); }
+.cat-desc { font-size:12px; color:var(--muted); margin-top:2px; }
+.soon-badge {
+  font-size:10px; font-weight:600; padding:3px 10px; border-radius:50px;
+  background:rgba(124,111,205,0.15); color:var(--memories); letter-spacing:0.06em;
+}
+
+/* ── GAME ── */
+#s-game { justify-content:flex-start; gap:14px; padding-top:20px; }
+.game-header { width:100%; display:flex; align-items:center; justify-content:space-between; }
+.back-btn {
+  width:36px; height:36px; border-radius:50%; border:1px solid var(--border);
+  background:transparent; color:var(--muted); font-size:17px; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+}
+.round-badge { font-size:13px; color:var(--muted); font-weight:500; }
+.prog-bar { width:100%; height:3px; background:rgba(255,255,255,0.06); border-radius:99px; overflow:hidden; }
+.prog-fill { height:100%; border-radius:99px; transition:width 0.4s ease; }
+.who-label { font-size:11px; letter-spacing:0.08em; font-weight:600; text-transform:uppercase; text-align:center; opacity:0.8; }
+.q-card {
+  width:100%; background:var(--card); border:1px solid var(--border);
+  border-radius:24px; padding:28px 24px; text-align:center;
+}
+.q-cat-badge {
+  font-size:11px; font-weight:600; letter-spacing:0.07em; text-transform:uppercase;
+  display:inline-block; padding:4px 14px; border-radius:50px; margin-bottom:14px;
+}
+.q-text { font-family:'Playfair Display',serif; font-size:19px; font-style:italic; line-height:1.55; }
+.options { width:100%; display:flex; flex-direction:column; gap:10px; }
+.opt-btn {
+  width:100%; padding:16px 20px; border-radius:16px; border:1.5px solid var(--border);
+  background:var(--surface); color:var(--text); font-family:'DM Sans',sans-serif;
+  font-size:15px; font-weight:500; cursor:pointer;
+  display:flex; align-items:center; gap:12px; text-align:left;
+  transition:all 0.18s;
+}
+.opt-btn:active { transform:scale(0.98); }
+.opt-btn:disabled { cursor:default; }
+.opt-btn.pressed { border-color:var(--gold); background:rgba(212,175,106,0.1); color:var(--gold); }
+.opt-letter {
+  width:26px; height:26px; border-radius:50%; background:rgba(255,255,255,0.07);
+  display:flex; align-items:center; justify-content:center;
+  font-size:12px; font-weight:700; flex-shrink:0;
+}
+.opt-btn.pressed .opt-letter { background:rgba(212,175,106,0.25); }
+.result-banner {
+  width:100%; padding:14px 18px; border-radius:14px; text-align:center;
+  font-size:14px; font-weight:600; display:none;
+}
+.result-banner.match { background:rgba(74,222,128,0.12); color:#4ade80; border:1px solid rgba(74,222,128,0.25); }
+.result-banner.nomatch { background:rgba(255,71,87,0.12); color:var(--spicy); border:1px solid rgba(255,71,87,0.25); }
+.result-banner.waiting { background:rgba(212,175,106,0.1); color:var(--gold); border:1px solid rgba(212,175,106,0.2); }
+.switch-hint { font-size:12px; color:var(--muted); text-align:center; }
+
+/* ── DONE ── */
+#s-done { justify-content:center; text-align:center; gap:22px; }
+.done-icon { font-size:68px; animation:float 3s ease-in-out infinite; }
+.done-title {
+  font-family:'Playfair Display',serif; font-size:28px;
+  background:linear-gradient(135deg,var(--gold),var(--romantic));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+}
+.done-sub { font-size:15px; color:var(--muted); line-height:1.65; }
+
+/* ── BUTTONS ── */
+.btn { width:100%; padding:17px; border-radius:16px; border:none; font-family:'DM Sans',sans-serif; font-size:16px; font-weight:700; cursor:pointer; transition:transform 0.15s; display:flex; align-items:center; justify-content:center; gap:8px; }
+.btn:active { transform:scale(0.97); }
+.btn.primary { background:linear-gradient(135deg,#e8537a,#c73a60); color:#fff; box-shadow:0 8px 28px rgba(232,83,122,0.3); }
+.btn.gold { background:linear-gradient(135deg,var(--gold),#b8962e); color:#0d0a0e; box-shadow:0 6px 22px rgba(212,175,106,0.25); }
+.btn.outline { background:transparent; border:1px solid var(--border); color:var(--muted); }
+.btn-row { width:100%; display:flex; flex-direction:column; gap:10px; }
+</style>
+</head>
+<body>
+
+<!-- START -->
+<div class="screen active" id="s-start">
+  <div class="logo-icon">💘</div>
+  <div>
+    <div class="logo-title">Kettesben Itókás</div>
+    <div class="logo-sub" style="margin-top:6px">ismeritek-e egymást igazán?</div>
+  </div>
+  <div class="rules-card">
+    <div class="rules-title">⚡ Hogyan megy</div>
+    <div class="rule"><span class="rule-icon">📱</span><span>Az egyik játékos tartja a telefont</span></div>
+    <div class="rule"><span class="rule-icon">🗣️</span><span>A <strong>partner szóban mond A-t vagy B-t</strong></span></div>
+    <div class="rule"><span class="rule-icon">👆</span><span>A <strong>telefonnál lévő megnyomja</strong> amit gondol</span></div>
+    <div class="rule"><span class="rule-icon">🍺</span><span>Ha nem egyezik → <strong>isztok egyet</strong>, majd tovább</span></div>
+    <div class="rule"><span class="rule-icon">🔄</span><span>Körönként adjátok át a telefont egymásnak</span></div>
+  </div>
+  <button class="btn primary" onclick="show('s-category')">Játék kezdése 🥂</button>
+</div>
+
+<!-- CATEGORY -->
+<div class="screen" id="s-category">
+  <div style="text-align:center; margin-bottom:4px; margin-top:16px">
+    <div class="screen-title">Kategória</div>
+    <div class="screen-sub" style="margin-top:4px">Melyikkel kezditek?</div>
+  </div>
+  <div class="cat-list">
+    <div class="cat-item romantic" onclick="startGame('romantic')">
+      <div class="cat-emoji">💕</div>
+      <div class="cat-info">
+        <div class="cat-name">Romantikus</div>
+        <div class="cat-desc">Érzések, szokások, álmok</div>
+      </div>
+    </div>
+    <div class="cat-item funny" onclick="startGame('funny')">
+      <div class="cat-emoji">😂</div>
+      <div class="cat-info">
+        <div class="cat-name">Vicces</div>
+        <div class="cat-desc">Választások, hülyeségek, nevetés</div>
+      </div>
+    </div>
+    <div class="cat-item spicy" onclick="startGame('spicy')">
+      <div class="cat-emoji">🔥</div>
+      <div class="cat-info">
+        <div class="cat-name">Pikáns</div>
+        <div class="cat-desc">Csak bátraknak 😏</div>
+      </div>
+    </div>
+    <div class="cat-item memories" onclick="startGame('memories')">
+      <div class="cat-emoji">📸</div>
+      <div class="cat-info">
+        <div class="cat-name">Emlékek</div>
+        <div class="cat-desc">A ti közös történetetek</div>
+      </div>
+    </div>
+    <div class="cat-item" onclick="startGame('random')" style="background:rgba(255,255,255,0.04); border-color:rgba(255,255,255,0.12);">
+      <div class="cat-emoji">🎲</div>
+      <div class="cat-info">
+        <div class="cat-name" style="color:#a0d8ef">Random</div>
+        <div class="cat-desc">20 kérdés, minden kategóriából</div>
+      </div>
+    </div>
+    <div class="cat-item" onclick="showSecret()" style="background:rgba(255,0,0,0.05); border-color:rgba(255,0,0,0.2);">
+      <div class="cat-emoji">⛔</div>
+      <div class="cat-info">
+        <div class="cat-name" style="color:#ff4444; font-size:19px; letter-spacing:0.04em">NE KATTINTS RÁ</div>
+      </div>
+    </div>
+  </div>
+  <button class="btn outline" style="margin-top:8px" onclick="show('s-start')">← Vissza</button>
+</div>
+
+<!-- SECRET MODAL -->
+<div id="secret-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.95); z-index:999; flex-direction:column; align-items:center; justify-content:center; padding:36px 28px; text-align:center; gap:28px;">
+  <div style="font-size:56px; animation:float 3s ease-in-out infinite;">💔</div>
+  <div style="font-family:'Playfair Display',serif; font-size:20px; line-height:1.8; color:#f0e8f5;">
+    Sajnálom hogy nem egy életre szólt.<br><br>
+    Vissza mehetnék az időben,<br>
+    minden úgy csinálnék hogy<br><br>
+    <span style="background:linear-gradient(135deg,#d4af6a,#e8537a); -webkit-background-clip:text; -webkit-text-fill-color:transparent; font-weight:700; font-size:22px;">ne enyhüljön a szerelmed</span><br><br>
+    és egy egész életen át tartson ki<br>a közös <span style="color:#d4af6a; font-weight:700; font-size:22px;">SZTORINK!</span>
+  </div>
+  <button class="btn outline" style="max-width:260px; margin-top:8px" onclick="document.getElementById('secret-modal').style.display='none'">← Vissza</button>
+</div>
+<div class="screen" id="s-game">
+  <div class="game-header">
+    <button class="back-btn" onclick="show('s-category')">←</button>
+    <div class="round-badge" id="round-badge">1 / 10</div>
+    <div style="width:36px"></div>
+  </div>
+
+  <div class="prog-bar">
+    <div class="prog-fill" id="prog-fill" style="width:10%"></div>
+  </div>
+
+  <div class="who-label" id="who-label">Kérdés rólad!</div>
+
+  <div class="q-card">
+    <div class="q-cat-badge" id="q-badge"></div>
+    <div class="q-text" id="q-text"></div>
+  </div>
+
+  <div class="options">
+    <button class="opt-btn" id="opt-a" onclick="selectOpt(0)">
+      <div class="opt-letter">A</div>
+      <span id="opt-a-text"></span>
+    </button>
+    <button class="opt-btn" id="opt-b" onclick="selectOpt(1)">
+      <div class="opt-letter">B</div>
+      <span id="opt-b-text"></span>
+    </button>
+  </div>
+
+  <div class="btn-row" id="next-row" style="display:none">
+    <button class="btn gold" id="next-btn" onclick="nextRound()">Következő →</button>
+  </div>
+</div>
+
+<!-- DONE -->
+<div class="screen" id="s-done">
+  <div class="done-icon">🏆</div>
+  <div class="done-title">Vége a játéknak!</div>
+  <div class="done-sub">Remélhetőleg a kapcsolatotok<br>erősebb lett mint az italotok 😄</div>
+  <div class="btn-row">
+    <button class="btn primary" onclick="show('s-category')">Új kategória 🎴</button>
+    <button class="btn outline" onclick="show('s-start')">Főmenü</button>
+  </div>
+</div>
+
+<script>
+const QUESTIONS = {
+  romantic: [
+    { q:"Mit szeretsz legjobban a párodban?", a:"Az érzékenységét, gondoskodását", b:"A humorát, lazaságát", who:"Kérdés rólad!" },
+    { q:"Melyik randistílust részesíted előnyben?", a:"Otthon film + pizza kettesben", b:"Kint vacsora és séta", who:"Kérdés rólad!" },
+    { q:"Ha elmehetnétek valahova, hova mennétek?", a:"Tengerpart, meleg ország", b:"Városnézés, kulturális élmény", who:"Mit mondana a párod rólad?" },
+    { q:"Mikor érzed magad a legjobban?", a:"Nagy társaságban, buliban", b:"Kettesben, csendben otthon", who:"Kérdés rólad!" },
+    { q:"Mi fontosabb neked egy kapcsolatban?", a:"Szavak, bókok, vallomások", b:"Tettek, meglepetések, figyelmesség", who:"Kérdés rólad!" },
+    { q:"Mi zavar jobban?", a:"Ha valaki rendetlen körülötted", b:"Ha valaki mindig késik", who:"Mit mondana a párod rólad?" },
+    { q:"Mit csinálsz ha nagyon rossz napod volt?", a:"Elvonulsz és csendben vagy", b:"Mesélsz és kibeszéled magad", who:"Kérdés rólad!" },
+    { q:"Melyik évszakot szereted jobban?", a:"Nyár – meleg, napfény, strand", b:"Tél – otthon, meleg tea, csend", who:"Mit mondana a párod rólad?" },
+    { q:"Ha meglepetést kapnál, mit preferálnál?", a:"Közös élmény, program, kirándulás", b:"Fizikai ajándék amit magadnak nem vennél", who:"Kérdés rólad!" },
+    { q:"Reggel vagy este vagy jobb kedven?", a:"Reggel – frissen ébredsz", b:"Este – lassan melegszel be", who:"Mit mondana a párod rólad?" },
+    { q:"Hogyan mutatsz szeretetet?", a:"Fizikai közelséggel, öleléssel", b:"Apró dolgokkal, figyelmességgel", who:"Mit mondana a párod rólad?" },
+    { q:"Ha valamin gondolkozol, hogyan dolgozod fel?", a:"Magadban, csendben", b:"Másokkal megbeszélve", who:"Kérdés rólad!" },
+    { q:"Melyik jellemzőbb rád?", a:"Érzelmeid alapján döntesz", b:"Logikád alapján döntesz", who:"Mit mondana a párod rólad?" },
+    { q:"Mi a fontosabb hosszú távon?", a:"Közös szenvedélyek, hobbik", b:"Egymást kiegészítő különbségek", who:"Kérdés rólad!" },
+    { q:"Ha film lenne az életed, mi lenne?", a:"Romantikus vígjáték", b:"Kaland és akció", who:"Mit mondana a párod rólad?" },
+    { q:"Mit csinálsz ha a párod rossz kedvű?", a:"Hagyod hogy magától jöjjön ki belőle", b:"Azonnal megkérdezed mi a baj és próbálsz segíteni", who:"Kérdés rólad!" },
+    { q:"Mi fontosabb számodra egy kapcsolatban?", a:"Közös jövőkép és azonos célok", b:"Jó érzés a jelenben — a jövő majd megoldja magát", who:"Mit mondana a párod rólad?" },
+    { q:"Hogyan kezeled a konfliktusokat?", a:"Azonnal megbeszéled, nem tarthatsz haragot", b:"Időt kérsz magadnak, majd nyugodtan tárgyalod meg", who:"Kérdés rólad!" },
+    { q:"Melyik a jobb este kettesben?", a:"Hosszú vacsora ahol sokat beszélgettetek", b:"Csendben egymás mellett lenni, nem kell szó", who:"Mit mondana a párod rólad?" },
+    { q:"Melyik közelebb áll hozzád?", a:"A függetlenség fontos, kellenek a saját terek", b:"Minél több időt tölteni együtt, annál jobb", who:"Kérdés rólad!" },
+    { q:"Hogyan ünnepelsz ha a párodnak sikerült valami?", a:"Megünneplitek külön programmal", b:"Egyszerűen de szívből gratulálsz", who:"Mit mondana a párod rólad?" },
+    { q:"Mi fontosabb egy hosszú kapcsolatban?", a:"Megőrizni az izgalmat és az újdonságot", b:"Elmélyíteni a bizalmat és a kényelmet", who:"Kérdés rólad!" },
+    { q:"Hogyan kezeled ha a párod hibázott?", a:"Megbeszélitek de nem emlegeted vissza", b:"Időre van szükséged míg teljesen elengedted", who:"Mit mondana a párod rólad?" },
+    { q:"Mi fontosabb számodra?", a:"A párod aktívan figyeljen rád mikor mesélsz", b:"A párod ott legyen melletted, nem kell mindig szó", who:"Kérdés rólad!" },
+    { q:"Melyik romantikusabb számodra?", a:"Váratlan virág vagy ajándék ok nélkül", b:"Egy hosszú ölelés ami mindent elmond", who:"Mit mondana a párod rólad?" },
+    { q:"Ha vita van kettőtök között, hogyan viselkedsz?", a:"Azonnal kibeszélitek, nem mész el aludni haraggal", b:"Szünetet tartasz, majd nyugodtan tárgyalod meg", who:"Kérdés rólad!" },
+    { q:"Melyik jobban leír téged?", a:"Jelzed ha valami bántott, azonnal kimondod", b:"Magadban dolgozod fel, csak ha nagy baj van szólsz", who:"Mit mondana a párod rólad?" },
+    { q:"Mikor érzed hogy a párod szeret?", a:"Amikor emlékezik arra amit mondtál és megteszi", b:"Amikor fizikailag közel van hozzád", who:"Kérdés rólad!" },
+    { q:"Melyik fontosabb számodra?", a:"Hogy a párod büszke legyen rád mások előtt", b:"Hogy otthon, kettesben érezd a szerelmét", who:"Mit mondana a párod rólad?" },
+    { q:"Mit csinálsz ha a párod elfoglalt és nem ér rá?", a:"Jól vagy egyedül is, megérti", b:"Hiányzik és nehezen érzed jól magad nélküle", who:"Kérdés rólad!" },
+    { q:"Mi jellemzőbb rád egy kapcsolatban?", a:"Inkább túl sokat kommunikálsz", b:"Inkább kevesebbet, magadban tartasz dolgokat", who:"Mit mondana a párod rólad?" },
+    { q:"Melyik a fontosabb?", a:"Hogy a párod megértsen", b:"Hogy a párod elfogadjon olyannak amilyen vagy", who:"Kérdés rólad!" },
+    { q:"Mit csinálsz ha a párod valami olyat csinál amit nem szeretsz?", a:"Azonnal szólsz, nem hagyod szó nélkül", b:"Mérlegelsz — megéri-e szólni, vagy inkább elengeded", who:"Mit mondana a párod rólad?" },
+    { q:"Melyik jellemzőbb rád?", a:"Könnyen kimondod hogy szeretsz valakit", b:"Nehezebb szavakkal kifejezni az érzéseidet", who:"Kérdés rólad!" },
+    { q:"Mi fontosabb számodra hogy a párodban meglegyen?", a:"Ambíció és célok az életben", b:"Nyugalom és kiegyensúlyozottság", who:"Mit mondana a párod rólad?" },
+    { q:"Hogyan töltöd fel magad?", a:"Egyedül — csend és magány kell", b:"A párod társaságában — ő ad energiát", who:"Kérdés rólad!" },
+    { q:"Melyik a jobb meglepetés?", a:"Spontán program amit azonnal csináltok", b:"Gondosan előre megtervezett különleges este", who:"Mit mondana a párod rólad?" },
+    { q:"Mi fontosabb számodra?", a:"Hogy a párod megvédjen ha kell", b:"Hogy a párod egyenrangú félként kezeljen mindig", who:"Kérdés rólad!" },
+    { q:"Melyik a jobb módja a bocsánatkérésnek?", a:"Szavakkal — elmondod mi volt a hiba és sajnálod", b:"Tettekkel — megcsinálsz valamit ami mutatja hogy sajnálod", who:"Mit mondana a párod rólad?" },
+    { q:"Hogyan jelzed ha szükséged van a párodra?", a:"Egyenesen megmondod — szükségem van rád most", b:"Közvetve jelzed, reméled hogy ő is érzi", who:"Kérdés rólad!" },
+    { q:"Mi fontosabb számodra?", a:"Hogy a párodmal megosszd minden gondolatodat", b:"Hogy legyenek titkaid és saját gondolataid is", who:"Mit mondana a párod rólad?" },
+    { q:"Melyik jobban jellemez?", a:"Féltékeny típus vagy ha kell", b:"Nem vagy féltékeny, bizol a párodban mindig", who:"Kérdés rólad!" },
+    { q:"Ha a párod szomorú, mit csinálsz?", a:"Megkérdezed mi a baj és megpróbálsz megoldást találni", b:"Egyszerűen ott vagy mellette, nem kell megoldani", who:"Mit mondana a párod rólad?" },
+    { q:"Melyik romantikusabb?", a:"Hosszú séta kettesben este", b:"Otthon főzni együtt valamit", who:"Kérdés rólad!" },
+    { q:"Mi jellemzőbb rád?", a:"Inkább korai lefekváses típus vagy", b:"Inkább éjjeli bagoly vagy", who:"Mit mondana a párod rólad?" },
+    { q:"Melyik fontosabb számodra?", a:"A párod legyen a legjobb barátod is", b:"A párod legyen a szerelmed — a barátság más emberekkel legyen", who:"Kérdés rólad!" },
+    { q:"Hogyan fejezed ki hogy valaki fontos neked?", a:"Sok időt töltesz vele", b:"Apró figyelmességekkel kedveskedsz neki", who:"Mit mondana a párod rólad?" },
+    { q:"Melyik jellemzőbb rád?", a:"Könnyen megbocsátasz, nem tartasz haragot", b:"Nehezebben engedsz el dolgokat ha megbántottak", who:"Kérdés rólad!" },
+    { q:"Mi fontosabb számodra?", a:"Hogy a párod hasonló értékrenddel bírjon", b:"Hogy a párod más szemszögből látja a világot mint te", who:"Mit mondana a párod rólad?" },
+    { q:"Mit csinálsz ha a párod valamiben nem ért egyet veled?", a:"Megpróbálod meggyőzni az álláspontodról", b:"Elfogadod a különbséget és nem erőlteted", who:"Kérdés rólad!" },
+    { q:"Mi jellemzőbb rád kapcsolatban?", a:"Inkább te kezdeményezed a közelséget", b:"Inkább megvárod hogy a párod kezdeményezzen", who:"Mit mondana a párod rólad?" },
+    { q:"Ha a párod valami újat szeretne kipróbálni amit te nem akarsz, mit csinálsz?", a:"Megpróbálod a kedvéért, hátha tetszik", b:"Nyíltan megmondod hogy nem vagy benne és megegyeztek", who:"Kérdés rólad!" },
+    { q:"Mi jellemzőbb rád?", a:"Szívesen teszel apró meglepetéseket a párodnak", b:"Inkább a nagy gesztusokra koncentrálsz ritkábban", who:"Mit mondana a párod rólad?" },
+    { q:"Melyik érzelmi szükséglet fontosabb neked?", a:"Biztonság — tudni hogy mindig ott lesz a párod", b:"Szabadság — tudni hogy te magad döntesz az életedről", who:"Kérdés rólad!" },
+    { q:"Hogyan viselkedsz ha a párod hibát csinál?", a:"Azonnal megbeszélitek és továbbléptek", b:"Kell némi idő mire teljesen elengedted", who:"Mit mondana a párod rólad?" },
+    { q:"Mi fontosabb számodra?", a:"Hogy a kapcsolatban mindig legyen fejlődés és változás", b:"Hogy stabil és kiszámítható legyen a kapcsolat", who:"Kérdés rólad!" },
+    { q:"Melyik a jobb módja annak hogy a párod érezze a szerelmet?", a:"Rendszeresen kimondod hangosan", b:"Folyamatosan megmutatod tettekkel", who:"Mit mondana a párod rólad?" },
+    { q:"Mi jellemzőbb rád?", a:"Szívesen osztod meg az érzéseidet a párodmal", b:"Inkább a tetteken keresztül mutatsz érzéseket", who:"Kérdés rólad!" },
+    { q:"Melyik fontosabb?", a:"Hogy a párodmal nevet is lehessen egyet mindig", b:"Hogy a párodmal komoly dolgokat is meg lehet beszélni", who:"Mit mondana a párod rólad?" },
+    { q:"Mit csinálsz ha a párod valamin aggódik?", a:"Megpróbálod meggyőzni hogy minden rendben lesz", b:"Meghallgatod és hagyod hogy kibeszélje magát", who:"Kérdés rólad!" },
+    { q:"Mi fontosabb számodra?", a:"Hogy a párod mindig támogasson a döntéseidben", b:"Hogy a párod legyen őszinte akkor is ha nem ért egyet", who:"Mit mondana a párod rólad?" },
+    { q:"Melyik jellemzőbb rád?", a:"Szívesen mondasz bókokat és dicsérsz", b:"Inkább ritkábban mondod de akkor nagyon komolyan", who:"Kérdés rólad!" },
+    { q:"Mi fontosabb számodra?", a:"Hogy a párod emlékezzen minden fontos dátumra", b:"Hogy mindennap éreztesd a szerelmet ne csak különleges napokon", who:"Mit mondana a párod rólad?" },
+    { q:"Hogyan reagálsz ha a párod kritizál?", a:"Nyíltan fogadod, ha konstruktív akkor hasznos", b:"Eleinte nehezebb fogadni, de aztán elgondolkozol rajta", who:"Kérdés rólad!" },
+    { q:"Mi jellemzőbb rád?", a:"Szeretsz a jövőről tervezni a párodmal", b:"Inkább a jelenre koncentrálsz, nem tervezgetsz sokat", who:"Mit mondana a párod rólad?" },
+    { q:"Melyik a fontosabb?", a:"Hogy a párod megvédjen ha mások előtt kell", b:"Hogy a párod négyszemközt mondja el ha valamit rosszul csináltál", who:"Kérdés rólad!" },
+    { q:"Mi jellemzőbb rád?", a:"Szívesen osztod meg minden napi eseményt a párodmal", b:"Csak a fontosabb dolgokat osztod meg, nem minden apróságot", who:"Mit mondana a párod rólad?" },
+    { q:"Melyik fontosabb számodra?", a:"Hogy a párod inspiráljon és fejlődjél mellette", b:"Hogy a párod mellett megpihenj és ne kelljen teljesíteni", who:"Kérdés rólad!" },
+    { q:"Mi a fontosabb?", a:"Sokat nevetni együtt", b:"Mélyen megérteni egymást", who:"Mit mondana a párod rólad?" },
+    { q:"Melyik jellemzőbb rád?", a:"Romantikus típus vagy, szereted a gesztusokat", b:"Praktikusabb vagy, a valódi tetteket értékeled jobban", who:"Kérdés rólad!" },
+    { q:"Mit tartasz fontosabbnak?", a:"Hogy a párod fizikailag vonzó maradjon számodra", b:"Hogy a párod szellemileg és érzelmileg vonzó maradjon", who:"Mit mondana a párod rólad?" },
+    { q:"Melyik boldogabb pillanat számodra?", a:"Amikor a párod meglepetéssel készül neked", b:"Amikor te csinálsz valami szépet a párodnak", who:"Kérdés rólad!" },
+    { q:"Mi jellemzőbb rád?", a:"Ha baj van jelzed, nem viseled egyedül", b:"Inkább magadban viseled a gondjaidat, nem akarsz terhére lenni", who:"Mit mondana a párod rólad?" },
+    { q:"Hogyan fejezed ki hogy valami fáj?", a:"Azonnal megmondod mit éreztél", b:"Vársz míg feldolgoztad, majd akkor hozod szóba", who:"Kérdés rólad!" },
+    { q:"Mi fontosabb számodra?", a:"Hogy a párod ugyanolyan életstílust éljen mint te", b:"Hogy a párod saját egyéniségét megőrizze melleted is", who:"Mit mondana a párod rólad?" },
+    { q:"Melyik boldogabb pillanat?", a:"Amikor valami újat fedeztek fel együtt", b:"Amikor egy régi kedvenc dolgot csináltok újra", who:"Kérdés rólad!" },
+    { q:"Mi jellemzőbb rád?", a:"Szívesen compromittálsz ha szükséges", b:"Nehezebb engedni ha valamiben nagyon meg vagy győződve", who:"Mit mondana a párod rólad?" },
+    { q:"Melyik fontosabb számodra?", a:"Hogy a párod ismerjen téged igazán mélyen", b:"Hogy a párod folyamatosan felfedezzen benned új dolgokat", who:"Kérdés rólad!" },
+    { q:"Mit tartasz fontosabbnak?", a:"Rendszeres minőségi idő kettesben", b:"Spontán közös pillanatok amikor épp úgy jön", who:"Mit mondana a párod rólad?" },
+    { q:"Melyik a jobb reggel?", a:"Lassan ébredni egymás mellett csendben", b:"Reggeli és kávé melletti beszélgetés", who:"Kérdés rólad!" },
+    { q:"Mi fontosabb számodra?", a:"Hogy a párod nyíltan megmutassa az érzéseit", b:"Hogy a párod érzelmileg stabil és nem hullámzó", who:"Mit mondana a párod rólad?" },
+    { q:"Melyik jellemzőbb rád?", a:"Könnyen mondasz nemet ha valami nem tetszik", b:"Nehezebb nemet mondani, inkább alkalmazkodsz", who:"Kérdés rólad!" },
+    { q:"Melyik a jobb módja hogy a párod gondoskodjon rólad?", a:"Konkrét segítség — megcsinálja amit kell", b:"Érzelmi jelenlét — ott van és meghallgat", who:"Mit mondana a párod rólad?" },
+    { q:"Mi fontosabb számodra?", a:"Hogy a párod kihívjon és ösztönözzön fejlődni", b:"Hogy a párod elfogadjon és ne akarjon megváltoztatni", who:"Kérdés rólad!" },
+    { q:"Melyik romantikusabb számodra?", a:"Levél vagy üzenet amit a párod írt neked", b:"Egy fénykép vagy emlék amit megőrzött rólatok", who:"Mit mondana a párod rólad?" },
+    { q:"Mi jellemzőbb rád?", a:"Könnyen kimondod hogy szükséged van a párodra", b:"Inkább megpróbálsz önálló maradni, nehezebben kérsz segítséget", who:"Kérdés rólad!" },
+    { q:"Mit tartasz fontosabbnak?", a:"Közösen dönteni minden fontosabb dologban", b:"Egymásnak megadni a teret saját döntésekhez is", who:"Mit mondana a párod rólad?" },
+    { q:"Melyik jellemzőbb rád?", a:"Szívesen mesélsz a párodnak a napi dolgokról", b:"Inkább akkor osztod meg a dolgokat ha valami fontos történt", who:"Kérdés rólad!" },
+    { q:"Mi fontosabb számodra?", a:"Hogy a párod a legfontosabb ember legyen az életedben", b:"Hogy a párod egy az élet sok fontos részéből", who:"Mit mondana a párod rólad?" },
+    { q:"Melyik a jobb?", a:"Hogy a párod megvédjen a világ előtt", b:"Hogy a párod megértsen ha a világgal szemben is tévedsz", who:"Kérdés rólad!" },
+    { q:"Mi fontosabb számodra hosszú távon?", a:"Hogy a kapcsolat folyamatosan fejlődjön és változzon", b:"Hogy a kapcsolat stabil alapot adjon mindkettőtöknek", who:"Mit mondana a párod rólad?" },
+    { q:"Melyik fontosabb számodra?", a:"Hogy a párod ismerje a barátaidat és jól jöjjön ki velük", b:"Hogy a párod világa legyen külön — nem kell mindenbe beleolvadni", who:"Kérdés rólad!" },
+    { q:"Melyik a jobb este?", a:"Tervezett különleges program kettesben", b:"Spontán véletlenszerű est ahol semmi sincs tervezve", who:"Mit mondana a párod rólad?" },
+    { q:"Mit tartasz fontosabbnak?", a:"Hogy a párod hasonlóan kommunikáljon mint te", b:"Hogy a párod akarjon tanulni a te kommunikációs stílusodból", who:"Kérdés rólad!" },
+    { q:"Mi fontosabb számodra?", a:"Hogy a kapcsolatban legyenek közös rituálék és szokások", b:"Hogy minden nap más legyen, ne legyen rutin", who:"Mit mondana a párod rólad?" },
+    { q:"Melyik jellemzőbb rád?", a:"Ha valaki fontos neked azt meg is mondod hangosan", b:"Ha valaki fontos neked azt inkább a tetteiden látszik", who:"Kérdés rólad!" },
+    { q:"Mi fontosabb számodra?", a:"Hogy a párod a rossz napjain is jól bánjon veled", b:"Hogy a párod a jó napjain igazán ott legyen veled", who:"Mit mondana a párod rólad?" },
+  ],
+  funny: [
+    { q:"Ha állat lennél, mi lennél?", a:"Macska – független, kényelemszerető", b:"Kutya – lojális, aktív, boldog", who:"Mit mondana a párod rólad?" },
+    { q:"Mi bosszant jobban?", a:"Lassú internet vagy telefon", b:"Hangosan csámcsogó ember", who:"Kérdés rólad!" },
+    { q:"Mit választanál inkább?", a:"Soha többé nem enni az egyik kedvenc ételed", b:"Soha többé nem nézni sorozatot vagy filmet", who:"Kérdés rólad!" },
+    { q:"Ha milliárdos lennél, mit csinálnál először?", a:"Utaznál a világ körül", b:"Megvennéd az álomotthonod", who:"Mit mondana a párod rólad?" },
+    { q:"Mi a párod mottója az életben?", a:"Élj most, gondolkozz later", b:"Tervezz előre, ne érjen meglepetés", who:"Mit gondolsz a párodról?" },
+    { q:"Melyik illik rád inkább?", a:"Reggeli kávé nélkül nem létezik az élet", b:"Megvan kávé nélkül is simán", who:"Mit mondana a párod rólad?" },
+    { q:"Ha el kellene menekülni egy lakatlan szigetre, mit vinnél?", a:"Zenét – fejhallgató, hangszóró", b:"Szórakozást – könyv, kártyajáték", who:"Kérdés rólad!" },
+    { q:"Melyik vagy inkább?", a:"Ha fájdalmas az igazság, inkább hallani", b:"Ha fájdalmas, inkább ne mondják meg", who:"Kérdés rólad!" },
+    { q:"Mit csinálnál egy váratlan szabadnappal?", a:"Semmit – pihennél és lustálkodnál", b:"Kimozdulnál és csinálnál valamit", who:"Mit mondana a párod rólad?" },
+    { q:"Melyik helyzet kellemetlenebb?", a:"Nyilvánosan csuklani egyet nagyot", b:"Nyilvánosan megbotlani és elesni", who:"Kérdés rólad!" },
+    { q:"Hogyan viselkedsz ha valami elromlik otthon?", a:"Megpróbálod magad megjavítani", b:"Azonnal szakembert hívnál", who:"Mit mondana a párod rólad?" },
+    { q:"Mi a viszonyod a horror filmekkel?", a:"Szereted – annál jobb minél ijesztőbb", b:"Kerülöd – semmi szükség rá", who:"Kérdés rólad!" },
+    { q:"Melyik inkább te?", a:"Általában korán érsz mindenhova", b:"Általában az utolsó pillanatban érsz oda", who:"Mit mondana a párod rólad?" },
+    { q:"Ha szabad este van, mit választasz?", a:"Ismerős helyre menni ahol biztos jó", b:"Valami újat kipróbálni", who:"Kérdés rólad!" },
+    { q:"Ha 1 hónapig semmi internet, hogy lennél?", a:"Szenvedős — az internet muszáj", b:"Jól — végre csend és béke", who:"Mit mondana a párod rólad?" },
+    { q:"Melyik inkább te?", a:"Terv szerint csinálsz mindent", b:"Spontán döntesz menet közben", who:"Kérdés rólad!" },
+    { q:"Mit választanál inkább?", a:"Soha többé nem inni alkoholt", b:"Soha többé nem inni kávét vagy teát", who:"Mit mondana a párod rólad?" },
+    { q:"Melyik típus vagy?", a:"Minden cipőt és ruhát megőrzöl hátha kelleni fog", b:"Ha 1 éve nem vetted fel, ki vele azonnal", who:"Kérdés rólad!" },
+    { q:"Mi bosszant jobban?", a:"Ha valaki megszakít mikor mesélsz", b:"Ha valaki telefonozik mikor együtt vagytok", who:"Mit mondana a párod rólad?" },
+    { q:"Mit választanál inkább?", a:"Mindig tudnád mit gondolnak rólad az emberek", b:"Soha nem tudnád mit gondolnak rólad mások", who:"Kérdés rólad!" },
+    { q:"Melyik jellemzőbb rád?", a:"Hangos és feltűnő társaságban", b:"Inkább a háttérből figyelsz", who:"Mit mondana a párod rólad?" },
+    { q:"Mit választanál?", a:"Mindig hideg legyen — sosem legyen nyár", b:"Mindig meleg legyen — sosem legyen tél", who:"Kérdés rólad!" },
+    { q:"Mi bosszantóbb?", a:"Ha valaki a filmnél hangosan eszik", b:"Ha valaki kommentálja végig a filmet", who:"Mit mondana a párod rólad?" },
+    { q:"Melyik vagy inkább?", a:"Megkérsz másokat ha segítségre van szükséged", b:"Inkább egyedül megoldod semmint segítséget kérsz", who:"Kérdés rólad!" },
+    { q:"Mit választanál inkább?", a:"Egy hét öt csillagos szállodában egyedül", b:"Két hét sátorban a kedvenc embereddel", who:"Mit mondana a párod rólad?" },
+    { q:"Melyik jellemzőbb rád?", a:"Rendet raksz mielőtt elhagyod az otthont", b:"Megcsinálod majd ha visszaérsz", who:"Kérdés rólad!" },
+    { q:"Mi zavar jobban?", a:"Hideg étel amit melegen kellene enni", b:"Meleg ital amit hidegen kellene inni", who:"Mit mondana a párod rólad?" },
+    { q:"Melyik inkább te?", a:"Tele van a telefon képekkel és képernyőképekkel", b:"Rendszeresen törlöd ami nem kell", who:"Kérdés rólad!" },
+    { q:"Mit választanál?", a:"Mindig tudnád hogy mi lesz a jövőben", b:"Soha nem tudnád előre mi fog történni", who:"Mit mondana a párod rólad?" },
+    { q:"Melyik jellemzőbb rád?", a:"Egy ételt tudnál enni hetekig ha nagyon szereted", b:"Változatosságra vágysz, nem bírod ugyanazt sokszor egymás után", who:"Kérdés rólad!" },
+    { q:"Mi bosszantóbb?", a:"Ha valaki nem köszön vissza", b:"Ha valaki szó nélkül elmegy anélkül hogy elbúcsúzna", who:"Mit mondana a párod rólad?" },
+    { q:"Melyik inkább te?", a:"Minden üzenetre gyorsan válaszolsz", b:"Órákat csúszik mire visszaírsz", who:"Kérdés rólad!" },
+    { q:"Mit választanál inkább?", a:"Láthatatlan lehetsz ha akarsz", b:"Tudsz repülni ha akarsz", who:"Mit mondana a párod rólad?" },
+    { q:"Melyik jellemzőbb rád?", a:"Ha vásárolsz mindent megveszel ami kell egyszerre", b:"Naponta többször is bemész a boltba mert elfelejtetted", who:"Kérdés rólad!" },
+    { q:"Mi bosszantóbb?", a:"Lassú fizető a kasszánál előtted", b:"Valaki aki nem tartja a sort", who:"Mit mondana a párod rólad?" },
+    { q:"Melyik inkább te?", a:"Elalvás előtt még tíz percet telefonozol", b:"Amint lefekszel azonnal elalszol", who:"Kérdés rólad!" },
+    { q:"Mit választanál?", a:"Soha ne legyen fájdalomérzetünk", b:"Soha ne legyünk fáradtak", who:"Mit mondana a párod rólad?" },
+    { q:"Melyik jellemzőbb rád?", a:"Teli van a táskád mindenféle dologgal", b:"Minimalista — csak ami szükséges kerül a táskába", who:"Kérdés rólad!" },
+    { q:"Melyik inkább te?", a:"Mindent megőrzöl ami lehet hogy egyszer kelleni fog", b:"Ha nem kell most azonnal ki a szemétbe", who:"Mit mondana a párod rólad?" },
+    { q:"Melyik jellemzőbb rád?", a:"Rögtön megeszed amit kapsz", b:"Elmented a legjobb falat a végére", who:"Kérdés rólad!" },
+    { q:"Mi bosszantóbb?", a:"Ha a film közepén spoilereznek neked", b:"Ha egy sorozatból kiderül hogy rosszul végződik", who:"Mit mondana a párod rólad?" },
+    { q:"Melyik inkább te?", a:"Sokat fotografálsz és videózol élményekből", b:"Inkább átéled a pillanatot, nem kell megörökíteni minden", who:"Kérdés rólad!" },
+    { q:"Mit választanál?", a:"Sosem fázna az ember", b:"Sosem izzadna az ember", who:"Mit mondana a párod rólad?" },
+    { q:"Melyik jellemzőbb rád?", a:"Azonnal megnézed a telefont ha értesítés jön", b:"Tud gyűlni az értesítés, nem zavar", who:"Kérdés rólad!" },
+    { q:"Mi bosszantóbb?", a:"Ha valaki hangosan telefonál nyilvános helyen", b:"Ha valaki nyilvános helyen dohányzik ahol nem kellene", who:"Mit mondana a párod rólad?" },
+    { q:"Melyik inkább te?", a:"Sokat gondolkodsz mielőtt szólsz valamit", b:"Inkább kimondod és utána gondolkodsz", who:"Kérdés rólad!" },
+    { q:"Mit választanál inkább?", a:"Mindenki kedvelje de ne szeressen igazán senki", b:"Egy ember szeressen nagyon de mások nem kedveljenek", who:"Mit mondana a párod rólad?" },
+    { q:"Melyik jellemzőbb rád?", a:"Ha nem megy valami egyre dühösebben próbálod", b:"Ha nem megy félreteszed és visszatérsz hozzá", who:"Kérdés rólad!" },
+    { q:"Melyik inkább te?", a:"Ha vásárolsz listával mész", b:"Fejből tudod mi kell, lista felesleges", who:"Mit mondana a párod rólad?" },
+    { q:"Mi zavar jobban?", a:"Ha valaki a szekrényt nyitva hagyja", b:"Ha valaki a fogkrém csövét középen nyomja", who:"Kérdés rólad!" },
+    { q:"Melyik inkább te?", a:"Azonnal elmondod ha valami nem tetszik", b:"Inkább belül tartod és nem szólsz ha kis dolog", who:"Mit mondana a párod rólad?" },
+    { q:"Mit választanál inkább?", a:"Mindig pontosan tudnád mi az igazság minden helyzetben", b:"Mindig tökéletes döntéseket hoznál minden helyzetben", who:"Kérdés rólad!" },
+    { q:"Melyik jellemzőbb rád?", a:"Töltőn van a telefon amint 30% alá esik", b:"Szinte mindig kimerülőben megy a telefon", who:"Mit mondana a párod rólad?" },
+    { q:"Melyik inkább te?", a:"Ha unatkozol azonnal kitalálsz valamit", b:"Ha unatkozol simán el tudsz lenni semmit csinálva", who:"Kérdés rólad!" },
+    { q:"Mit választanál?", a:"Egy évig nem ehetnél semmilyen édeset", b:"Egy évig nem ehetnél semmilyen sósat", who:"Mit mondana a párod rólad?" },
+    { q:"Melyik jellemzőbb rád?", a:"Szívesen fizetsz egy kis kényelemért", b:"Inkább spórolsz és nem fizetsz feleslegesen", who:"Kérdés rólad!" },
+    { q:"Melyik inkább te?", a:"Elolvasod a használati utasítást mielőtt összerakod", b:"Próba-szerencse alapon rakod össze anélkül hogy elolvastad", who:"Mit mondana a párod rólad?" },
+    { q:"Mit választanál inkább?", a:"Mindig te lennél a legokosabb a szobában", b:"Mindig te lennél a legviccesebb a szobában", who:"Kérdés rólad!" },
+    { q:"Melyik jellemzőbb rád?", a:"Ha mérsz valamit akkor mérőeszközzel", b:"Szemre, érzésre mérsz mindent", who:"Mit mondana a párod rólad?" },
+    { q:"Melyik inkább te?", a:"Ha valamit nem tudsz rögtön utánaolvasol", b:"Ha valamit nem tudsz azt gondolod majd kiderül egyszer", who:"Kérdés rólad!" },
+    { q:"Mit választanál?", a:"Örökre meg tudnád jósolni az időjárást", b:"Örökre soha nem tévedj el sehol", who:"Mit mondana a párod rólad?" },
+    { q:"Melyik jellemzőbb rád?", a:"Ha nincs semmi teendő rögtön kitalálsz magadnak valamit", b:"Szívesen nem csinálsz semmit ha nincs teendő", who:"Kérdés rólad!" },
+    { q:"Melyik inkább te?", a:"Ha mozi — akkor pattogatott kukorica, kötelező", b:"Moziba sem kell enni, elvan enni nélkül", who:"Mit mondana a párod rólad?" },
+    { q:"Mit választanál?", a:"Minden éjjel tökéletesen aludnál", b:"Minden reggel tele lennél energiával függetlenül az alvástól", who:"Kérdés rólad!" },
+    { q:"Melyik jellemzőbb rád?", a:"Szívesen festenél falat vagy bútort pakolnál át", b:"Ha lehet ne kelljen semmi ilyen munkával járó project", who:"Mit mondana a párod rólad?" },
+    { q:"Melyik inkább te?", a:"Ha valami finom van megosztod a párodmal is", b:"Ha valami finom van nem szívesen osztod meg", who:"Kérdés rólad!" },
+    { q:"Mit választanál inkább?", a:"Mindig tudnád hogy kinek tetszesz", b:"Mindig tudnád hogy ki hazudik neked", who:"Mit mondana a párod rólad?" },
+    { q:"Melyik jellemzőbb rád?", a:"Ha főzöl mindig sok lesz belőle", b:"Pontosan annyit főzöl amennyi kell, nem marad felesleg", who:"Kérdés rólad!" },
+    { q:"Melyik inkább te?", a:"Ha fáradt vagy azonnal megmutatkozik rajtad", b:"Ha fáradt vagy is el tudod rejteni és normálisan viselkedsz", who:"Mit mondana a párod rólad?" },
+    { q:"Melyik jellemzőbb rád?", a:"Mielőtt vásárolsz utánanézel és összehasonlítasz", b:"Ha kell valami megveszed az elsőt ami megfelelőnek tűnik", who:"Kérdés rólad!" },
+    { q:"Mi bosszantóbb?", a:"Ha valaki folyamatosan késik", b:"Ha valaki folyamatosan előbb ér mint kellene", who:"Mit mondana a párod rólad?" },
+    { q:"Melyik inkább te?", a:"Ha valamit meg lehet csinálni ma ne halaszd holnapra", b:"Ha valamit el lehet halasztani holnapra miért csináld ma", who:"Kérdés rólad!" },
+    { q:"Mit választanál inkább?", a:"Mindig nyernél minden vitában", b:"Mindig tudnád mit mondj hogy ne kezdődjön vita", who:"Mit mondana a párod rólad?" },
+    { q:"Melyik jellemzőbb rád?", a:"Szívesen tanítasz másokat valamire amit tudsz", b:"Inkább megcsinálod helyette minthogy elmagyarázd", who:"Kérdés rólad!" },
+    { q:"Melyik inkább te?", a:"Ha valami nem stimmel azonnal szólsz a pincérnek", b:"Inkább nem szólsz mert kínos és majd megeszel ahogy van", who:"Mit mondana a párod rólad?" },
+    { q:"Mit választanál?", a:"Mindig megéreznéd ha valaki hazudik neked", b:"Mindig tudnál meggyőzni bárkit bármiről", who:"Kérdés rólad!" },
+    { q:"Melyik jellemzőbb rád?", a:"Ha izgulsz az megmutatkozik a viselkedéseden", b:"Ha izgulsz kívülről nem lehet látni rajtad", who:"Mit mondana a párod rólad?" },
+    { q:"Mi bosszantóbb?", a:"Ha valaki mindig helyesbíti amit mondasz", b:"Ha valaki mindig befejezi helyetted a mondatot", who:"Kérdés rólad!" },
+    { q:"Melyik inkább te?", a:"Ha vásárolsz szívesen kipróbálsz új dolgokat", b:"Ha vásárolsz inkább a bevált márkáknál maradsz", who:"Mit mondana a párod rólad?" },
+    { q:"Mit választanál?", a:"Soha ne legyen dugó ahol jársz", b:"Mindig kapnál parkolót ahol kell", who:"Kérdés rólad!" },
+    { q:"Melyik jellemzőbb rád?", a:"Ha valamit félbehagysz nehéz visszatérni és befejezni", b:"Ha valamit félbehagytál visszatérsz és befejezed", who:"Mit mondana a párod rólad?" },
+    { q:"Melyik inkább te?", a:"Szívesen vezeted a helyzeteket és te döntesz", b:"Szívesen alkalmazkodsz ahhoz amit mások döntenek", who:"Kérdés rólad!" },
+    { q:"Mit választanál inkább?", a:"Mindenki tisztelne de senki sem szeretne igazán", b:"Mindenki szeretne de senki sem respektálna", who:"Mit mondana a párod rólad?" },
+    { q:"Melyik jellemzőbb rád?", a:"Ha valaki megkér valamire általában igent mondasz", b:"Könnyedén mondasz nemet ha nem akarod megcsinálni", who:"Kérdés rólad!" },
+    { q:"Melyik inkább te?", a:"Ha valamit elrontasz azonnal szólsz és megoldod", b:"Ha valamit elrontasz megvárod hogy valaki más vegye észre", who:"Mit mondana a párod rólad?" },
+    { q:"Mit választanál?", a:"Minden ember mindig tudja mit gondolsz", b:"Te mindig tudod mit gondolnak rólad az emberek", who:"Kérdés rólad!" },
+    { q:"Mi bosszantóbb?", a:"Ha valaki nyilvánvalóan hazudik de ragaszkodik az igazához", b:"Ha valaki az igazságot mondja de nagyon tapintatlanul", who:"Mit mondana a párod rólad?" },
+    { q:"Melyik inkább te?", a:"Szívesen élsz egy szokás szerint felépített napirend szerint", b:"Minden nap más — nincs fix napirendünk", who:"Kérdés rólad!" },
+    { q:"Mit választanál inkább?", a:"Tökéletesen emlékeznél minden fontos pillanatra", b:"Mindig pontosan tudnád mit kell mondani minden helyzetben", who:"Mit mondana a párod rólad?" },
+    { q:"Melyik jellemzőbb rád?", a:"Ha nem értesz egyet valamivel szólsz akkor is ha kínos", b:"Ha nem értesz egyet inkább csendben maradsz ha nem muszáj szólni", who:"Kérdés rólad!" },
+    { q:"Melyik inkább te?", a:"Gyorsan megbarátkozol idegenekkel", b:"Nehezebben nyílsz meg, az ismerkedés időbe telik", who:"Mit mondana a párod rólad?" },
+    { q:"Mit választanál?", a:"Mindig tudnád hol vannak az elveszett dolgaid", b:"Soha ne felejtsd el hol hagytál dolgokat", who:"Kérdés rólad!" },
+    { q:"Melyik jellemzőbb rád?", a:"Ha valami rossz történik rögtön megneveted utólag", b:"Ha valami rossz történik hosszabb ideig zavar mielőtt elviccelned", who:"Mit mondana a párod rólad?" },
+    { q:"Melyik inkább te?", a:"Az elromlott eszközöket megpróbálod megjavítani mielőtt újat veszel", b:"Ha elromlik valami inkább azonnal újat veszel", who:"Kérdés rólad!" },
+    { q:"Mi bosszantóbb?", a:"Ha valaki soha nem neveti meg a vicceidet", b:"Ha valaki mindenen nevet pedig nem is olyan vicces", who:"Mit mondana a párod rólad?" },
+  ],
+  spicy: [
+    { q:"Mit preferálsz jobban az ágyban?", a:"Te irányítasz", b:"A párod irányít", who:"Kérdés rólad!" },
+    { q:"Mi izgatóbb számodra?", a:"Lassú, kínzó előjáték", b:"Gyors, szenvedélyes, azonnal", who:"Mit gondol rólad a párod?" },
+    { q:"Melyik helyszín izgalmasabb?", a:"Nyilvános hely ahol lebukhatnátok", b:"Otthon de szokatlan helyen", who:"Kérdés rólad!" },
+    { q:"Mit élveznél jobban?", a:"A párod meglepetésszerűen kezdeményez", b:"Te irányítod mikor és hogyan", who:"Mit gondol rólad a párod?" },
+    { q:"Mi hozza lázba jobban?", a:"Suttogott dolgok a füledbe", b:"Amikor a párod egyszerűen csak ránéz és tudod mit akar", who:"Kérdés rólad!" },
+    { q:"Melyiket választanád?", a:"Csak előjáték szex nélkül egy estén", b:"Gyors szex előjáték nélkül", who:"Mit gondol rólad a párod?" },
+    { q:"Mit preferálsz?", a:"Világítás van — mindent lát mindenki", b:"Sötétben — csak érzetek", who:"Kérdés rólad!" },
+    { q:"Mi izgalmasabb?", a:"A párod teljesen felöltözve de nagyon csábítóan", b:"A párod azonnal vetkőzik", who:"Mit gondol rólad a párod?" },
+    { q:"Melyik forróbb?", a:"Amikor a párod megmondja pontosan mit akar", b:"Amikor csendben de egyértelműen mutatja", who:"Kérdés rólad!" },
+    { q:"Mit választanál?", a:"Szex de nem szabad hangot adni ki", b:"Szex de nem szabad megérinteni egymást kézzel", who:"Mit gondol rólad a párod?" },
+    { q:"Mi vonzóbb rajtad?", a:"Amikor magabiztos és vezeted a helyzetet", b:"Amikor engeded hogy a párod csinálja amit akar", who:"Mit gondol rólad a párod?" },
+    { q:"Melyiket élveznéd jobban?", a:"A párod masszíroz végig lassan", b:"A párod csókolgatja végig lassan", who:"Kérdés rólad!" },
+    { q:"Melyik pillanat jobb kettőtök között?", a:"Egy váratlan csók vagy érintés valahol", b:"Szex", who:"Mit gondol rólad a párod?" },
+    { q:"Ha csak 5 percetek lenne, mit csinálnátok?", a:"Csók és ölelés — ennyi elég", b:"Belefér a szex is 😏", who:"Kérdés rólad!" },
+    { q:"Mi tesz téged azonnal kívánóvá?", a:"Egy bizonyos tekintet a párodtól", b:"Fizikai érintés egy bizonyos helyen", who:"Mit gondol rólad a párod?" },
+    { q:"Melyik izgalmasabb számodra?", a:"Szerepjáték — más karaktert játszani", b:"Meglepetés helyszín amit a párod választ", who:"Kérdés rólad!" },
+    { q:"Mi vonzóbb?", a:"A párod szaga közvetlenül test után", b:"A párod parfümje amit szeret viselni", who:"Mit gondol rólad a párod?" },
+    { q:"Melyiket élveznéd jobban?", a:"Szex reggel ébredés után", b:"Szex éjjel lefekvés előtt", who:"Kérdés rólad!" },
+    { q:"Mi izgalmasabb számodra?", a:"Amikor a párod dominál és átveszi az irányítást", b:"Amikor te dominálsz és te döntesz mindenről", who:"Mit gondol rólad a párod?" },
+    { q:"Mit preferálsz?", a:"Lassú, kíméletes, gyengéd", b:"Erős, intenzív, szenvedélyes", who:"Kérdés rólad!" },
+    { q:"Melyik csók a legjobb?", a:"Hosszú mély csók amikor csak álltok és csókoltok", b:"Rövidebb de intenzív csók mielőtt elmentek egymástól", who:"Mit gondol rólad a párod?" },
+    { q:"Melyik inkább te?", a:"Szívesen kezdeményezel akkor is ha fáradt vagy", b:"Ha fáradt vagy inkább alszol, holnap is lehet", who:"Mit gondol rólad a párod?" },
+    { q:"Mit preferálsz?", a:"A párod laza és természetes", b:"A párod felöltözik és felkészül rá", who:"Kérdés rólad!" },
+    { q:"Mi vonzóbb?", a:"A párod hangja amikor suttog", b:"A párod hangja amikor kimondja hogy akar téged", who:"Mit gondol rólad a párod?" },
+    { q:"Melyiket élveznéd jobban?", a:"Hosszú előjáték ami szinte kínzás", b:"Közvetlen azonnali, nincs várakozás", who:"Kérdés rólad!" },
+    { q:"Mi izgalmasabb számodra?", a:"A párod kezei", b:"A párod szája", who:"Mit gondol rólad a párod?" },
+    { q:"Melyiket választanád?", a:"Szex egy szokatlan helyen", b:"Szex otthon de valami új dolgot kipróbálva", who:"Kérdés rólad!" },
+    { q:"Mi vonzóbb?", a:"Amikor a párod nagyon magabiztos és tudja mit csinál", b:"Amikor a párod egy kicsit bizonytalan és sebezhető", who:"Mit gondol rólad a párod?" },
+    { q:"Melyik inkább te?", a:"Szex után szívesen maradsz közel és elalszol együtt", b:"Szex után kell egy kis saját tér", who:"Kérdés rólad!" },
+    { q:"Mi izgalmasabb?", a:"Amikor a párod megmondja mit akar tőled", b:"Amikor te találod ki mit akar a párod és megcsinálod", who:"Mit gondol rólad a párod?" },
+    { q:"Melyiket élveznéd jobban?", a:"A párod ölén fekve néz vissza rád", b:"A párod mögötted áll és ölel", who:"Kérdés rólad!" },
+    { q:"Mi vonzóbb?", a:"A párod spontán és kiszámíthatatlan az intim pillanatokban", b:"A párod következetes és tudod mit vársz tőle", who:"Mit gondol rólad a párod?" },
+    { q:"Mit preferálsz?", a:"A párod lassan vetkőzik előtted", b:"Te vetkőzteted a párod", who:"Kérdés rólad!" },
+    { q:"Mi izgalmasabb számodra?", a:"Amikor érzed hogy a párod igazán akar téged", b:"Amikor te érzed hogy nagyon akarod a párod", who:"Mit gondol rólad a párod?" },
+    { q:"Melyiket élveznéd jobban?", a:"Szex egy ismeretlen helyen ahol vagytok épp", b:"Szex otthon ahol minden kényelmes és ismerős", who:"Kérdés rólad!" },
+    { q:"Melyik inkább te?", a:"Jobban szereted ha sok idő van rá", b:"Jobban szereted ha gyors és intenzív", who:"Mit gondol rólad a párod?" },
+    { q:"Mi izgalmasabb?", a:"Amikor a párod megsuttogja mit szeretne", b:"Amikor a párod megmutatja tettekkel mit szeretne", who:"Kérdés rólad!" },
+    { q:"Melyiket választanád?", a:"Szex amiben te adsz és a párod fogad", b:"Szex amiben te fogadsz és a párod ad", who:"Mit gondol rólad a párod?" },
+    { q:"Mi vonzóbb?", a:"A párod csukott szemmel teljesen átadja magát", b:"A párod nyitott szemmel végig rád néz", who:"Kérdés rólad!" },
+    { q:"Melyiket élveznéd jobban?", a:"Szex zene mellett", b:"Szex teljes csendben", who:"Mit gondol rólad a párod?" },
+    { q:"Mi izgalmasabb számodra?", a:"Amikor a párod meztelenül vár rád", b:"Amikor a párod félig öltözve vár rád", who:"Kérdés rólad!" },
+    { q:"Mit preferálsz?", a:"Szex amiben mindketten egyenlő mértékben aktívak", b:"Szex amiben van egy aki inkább ad és egy aki inkább kap", who:"Mit gondol rólad a párod?" },
+    { q:"Mi vonzóbb?", a:"A párod háta", b:"A párod nyaka", who:"Kérdés rólad!" },
+    { q:"Melyik inkább te?", a:"Szívesen mondod hangosan mit szeretnél", b:"Inkább megmutatod szavak nélkül", who:"Mit gondol rólad a párod?" },
+    { q:"Mi izgalmasabb?", a:"Amikor a párod nehezen tartja vissza magát", b:"Amikor a párod teljesen kontroll alatt van", who:"Kérdés rólad!" },
+    { q:"Melyiket élveznéd jobban?", a:"Szex tükör előtt", b:"Szex ahol nem látjátok egymást teljesen", who:"Mit gondol rólad a párod?" },
+    { q:"Mi vonzóbb?", a:"A párod ahogy mozog", b:"A párod ahogy néz rád", who:"Kérdés rólad!" },
+    { q:"Melyiket választanád?", a:"Hosszú intim este ahol van időtök mindenre", b:"Rövid intenzív pillanat ami váratlanul jön", who:"Mit gondol rólad a párod?" },
+    { q:"Mi izgalmasabb számodra?", a:"Amikor a párod a neveden szólít közben", b:"Amikor a párod nem szól semmit csak érez", who:"Kérdés rólad!" },
+    { q:"Mit preferálsz?", a:"A párod irányítja az ütemet", b:"Te irányítod az ütemet", who:"Mit gondol rólad a párod?" },
+    { q:"Mi vonzóbb?", a:"A párod mosolya közben", b:"A párod arca amikor teljesen elmerül az érzésben", who:"Kérdés rólad!" },
+    { q:"Melyiket élveznéd jobban?", a:"Szex ami meglepetésszerűen kezdődik", b:"Szex amire előre készültetek és vártátok", who:"Mit gondol rólad a párod?" },
+    { q:"Mi izgalmasabb?", a:"Amikor a párod kihív és provokál", b:"Amikor a párod gyengéd és odaadó", who:"Kérdés rólad!" },
+    { q:"Melyik inkább te?", a:"Szívesen kísérletezel új dolgokkal", b:"A bevált és megbízható a legjobb", who:"Mit gondol rólad a párod?" },
+    { q:"Mi vonzóbb?", a:"A párod hangjai", b:"A párod érintése", who:"Kérdés rólad!" },
+    { q:"Melyiket választanád?", a:"Szex amit a párod tervezett meg teljesen", b:"Spontán szex amire senki nem készült", who:"Mit gondol rólad a párod?" },
+    { q:"Mi izgalmasabb számodra?", a:"Amikor a párod kicsit megvárakoztat", b:"Amikor a párod azonnal reagál rád", who:"Kérdés rólad!" },
+    { q:"Mit preferálsz?", a:"Szex ami hosszan tart", b:"Szex ami rövid de nagyon intenzív", who:"Mit gondol rólad a párod?" },
+    { q:"Mi vonzóbb?", a:"A párod önbizalma az intim pillanatokban", b:"A párod sebezhetősége az intim pillanatokban", who:"Kérdés rólad!" },
+    { q:"Melyiket élveznéd jobban?", a:"A párod suttogva mesél közben", b:"A párod csendben van és csak érez", who:"Mit gondol rólad a párod?" },
+    { q:"Mi izgalmasabb?", a:"Amikor a párod vezeti a kezed", b:"Amikor a párod megengedi hogy te vezess mindent", who:"Kérdés rólad!" },
+    { q:"Melyik inkább te?", a:"Szívesen kérsz visszajelzést hogyan volt", b:"Nem kell szavakba önteni — az érzésből tudod", who:"Mit gondol rólad a párod?" },
+    { q:"Mi vonzóbb?", a:"A párod hogyan néz rád mielőtt elkezdődik", b:"A párod hogyan néz rád utána", who:"Kérdés rólad!" },
+    { q:"Melyiket választanád?", a:"Szex amiben te adsz el a legtöbbet", b:"Szex amiben a párod ad mindent és te kapsz", who:"Mit gondol rólad a párod?" },
+    { q:"Mi izgalmasabb számodra?", a:"Amikor a párod nagyon akar téged és mutatja", b:"Amikor a párod visszafogja magát és te döntöd el mikor", who:"Kérdés rólad!" },
+    { q:"Mi vonzóbb?", a:"A párod ahogy leveszi a ruháit", b:"A párod ahogy felveszi a ruháit utána", who:"Mit gondol rólad a párod?" },
+    { q:"Melyiket élveznéd jobban?", a:"Szex amiben sok érintés van mindenhol", b:"Szex amiben egy helyre koncentrálódik minden figyelem", who:"Kérdés rólad!" },
+    { q:"Mi izgalmasabb?", a:"Amikor a párod irányítja és megmondja mit csinálj", b:"Amikor a párod hagy téged mindenben dönteni", who:"Mit gondol rólad a párod?" },
+    { q:"Melyik inkább te?", a:"Az előjáték a kedvenced — az a legjobb rész", b:"A szex maga a legjobb, az előjáték inkább bónusz", who:"Kérdés rólad!" },
+    { q:"Mi vonzóbb?", a:"A párod erős kezei", b:"A párod gyengéd ujjai", who:"Mit gondol rólad a párod?" },
+    { q:"Melyiket választanád?", a:"Szex amiben teljesen átadod magad a párodnak", b:"Szex amiben te irányítasz teljesen", who:"Kérdés rólad!" },
+    { q:"Mi izgalmasabb számodra?", a:"Az a pillanat mielőtt elkezdődik", b:"Az a pillanat amikor teljesen csúcson vagytok", who:"Mit gondol rólad a párod?" },
+    { q:"Mit preferálsz?", a:"A párod meglepetésszerűen elvisz valahova romantikusan", b:"Kettesben otthon tölteni el az estét tervszerűen", who:"Kérdés rólad!" },
+    { q:"Mi vonzóbb?", a:"A párod ahogy kimondja hogy szeret", b:"A párod ahogy mutatja hogy szeret intim pillanatokban", who:"Mit gondol rólad a párod?" },
+    { q:"Melyiket élveznéd jobban?", a:"Szex amibe valami új elemet viszel bele", b:"Szex ami a tökéletesen bevált kedvenc változat", who:"Kérdés rólad!" },
+    { q:"Mi izgalmasabb?", a:"Amikor a párod vetkeztet téged", b:"Amikor te vetkeztetel és a párod csak hagyja", who:"Mit gondol rólad a párod?" },
+    { q:"Melyik inkább te?", a:"Szívesen maradsz ébren utána és suttogva beszélgettetek", b:"Szex után szívesen elalszol gyorsan a párod mellett", who:"Kérdés rólad!" },
+    { q:"Mi vonzóbb?", a:"A párod illata az ágyon", b:"A párod melege testileg közel", who:"Mit gondol rólad a párod?" },
+    { q:"Melyiket választanád?", a:"Szex amiben teljesen elveszíted magad és nem gondolsz másra", b:"Szex amiben teljesen jelen vagy és mindent tudatosan érzékelsz", who:"Kérdés rólad!" },
+    { q:"Mi izgalmasabb számodra?", a:"Amikor a párod siet mert annyira akar", b:"Amikor a párod visszafog és megvárakoztat", who:"Mit gondol rólad a párod?" },
+    { q:"Mit preferálsz?", a:"Az intim pillanatok legyenek tervezett felkészült estek", b:"Az intim pillanatok legyenek spontán váratlan esetek", who:"Kérdés rólad!" },
+    { q:"Melyiket élveznéd jobban?", a:"Szex amiben mindkettőtök egyformán elégedett lesz", b:"Szex amiben te adsz mindent és a párod elégedettsége a fontos", who:"Mit gondol rólad a párod?" },
+    { q:"Mi izgalmasabb?", a:"Amikor a párod kicsit kiszámíthatatlan és meglepetésszerű", b:"Amikor pontosan tudod mit fog csinálni és az pontosan az kell", who:"Kérdés rólad!" },
+    { q:"Melyik inkább te?", a:"Szívesen dicsérsz és visszajelzel közben", b:"Inkább csendben vagy és az érzések magukért beszélnek", who:"Mit gondol rólad a párod?" },
+    { q:"Mi vonzóbb?", a:"A párod fizikai ereje", b:"A párod gyengédsége és figyelmessége", who:"Kérdés rólad!" },
+    { q:"Melyiket választanád?", a:"Szex amiben te mutatsz be valami újat a párodnak", b:"Szex amiben a párod mutat neked valami újat", who:"Mit gondol rólad a párod?" },
+    { q:"Mi izgalmasabb számodra?", a:"Intimitás ami sokáig építkezik egész este", b:"Intimitás ami hirtelen jön és azonnal intenzív", who:"Kérdés rólad!" },
+    { q:"Mit preferálsz?", a:"A párod irányítsa a tempót és a ritmust", b:"Te irányítod a tempót és a ritmust", who:"Mit gondol rólad a párod?" },
+    { q:"Mi vonzóbb?", a:"A párod hangja amikor a nevedet mondja", b:"A párod hangja amikor nem mond szavakat csak hangot ad ki", who:"Kérdés rólad!" },
+    { q:"Melyiket élveznéd jobban?", a:"Az az érzés ami az elején van — az izgalom, a várakozás", b:"Az az érzés ami a végén van — a teljesség, a megérkezés", who:"Mit gondol rólad a párod?" },
+    { q:"Mi izgalmasabb?", a:"Amikor a párod próbál kontrollálni téged", b:"Amikor te próbálod kontrollálni a párod reakcióit", who:"Kérdés rólad!" },
+    { q:"Melyik inkább te?", a:"Szívesen kezdeményezed hogy legyen valami köztetek", b:"Szívesebben várod hogy a párod kezdeményezzen", who:"Mit gondol rólad a párod?" },
+    { q:"Mi vonzóbb?", a:"A párod egész teste egyszerre", b:"A párod egy konkrét kedvenc testrészed rajta", who:"Kérdés rólad!" },
+    { q:"Melyiket választanád?", a:"Hosszú este ahol minden lassan és érzékien megy", b:"Rövid robbanékony este ahol minden gyors és intenzív", who:"Mit gondol rólad a párod?" },
+    { q:"Mi izgalmasabb számodra?", a:"Amikor valami teljesen újat próbáltok ki", b:"Amikor a legjobb dolgot csináljátok amit már tudjátok hogy működik", who:"Kérdés rólad!" },
+    { q:"Mit preferálsz?", a:"Az intimitás legyen a kettőtök teljesen titkos világa", b:"Az intimitás legyen amiben teljesen szabadok vagytok mindketten", who:"Mit gondol rólad a párod?" },
+  ],
+};
+
+// ── MEMORIES: összes kombináció generálása ──
+const MEMORY_ITEMS = [
+  "BIGezések",
+  "Séta a Promenádán",
+  "Színdarabok Temerinben",
+  "Mozizás Temerinben",
+  "Jégkorcsolyázás",
+  "Betyarac",
+  "Autóban evések kettesben",
+  "Étterem Péterváradon",
+  "Rave-ek, bulik együtt",
+  "Otthoni chillek kettesben",
+  "It Takes Two",
+  "Overcooked 2",
+  "Split Fiction",
+  "Közös sütés a konyhában",
+  "Együtt ivászat",
+  "Sorozatnézés a kanapén",
+  "Amikor csak néztelek",
+  "Közös filmezés",
+  "Jakuzzi Újvidéken",
+  "Jakuzzi nálatok az udvaron",
+  "Közös karácsony",
+  "Karácsonyra készülődés",
+  "Hosszú beszélgetések hajnalig",
+  "Szendvics a Becsei parton",
+  "Szex a színházban",
+  "Szex otthon",
+  "Szex az autóban",
+  "Szopás az autóban",
+  "Írkalás egész nap kettesben",
+  "Me time",
+];
+
+const WHO_OPTIONS = ["Kérdés rólad!", "Mit mondana a párod rólad?"];
+const QUESTIONS_PREFIXES = [
+  "Melyikre emlékszel szívesebben?",
+  "Melyiket hiányolnád jobban?",
+  "Melyikre gondolsz szívesebben?",
+  "Melyiket csinálnátok meg holnap ha lehetne?",
+  "Melyik volt a jobb kettőtök számára?",
+];
+
+function generateMemories() {
+  const combos = [];
+  for (let i = 0; i < MEMORY_ITEMS.length; i++) {
+    for (let j = i + 1; j < MEMORY_ITEMS.length; j++) {
+      combos.push({
+        q: QUESTIONS_PREFIXES[(i + j) % QUESTIONS_PREFIXES.length],
+        a: MEMORY_ITEMS[i],
+        b: MEMORY_ITEMS[j],
+        who: WHO_OPTIONS[(i + j) % 2],
+      });
+    }
+  }
+  return combos; // 435 kombináció
+}
+
+const CAT_META = {
+  romantic: { label:'💕 Romantikus', color:'#e8537a', bg:'rgba(232,83,122,0.15)' },
+  funny:    { label:'😂 Vicces',     color:'#f5a623', bg:'rgba(245,166,35,0.15)' },
+  spicy:    { label:'🔥 Pikáns',     color:'#ff4757', bg:'rgba(255,71,87,0.15)' },
+  memories: { label:'📸 Emlékek',    color:'#7c6fcd', bg:'rgba(124,111,205,0.15)' },
+  random:   { label:'🎲 Random',     color:'#a0d8ef', bg:'rgba(160,216,239,0.12)' },
+};
+
+let G = { cat:null, pool:[], round:0, total:10, answered:false };
+
+function showSecret() {
+  document.getElementById('secret-modal').style.display = 'flex';
+}
+
+function show(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function shuffle(arr) {
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+  return a;
+}
+
+function startGame(cat) {
+  let source;
+  let total = 10;
+  if (cat === 'memories') {
+    source = generateMemories();
+  } else if (cat === 'random') {
+    total = 20;
+    const all = [
+      ...shuffle(QUESTIONS.romantic).slice(0,5),
+      ...shuffle(QUESTIONS.funny).slice(0,5),
+      ...shuffle(QUESTIONS.spicy).slice(0,5),
+      ...shuffle(generateMemories()).slice(0,5),
+    ];
+    source = shuffle(all);
+  } else {
+    source = QUESTIONS[cat];
+  }
+  G = { cat, pool: shuffle(source).slice(0, total), round:0, total, answered:false };
+  loadRound();
+  show('s-game');
+}
+
+function loadRound() {
+  const q = G.pool[G.round];
+  const m = CAT_META[G.cat];
+  G.answered = false;
+
+  document.getElementById('round-badge').textContent = `${G.round+1} / ${G.total}`;
+  document.getElementById('prog-fill').style.width = `${((G.round+1)/G.total)*100}%`;
+  document.getElementById('prog-fill').style.background = m.color;
+
+  const who = document.getElementById('who-label');
+  who.textContent = q.who;
+  who.style.color = m.color;
+
+  const badge = document.getElementById('q-badge');
+  badge.textContent = m.label;
+  badge.style.background = m.bg;
+  badge.style.color = m.color;
+
+  document.getElementById('q-text').textContent = `„${q.q}"`;
+  document.getElementById('opt-a-text').textContent = q.a;
+  document.getElementById('opt-b-text').textContent = q.b;
+
+  ['opt-a','opt-b'].forEach(id => {
+    const el = document.getElementById(id);
+    el.className = 'opt-btn';
+    el.disabled = false;
+  });
+
+  document.getElementById('next-row').style.display = 'none';
+}
+
+function selectOpt(idx) {
+  if (G.answered) return;
+  G.answered = true;
+
+  document.getElementById('opt-a').disabled = true;
+  document.getElementById('opt-b').disabled = true;
+  document.getElementById(idx===0?'opt-a':'opt-b').classList.add('pressed');
+
+  const isLast = G.round >= G.total - 1;
+  const nextBtn = document.getElementById('next-btn');
+  nextBtn.textContent = isLast ? '🏆 Vége!' : 'Következő →';
+  document.getElementById('next-row').style.display = 'flex';
+}
+
+function nextRound() {
+  G.round++;
+  if (G.round >= G.total) {
+    show('s-done');
+  } else {
+    loadRound();
+  }
+}
+</script>
+</body>
+</html>
