@@ -1,0 +1,2482 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#07050f">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Kettesben 💘</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<style>
+
+:root{
+  --bg:#07050f;--surface:#100c1e;--card:#170e2c;
+  --romantic:#d4788a;--funny:#c9933e;--spicy:#c96060;--custom:#6aadcc;
+  --gold:#c8a870;--gold-l:#e8c890;
+  --text:#f0eafc;--text2:#b8afd0;--muted:#6a5e82;
+  --green:#5abd70;--red:#e06060;
+  --border:rgba(200,168,112,.13);--border2:rgba(200,168,112,.28);
+  --r-sm:12px;--r-md:18px;--r-lg:24px;--r-xl:28px;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{height:100%}
+body{
+  background:var(--bg);color:var(--text);
+  font-family:'Plus Jakarta Sans','DM Sans',sans-serif;
+  min-height:100dvh;min-height:100vh;
+  overflow-x:hidden;-webkit-font-smoothing:antialiased;
+}
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(ellipse 55% 38% at 15% 0%,rgba(212,120,138,.09) 0%,transparent 60%),
+    radial-gradient(ellipse 40% 48% at 85% 100%,rgba(128,104,200,.09) 0%,transparent 60%),
+    radial-gradient(ellipse 45% 28% at 50% 55%,rgba(200,168,112,.04) 0%,transparent 70%);
+}
+.screen{display:none;flex-direction:column;align-items:center;
+  min-height:100dvh;min-height:100vh;position:relative;z-index:1;
+  padding:24px 20px 50px;
+  padding-top:calc(24px + env(safe-area-inset-top,0px));
+  padding-bottom:calc(50px + env(safe-area-inset-bottom,0px));}
+.screen.active{display:flex;animation:sIn .22s ease}
+@keyframes sIn{from{opacity:0;transform:translateX(10px)}to{opacity:1;transform:translateX(0)}}
+/* TYPOGRAPHY */
+.d-title{font-family:'Cormorant Garamond','Playfair Display',Georgia,serif;
+  font-size:33px;font-weight:700;letter-spacing:-.01em;line-height:1.15;
+  background:linear-gradient(135deg,var(--gold-l) 0%,var(--romantic) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.s-title{font-family:'Cormorant Garamond','Playfair Display',Georgia,serif;
+  font-size:26px;font-weight:600;color:var(--gold);}
+/* BUTTONS */
+.btn{width:100%;padding:17px 20px;border-radius:var(--r-md);border:none;
+  font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;font-weight:600;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;
+  transition:transform .12s,opacity .12s;position:relative;overflow:hidden;}
+.btn:active{transform:scale(.97);opacity:.9}
+.btn-primary{background:linear-gradient(135deg,#c9697a,#a04060);color:#fff;box-shadow:0 8px 28px rgba(201,105,122,.28)}
+.btn-gold{background:linear-gradient(135deg,var(--gold),#a07828);color:#07050f;font-weight:700;box-shadow:0 6px 22px rgba(200,168,112,.22)}
+.btn-outline{background:transparent;border:1px solid var(--border);color:var(--muted)}
+.btn-premium{background:linear-gradient(135deg,#7c6fcd,#5a4fa0);color:#fff;box-shadow:0 8px 26px rgba(124,111,205,.28)}
+.btn-custom{background:linear-gradient(135deg,#4a9fc8,#2a7aaa);color:#fff;box-shadow:0 6px 20px rgba(74,159,200,.22)}
+.btn-row{width:100%;display:flex;flex-direction:column;gap:10px}
+.card{width:100%;background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);padding:20px}
+.back-btn{width:38px;height:38px;border-radius:50%;border:1px solid var(--border);
+  background:var(--surface);color:var(--muted);font-size:16px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.2s;}
+.back-btn:active{border-color:var(--border2);color:var(--text)}
+/* START */
+#s-start{justify-content:center;gap:26px;text-align:center}
+.hero-icon{font-size:66px;animation:hFloat 4s ease-in-out infinite;filter:drop-shadow(0 0 22px rgba(212,120,138,.4))}
+@keyframes hFloat{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-10px) scale(1.05)}}
+.hero-tagline{font-size:13px;color:var(--muted);font-style:italic;letter-spacing:.025em}
+.rules-card{display:flex;flex-direction:column;gap:11px}
+.rules-ttl{font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:600;color:var(--gold);letter-spacing:.04em}
+.rule-row{display:flex;align-items:flex-start;gap:12px;font-size:13px;color:var(--text2);line-height:1.5}
+.rule-ico{font-size:15px;flex-shrink:0}
+.hdiv{height:1px;background:var(--border)}
+/* CATEGORY */
+#s-category{gap:12px;padding-top:20px}
+.cat-list{width:100%;display:flex;flex-direction:column;gap:9px}
+.cat-item{width:100%;padding:15px 18px;border-radius:var(--r-md);border:1px solid;
+  cursor:pointer;display:flex;align-items:center;gap:14px;transition:transform .14s;position:relative;overflow:hidden;}
+.cat-item:active{transform:scale(.98)}
+.cat-item.romantic{background:rgba(212,120,138,.07);border-color:rgba(212,120,138,.2)}
+.cat-item.funny{background:rgba(201,147,62,.07);border-color:rgba(201,147,62,.2)}
+.cat-item.spicy{background:rgba(201,96,96,.07);border-color:rgba(201,96,96,.2)}
+.cat-item.custom-cat{background:rgba(74,159,200,.07);border-color:rgba(74,159,200,.2)}
+.cat-item.random{background:rgba(200,168,112,.05);border-color:rgba(200,168,112,.14)}
+.cat-item.locked{opacity:.72}
+.cat-emoji{font-size:32px;flex-shrink:0}
+.cat-info{flex:1}
+.cat-name{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;letter-spacing:.01em}
+.cat-item.romantic .cat-name{color:var(--romantic)}
+.cat-item.funny .cat-name{color:var(--funny)}
+.cat-item.spicy .cat-name{color:var(--spicy)}
+.cat-item.custom-cat .cat-name{color:var(--custom)}
+.cat-item.random .cat-name{color:var(--gold)}
+.cat-desc{font-size:12px;color:var(--muted);margin-top:2px}
+.badge-free{font-size:10px;font-weight:700;padding:3px 9px;border-radius:50px;background:rgba(90,189,112,.14);color:var(--green);letter-spacing:.06em;text-transform:uppercase;flex-shrink:0}
+.badge-prem{font-size:10px;font-weight:700;padding:3px 9px;border-radius:50px;background:rgba(200,168,112,.14);color:var(--gold);letter-spacing:.06em;text-transform:uppercase;flex-shrink:0}
+.badge-limit{font-size:10px;font-weight:700;padding:3px 9px;border-radius:50px;background:rgba(200,168,112,.14);color:var(--gold);letter-spacing:.06em;text-transform:uppercase;flex-shrink:0}
+.lock-icon{font-size:16px;flex-shrink:0}
+/* CUSTOM EDITOR */
+#s-custom-edit{gap:12px;padding-top:20px}
+.topbar{width:100%;display:flex;align-items:center;justify-content:space-between}
+.q-add-card{width:100%;background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);padding:18px;display:flex;flex-direction:column;gap:10px}
+.q-add-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.q-input{width:100%;padding:13px 15px;border-radius:var(--r-sm);border:1.5px solid var(--border);
+  background:var(--surface);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;-webkit-appearance:none;resize:none;}
+.q-input:focus{outline:none;border-color:var(--custom)}
+.q-ab-row{display:flex;gap:8px}
+.q-ab-input{flex:1;padding:12px 14px;border-radius:var(--r-sm);border:1.5px solid var(--border);
+  background:var(--surface);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;-webkit-appearance:none;}
+.q-ab-input:focus{outline:none;border-color:var(--custom)}
+.q-ab-label{font-size:11px;font-weight:700;color:var(--custom);margin-bottom:3px;letter-spacing:.04em}
+.cq-list{width:100%;display:flex;flex-direction:column;gap:8px}
+.cq-item{background:var(--card);border:1px solid var(--border);border-radius:var(--r-md);padding:13px 14px;display:flex;align-items:flex-start;gap:10px}
+.cq-item-info{flex:1}
+.cq-item-q{font-size:13px;font-weight:600;color:var(--text);margin-bottom:4px}
+.cq-item-opts{font-size:12px;color:var(--muted)}
+.cq-del-btn{width:28px;height:28px;border-radius:50%;border:none;background:rgba(201,96,96,.15);color:var(--red);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.cq-count{font-size:12px;color:var(--muted);text-align:center}
+.cq-empty{font-size:13px;color:var(--muted);text-align:center;padding:24px;font-style:italic}
+/* GAME */
+#s-game{padding-top:18px;gap:13px;justify-content:flex-start}
+.game-topbar{width:100%;display:flex;align-items:center;justify-content:space-between}
+.round-num{font-size:14px;font-weight:600;color:var(--text)}
+.drink-badge{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;
+  border-radius:50px;background:rgba(201,96,96,.12);border:1px solid rgba(201,96,96,.22);
+  font-size:12px;font-weight:700;color:var(--spicy);}
+.prog-track{width:100%;height:3px;background:rgba(255,255,255,.06);border-radius:99px;overflow:hidden}
+.prog-fill{height:100%;border-radius:99px;transition:width .5s cubic-bezier(.4,0,.2,1)}
+.who-chip{display:inline-block;padding:7px 20px;border-radius:50px;font-size:11px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;align-self:center;
+  border:1.5px solid currentColor;}
+.q-card{width:100%;background:var(--card);border:1px solid var(--border);
+  border-radius:var(--r-xl);padding:26px 22px 22px;text-align:center;position:relative;overflow:hidden;}
+.q-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(200,168,112,.3),transparent);}
+.q-cat-lbl{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  display:inline-block;padding:4px 13px;border-radius:50px;margin-bottom:14px;}
+.q-text{font-family:'Cormorant Garamond',serif;font-size:20px;font-style:italic;line-height:1.52;color:var(--text)}
+.options{width:100%;display:flex;flex-direction:column;gap:9px}
+.opt-btn{width:100%;padding:14px 16px;border-radius:var(--r-md);border:1.5px solid var(--border);
+  background:var(--surface);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:14px;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:11px;
+  text-align:left;transition:all .18s;line-height:1.4;}
+.opt-btn:active{transform:scale(.98)}
+.opt-btn:disabled{cursor:default}
+.opt-letter{width:27px;height:27px;border-radius:8px;background:rgba(255,255,255,.07);
+  display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;}
+.opt-btn.selected{border-color:var(--gold);background:rgba(200,168,112,.1);color:var(--gold)}
+.opt-btn.selected .opt-letter{background:rgba(200,168,112,.22);color:var(--gold)}
+.result-reveal{width:100%;padding:14px 16px;border-radius:var(--r-md);text-align:center;
+  font-size:14px;font-weight:600;display:none;animation:revIn .25s ease;}
+.guest-hint{
+  width:100%;padding:10px 16px;border-radius:var(--r-md);
+  background:rgba(212,120,138,.08);border:1px solid rgba(212,120,138,.18);
+  font-size:12px;font-weight:600;color:var(--romantic);text-align:center;
+  line-height:1.5;display:none;
+}
+@keyframes revIn{from{opacity:0;transform:translateY(4px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+.result-reveal.match{background:rgba(90,189,112,.12);color:var(--green);border:1px solid rgba(90,189,112,.25);display:block}
+.result-reveal.nomatch{background:rgba(201,96,96,.12);color:var(--red);border:1px solid rgba(201,96,96,.25);display:block}
+.result-reveal.waiting{background:rgba(200,168,112,.1);color:var(--gold);border:1px solid rgba(200,168,112,.2);display:block}
+/* DONE */
+#s-done{justify-content:center;text-align:center;gap:20px}
+.done-trophy{font-size:72px;animation:hFloat 3s ease-in-out infinite}
+.done-title{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:700;
+  background:linear-gradient(135deg,var(--gold-l),var(--romantic));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.stats-grid{width:100%;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r-md);padding:16px 10px;text-align:center}
+.stat-val{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:700;color:var(--gold);line-height:1}
+.stat-lbl{font-size:11px;color:var(--muted);margin-top:5px;line-height:1.3}
+.free-promo-card{width:100%;background:rgba(200,168,112,.07);border:1px solid rgba(200,168,112,.2);
+  border-radius:var(--r-lg);padding:18px;text-align:center;display:flex;flex-direction:column;gap:12px}
+.free-promo-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:var(--gold)}
+.free-promo-body{font-size:13px;color:var(--text2);line-height:1.55}
+/* MP */
+.room-code-big{font-family:'Cormorant Garamond',serif;font-size:58px;font-weight:700;letter-spacing:.15em;
+  background:linear-gradient(135deg,var(--gold-l),var(--romantic));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-align:center;}
+.room-code-hint{font-size:12px;color:var(--muted);text-align:center;margin-top:-6px}
+.join-row{display:flex;gap:10px;width:100%}
+.join-input{width:100%;padding:14px 15px;border-radius:var(--r-sm);border:1.5px solid var(--border);
+  background:var(--surface);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:22px;font-weight:700;letter-spacing:.12em;text-align:center;text-transform:uppercase;-webkit-appearance:none;}
+.join-input:focus{outline:none;border-color:var(--memories,#8068c8)}
+.mp-status-card{width:100%;padding:15px 16px;border-radius:var(--r-md);background:var(--surface);
+  border:1px solid var(--border);font-size:14px;font-weight:500;text-align:center;color:var(--text2);}
+.mp-divider{display:flex;align-items:center;gap:12px;width:100%}
+.mp-divider::before,.mp-divider::after{content:'';flex:1;height:1px;background:var(--border)}
+.mp-divider span{font-size:11px;color:var(--muted);letter-spacing:.06em}
+#mp-host-cats{flex-direction:column;gap:10px;width:100%;display:none}
+#mp-status-bar{width:100%;padding:12px 15px;border-radius:var(--r-md);text-align:center;
+  background:rgba(200,168,112,.08);border:1px solid rgba(200,168,112,.16);display:none;}
+#mp-reveal{width:100%;flex-direction:column;gap:10px;display:none}
+.mp-rev-row{display:flex;gap:10px}
+.mp-rev-card{flex:1;padding:13px 11px;border-radius:var(--r-md);text-align:center;border:1.5px solid}
+.mp-rev-card.me{background:rgba(140,158,220,.08);border-color:rgba(140,158,220,.24)}
+.mp-rev-card.partner{background:rgba(212,120,138,.08);border-color:rgba(212,120,138,.24)}
+.mp-rev-who{font-size:11px;font-weight:700;letter-spacing:.06em;margin-bottom:5px}
+.mp-rev-card.me .mp-rev-who{color:#a0b0ef}
+.mp-rev-card.partner .mp-rev-who{color:var(--romantic)}
+.mp-rev-ans{font-size:13px;color:var(--text);line-height:1.4}
+.mp-rev-result{padding:13px;border-radius:var(--r-md);text-align:center;font-size:14px;font-weight:700}
+.mp-rev-result.match{background:rgba(90,189,112,.12);color:var(--green);border:1px solid rgba(90,189,112,.25)}
+.mp-rev-result.nomatch{background:rgba(201,96,96,.12);color:var(--red);border:1px solid rgba(201,96,96,.25)}
+/* MODALS */
+.modal-ov{display:none;position:fixed;inset:0;background:rgba(7,5,15,.93);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  z-index:100;flex-direction:column;align-items:center;justify-content:center;padding:28px 20px;}
+.modal-ov.active{display:flex}
+.modal-box{width:100%;max-width:360px;background:var(--card);border:1px solid var(--border2);
+  border-radius:var(--r-xl);padding:28px 22px;
+  display:flex;flex-direction:column;align-items:center;gap:18px;text-align:center;
+  animation:mIn .28s cubic-bezier(.34,1.56,.64,1);}
+@keyframes mIn{from{opacity:0;transform:scale(.88) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.modal-ico{font-size:52px}
+.modal-ttl{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:700;color:var(--gold)}
+.modal-body{font-size:14px;color:var(--text2);line-height:1.65}
+.modal-acts{width:100%;display:flex;flex-direction:column;gap:9px}
+.prem-feats{width:100%;display:flex;flex-direction:column;gap:7px;text-align:left}
+.prem-feat{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--text2);padding:10px 13px;background:var(--surface);border-radius:var(--r-sm)}
+.prem-feat-ico{font-size:17px;flex-shrink:0}
+.prem-price{font-family:'Cormorant Garamond',serif;font-size:38px;font-weight:700;color:var(--gold)}
+.prem-price-sub{font-size:12px;color:var(--muted);margin-top:1px}
+
+.lobby-mode-card{
+  width:100%;padding:18px 20px;border-radius:var(--r-lg);border:1.5px solid var(--border);
+  cursor:pointer;transition:transform .14s,border-color .2s;
+}
+.lobby-mode-card:active{transform:scale(.98)}
+.lobby-join-card{
+  width:100%;padding:20px;border-radius:var(--r-lg);
+  background:rgba(212,120,138,.06);border:1.5px solid rgba(212,120,138,.2);
+}
+.lobby-mode-ico{
+  width:48px;height:48px;border-radius:14px;
+  display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;
+}
+.lobby-mode-title{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;margin-bottom:3px}
+.lobby-mode-desc{font-size:12px;color:var(--muted);line-height:1.45}
+#s-lobby{justify-content:center;gap:14px}
+.btn-quiz{background:linear-gradient(135deg,#4a9f8a,#2a7265);color:#fff;box-shadow:0 6px 20px rgba(74,159,138,.25)}
+.quiz-spinner{display:inline-block;width:20px;height:20px;border:2.5px solid rgba(200,168,112,.3);border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.quiz-opt-btn{width:100%;padding:15px 16px;border-radius:var(--r-md);border:1.5px solid var(--border);
+  background:var(--surface);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:14px;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:11px;
+  text-align:left;transition:all .18s;line-height:1.4;}
+.quiz-opt-btn:active{transform:scale(.98)}
+.quiz-opt-btn:disabled{cursor:default}
+.quiz-opt-btn.correct{border-color:var(--green)!important;background:rgba(90,189,112,.1)!important;color:var(--green)!important}
+.quiz-opt-btn.correct .opt-letter{background:rgba(90,189,112,.2)!important;color:var(--green)!important}
+.quiz-opt-btn.wrong{border-color:var(--red)!important;background:rgba(201,96,96,.1)!important;color:var(--red)!important}
+.quiz-opt-btn.wrong .opt-letter{background:rgba(201,96,96,.2)!important;color:var(--red)!important}
+.quiz-code-chip{font-size:11px;color:var(--muted);text-align:center}
+.quiz-code-chip strong{color:var(--gold);letter-spacing:.1em;font-size:13px}
+</style>
+</head>
+<body>
+
+<!-- ══ START ══ -->
+<div class="screen active" id="s-start">
+  <div style="display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center">
+    <div class="hero-icon">💘</div>
+    <div class="d-title">Kettesben</div>
+    <div class="hero-tagline">ismeritek-e egymást igazán?</div>
+  </div>
+  <div class="card rules-card">
+    <div class="rules-ttl">⚡ Hogyan megy</div>
+    <div class="hdiv"></div>
+    <div class="rule-row"><span class="rule-ico">📱</span><span>Mindenki a <strong>saját telefonján</strong> játszik</span></div>
+    <div class="rule-row"><span class="rule-ico">🏠</span><span>Az egyik párod <strong>létrehozza a szobát</strong></span></div>
+    <div class="rule-row"><span class="rule-ico">🤝</span><span>A másik <strong>csatlakozik a kóddal</strong></span></div>
+    <div class="rule-row"><span class="rule-ico">🍺</span><span>Ha nem egyezik → <strong>igyatok egyet</strong> vagy teljesítsetek feladatot</span></div>
+  </div>
+  <button class="btn btn-primary" onclick="show('s-lobby')">Játék indítása 🥂</button>
+</div>
+
+<!-- ══ CATEGORY ══ -->
+<div class="screen" id="s-category">
+  <div style="text-align:center;margin-bottom:4px;margin-top:14px">
+    <div class="s-title">Kategória</div>
+    <div style="font-size:13px;color:var(--muted);margin-top:4px">Melyikkel kezditek?</div>
+  </div>
+  <div class="cat-list">
+    <div class="cat-item romantic" onclick="handleCat('romantic')">
+      <div class="cat-emoji">💕</div>
+      <div class="cat-info"><div class="cat-name">Romantikus</div><div class="cat-desc">Érzések, szokások, álmok</div></div>
+      <div class="badge-limit" id="cat-romantic-limit">20 ingyenes</div>
+    </div>
+    <div class="cat-item funny" onclick="handleCat('funny')">
+      <div class="cat-emoji">😂</div>
+      <div class="cat-info"><div class="cat-name">Vicces</div><div class="cat-desc">Választások, hülyeségek, nevetés</div></div>
+      <div class="badge-limit" id="cat-funny-limit">20 ingyenes</div>
+    </div>
+    <div class="cat-item spicy locked" id="cat-spicy" onclick="handleCat('spicy')">
+      <div class="cat-emoji">🔥</div>
+      <div class="cat-info"><div class="cat-name">Pikáns</div><div class="cat-desc">Csak bátraknak 😏 · 18+</div></div>
+      <div class="badge-prem" id="cat-spicy-badge">Prémium</div>
+      <div class="lock-icon" id="cat-spicy-lock">🔒</div>
+    </div>
+    <div class="cat-item custom-cat locked" id="cat-custom" onclick="handleCat('custom')">
+      <div class="cat-emoji">✍️</div>
+      <div class="cat-info"><div class="cat-name">Saját kérdések</div><div class="cat-desc" id="custom-cat-desc">Add hozzá a saját kérdéseidet</div></div>
+      <div class="badge-prem" id="cat-custom-badge">Prémium</div>
+      <div class="lock-icon" id="cat-custom-lock">🔒</div>
+    </div>
+    <div class="cat-item random locked" id="cat-random" onclick="handleCat('random')">
+      <div class="cat-emoji">🎲</div>
+      <div class="cat-info"><div class="cat-name">Random</div><div class="cat-desc">20 kérdés, minden kategóriából</div></div>
+      <div class="badge-prem" id="cat-random-badge">Prémium</div>
+      <div class="lock-icon" id="cat-random-lock">🔒</div>
+    </div>
+  </div>
+  <button class="btn btn-outline" style="margin-top:8px" onclick="show('s-start')">← Vissza</button>
+</div>
+
+<!-- ══ CUSTOM QUESTION EDITOR ══ -->
+<div class="screen" id="s-custom-edit">
+  <div class="topbar" style="margin-top:4px">
+    <button class="back-btn" onclick="show('s-category')">←</button>
+    <div class="s-title" style="font-size:20px">✍️ Saját kérdések</div>
+    <div style="width:38px"></div>
+  </div>
+
+  <div class="q-add-card">
+    <div class="q-add-label">Új kérdés hozzáadása</div>
+    <textarea class="q-input" id="cq-input-q" placeholder="Pl. Mi a kedvenc közös programotok?" rows="2" maxlength="120"></textarea>
+    <div style="display:flex;gap:10px">
+      <div style="flex:1">
+        <div class="q-ab-label">A lehetőség</div>
+        <input class="q-ab-input" id="cq-input-a" placeholder="Pl. Mozizás" maxlength="60">
+      </div>
+      <div style="flex:1">
+        <div class="q-ab-label">B lehetőség</div>
+        <input class="q-ab-input" id="cq-input-b" placeholder="Pl. Otthon sorozat" maxlength="60">
+      </div>
+    </div>
+    <button class="btn btn-custom" onclick="cqAdd()" style="margin-top:2px">+ Kérdés hozzáadása</button>
+  </div>
+
+  <div class="cq-count" id="cq-count"></div>
+  <div style="font-size:12px;color:var(--muted);text-align:center;margin-top:-4px;padding:0 4px;line-height:1.5">
+    💡 A kérdést mindkét telefonos módban automatikusan <strong style="color:var(--custom)">TE</strong> / <strong style="color:var(--romantic)">PÁROD</strong> formátumban mutatja a játék.
+  </div>
+  <div class="cq-list" id="cq-list"></div>
+
+  <div style="width:100%;display:flex;flex-direction:column;gap:10px;margin-top:auto;padding-top:16px">
+    <button class="btn btn-gold" id="cq-play-btn" onclick="startGame('custom')">Játék indítása 🎴</button>
+    <button class="btn btn-outline" onclick="show('s-category')">← Vissza</button>
+  </div>
+</div>
+
+<!-- ══ LOBBY ══ -->
+<div class="screen" id="s-lobby">
+
+  <div style="text-align:center;margin-top:8px">
+    <div class="d-title" style="font-size:28px">Játék indítása</div>
+    <div style="font-size:13px;color:var(--muted);margin-top:6px">Válassz játékmódot</div>
+  </div>
+
+  <!-- MODE 1 -->
+  <div class="lobby-mode-card" onclick="show('s-mp-mode')" style="border-color:rgba(124,111,205,.35);background:rgba(124,111,205,.07)">
+    <div style="display:flex;align-items:center;gap:16px">
+      <div class="lobby-mode-ico" style="background:rgba(124,111,205,.15);color:#9d8fd4;font-size:26px">🎯</div>
+      <div style="flex:1">
+        <div class="lobby-mode-title" style="color:#9d8fd4">Mennyire hasonlítotok?</div>
+        <div class="lobby-mode-desc">A/B kérdések — egyezik-e a válaszotok?</div>
+      </div>
+      <div style="color:#9d8fd4;font-size:20px;opacity:.6">→</div>
+    </div>
+  </div>
+
+  <!-- MODE 2 -->
+  <div class="lobby-mode-card" onclick="show('s-know-mode')" style="border-color:rgba(74,159,138,.35);background:rgba(74,159,138,.07)">
+    <div style="display:flex;align-items:center;gap:16px">
+      <div class="lobby-mode-ico" style="background:rgba(74,159,138,.15);color:#4a9f8a;font-size:26px">🧠</div>
+      <div style="flex:1">
+        <div class="lobby-mode-title" style="color:#4a9f8a">Mennyire ismered a párod?</div>
+        <div class="lobby-mode-desc">Személyes kérdések · kitalálod-e a párod válaszát?</div>
+      </div>
+      <div style="color:#4a9f8a;font-size:20px;opacity:.6">→</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══ KNOW MODE (Mennyire ismered - módválasztó) ══ -->
+<div class="screen" id="s-know-mode" style="justify-content:center;gap:14px">
+
+  <div style="display:flex;align-items:center;gap:12px;width:100%">
+    <button class="back-btn" onclick="show('s-lobby')">←</button>
+    <div>
+      <div class="s-title" style="font-size:22px;color:#4a9f8a">🧠 Mennyire ismered a párod?</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:2px">Válassz játékmódot</div>
+    </div>
+  </div>
+
+  <div class="lobby-mode-card" onclick="show('s-yesno-lobby')" style="border-color:rgba(90,189,112,.35);background:rgba(90,189,112,.07)">
+    <div style="display:flex;align-items:center;gap:16px">
+      <div class="lobby-mode-ico" style="background:rgba(90,189,112,.15);color:var(--green);font-size:26px">✅</div>
+      <div style="flex:1">
+        <div class="lobby-mode-title" style="color:var(--green)">Igen / Nem kérdések</div>
+        <div class="lobby-mode-desc">Gyors, egyszerű játékmód</div>
+      </div>
+      <div style="color:var(--green);font-size:20px;opacity:.6">→</div>
+    </div>
+  </div>
+
+  <div class="lobby-mode-card" onclick="show('s-quiz-create')" style="border-color:rgba(200,168,112,.35);background:rgba(200,168,112,.07)">
+    <div style="display:flex;align-items:center;gap:16px">
+      <div class="lobby-mode-ico" style="background:rgba(200,168,112,.15);color:var(--gold);font-size:26px">🎯</div>
+      <div style="flex:1">
+        <div class="lobby-mode-title" style="color:var(--gold)">4 opciós kérdések</div>
+        <div class="lobby-mode-desc">Találd ki mit mondott a párod</div>
+      </div>
+      <div style="color:var(--gold);font-size:20px;opacity:.6">→</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══ MP MODE (Mennyire hasonlítotok - aloldal) ══ -->
+<div class="screen" id="s-mp-mode" style="justify-content:flex-start;gap:20px;padding-top:28px">
+
+  <!-- Header -->
+  <div style="display:flex;align-items:center;gap:14px;width:100%">
+    <button class="back-btn" onclick="show('s-lobby')">←</button>
+    <div>
+      <div class="s-title" style="font-size:22px;color:#9d8fd4">🎯 Mennyire hasonlítotok?</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:3px">A/B kérdések · mindenki a saját telefonján</div>
+    </div>
+  </div>
+
+  <!-- Create -->
+  <div class="lobby-mode-card" onclick="mpCreate()" style="border-color:rgba(124,111,205,.35);background:rgba(124,111,205,.07)">
+    <div style="display:flex;align-items:center;gap:16px">
+      <div class="lobby-mode-ico" style="background:rgba(124,111,205,.15);color:#9d8fd4;font-size:24px">🏠</div>
+      <div style="flex:1">
+        <div class="lobby-mode-title" style="color:#9d8fd4">Szoba létrehozása</div>
+        <div class="lobby-mode-desc">Te hozod létre — párod csatlakozik a kóddal</div>
+      </div>
+      <div style="color:#9d8fd4;font-size:20px;opacity:.6">→</div>
+    </div>
+  </div>
+
+  <!-- Divider -->
+  <div class="mp-divider"><span>VAGY CSATLAKOZZ</span></div>
+
+  <!-- Join -->
+  <div class="lobby-join-card">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+      <span style="font-size:18px">❤️</span>
+      <div class="lobby-mode-title" style="color:var(--romantic)">Csatlakozás</div>
+    </div>
+    <div class="lobby-mode-desc" style="margin-bottom:14px">Van szobakódod? Írd be itt</div>
+    <input class="join-input" id="mp-join-input" maxlength="4" placeholder="XXXX"
+      oninput="this.value=this.value.toUpperCase()"
+      style="width:100%;font-size:28px;letter-spacing:.2em;margin-bottom:12px">
+    <button class="btn btn-primary" onclick="mpJoin()">Csatlakozás →</button>
+  </div>
+
+</div>
+
+<!-- ══ MP HOST ══ -->
+<div class="screen" id="s-mp-host" style="justify-content:center;gap:20px">
+  <div style="text-align:center">
+    <div class="s-title" style="color:#9d8fd4">Szoba kész! 🏠</div>
+    <div style="font-size:13px;color:var(--muted);margin-top:6px">Mutasd ezt a kódot a párodnak</div>
+  </div>
+  <div style="text-align:center">
+    <div class="room-code-big" id="mp-room-code">----</div>
+    <div class="room-code-hint" style="margin-top:6px">A párod írja be a Csatlakozás mezőbe</div>
+  </div>
+  <div class="mp-status-card" id="mp-host-status">⏳ Várakozás a párodra...</div>
+  <div id="mp-host-cats">
+    <div style="font-size:14px;color:var(--gold);font-family:'Cormorant Garamond',serif;text-align:center;margin-bottom:10px">Válassz kategóriát!</div>
+    <div class="cat-item romantic" onclick="mpStartGame('romantic')"><div class="cat-emoji">💕</div><div class="cat-info"><div class="cat-name">Romantikus</div></div></div>
+    <div class="cat-item funny" onclick="mpStartGame('funny')"><div class="cat-emoji">😂</div><div class="cat-info"><div class="cat-name">Vicces</div></div></div>
+    <div class="cat-item spicy" onclick="mpStartGame('spicy')"><div class="cat-emoji">🔥</div><div class="cat-info"><div class="cat-name">Pikáns</div></div></div>
+    <div class="cat-item custom-cat" onclick="mpStartGame('custom')"><div class="cat-emoji">✍️</div><div class="cat-info"><div class="cat-name">Saját kérdések</div></div></div>
+    <div class="cat-item random" onclick="mpStartGame('random')"><div class="cat-emoji">🎲</div><div class="cat-info"><div class="cat-name" style="color:#a0d0ef">Random</div></div></div>
+  </div>
+  <button class="btn btn-outline" onclick="mpLeave();show('s-mp-mode')">← Kilépés</button>
+</div>
+
+<!-- ══ MP GUEST ══ -->
+<div class="screen" id="s-mp-guest">
+  <div style="text-align:center;margin-top:20px">
+    <div class="s-title" style="color:var(--romantic)">Csatlakozva!</div>
+  </div>
+  <div style="font-size:56px;animation:hFloat 3s ease-in-out infinite;text-align:center">📱</div>
+  <div class="mp-status-card" id="mp-guest-status">✅ Csatlakozva! Párod kategóriát választ...</div>
+  <button class="btn btn-outline" onclick="mpLeave();show('s-mp-mode')">← Kilépés</button>
+</div>
+
+<div class="screen" id="s-game">
+  <div class="game-topbar">
+    <button class="back-btn" onclick="show('s-category')">←</button>
+    <div class="round-num" id="round-badge">1 / 10</div>
+    <div class="drink-badge" id="drink-badge">🍺 0</div>
+  </div>
+  <div class="prog-track"><div class="prog-fill" id="prog-fill" style="width:10%"></div></div>
+  <div class="q-card">
+    <div class="q-cat-lbl" id="q-badge"></div>
+    <div class="q-text" id="q-text"></div>
+  </div>
+  <div class="options">
+    <button class="opt-btn" id="opt-a" onclick="selectOpt(0)">
+      <div class="opt-letter">A</div><span id="opt-a-text"></span>
+    </button>
+    <button class="opt-btn" id="opt-b" onclick="selectOpt(1)">
+      <div class="opt-letter">B</div><span id="opt-b-text"></span>
+    </button>
+  </div>
+  <div class="result-reveal" id="result-reveal"></div>
+  <div class="btn-row" id="next-row" style="display:none">
+    <button class="btn btn-gold" id="next-btn" onclick="nextRound()">Következő →</button>
+  </div>
+  <div id="mp-status-bar"><span id="mp-status-text" style="font-size:13px;font-weight:600"></span></div>
+  <div id="mp-reveal"></div>
+</div>
+
+<!-- ══ DONE ══ -->
+<div class="screen" id="s-done">
+  <div class="done-trophy">🏆</div>
+  <div class="done-title">Vége a játéknak!</div>
+  <div style="font-size:14px;color:var(--text2);line-height:1.65;text-align:center">
+    Remélhetőleg a kapcsolatotok erősebb lett mint az italotok 😄
+  </div>
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-val" id="stat-match">—</div><div class="stat-lbl">Egyező<br>válasz</div></div>
+    <div class="stat-card"><div class="stat-val" id="stat-pct">—</div><div class="stat-lbl">Egyezési<br>arány</div></div>
+    <div class="stat-card"><div class="stat-val" id="stat-drinks">—</div><div class="stat-lbl">Ivás ebben<br>a körben</div></div>
+    <div class="stat-card"><div class="stat-val" id="stat-total">—</div><div class="stat-lbl">Összes<br>játszott meccs</div></div>
+  </div>
+  <div id="free-promo" class="free-promo-card" style="display:none">
+    <div class="free-promo-title">✨ Prémium: Még több kérdés!</div>
+    <div class="free-promo-body">Az ingyenes verzióban 20 kérdés érhető el kategóriánként.<br>Prémiumban <strong>100+ kérdés</strong> Romantikusból, <strong>100+ kérdés</strong> Viccessből, <strong>Pikáns</strong> kategória, <strong>Saját kérdések</strong> és <strong>Random</strong> mix vár!</div>
+    <button class="btn btn-gold" onclick="openModal('modal-premium')">Prémium feloldása ✨</button>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-outline" onclick="show('s-start')">Főmenü</button>
+  </div>
+</div>
+
+<!-- ══ MODAL: AGE ══ -->
+<div class="modal-ov" id="modal-age">
+  <div class="modal-box">
+    <div class="modal-ico">🔞</div>
+    <div class="modal-ttl">Felnőtt tartalom</div>
+    <div class="modal-body">A <strong>Pikáns</strong> kategória 18+ jelölésű tartalmat tartalmaz.<br>Elmúltál 18 éves?</div>
+    <div class="modal-acts">
+      <button class="btn btn-primary" onclick="confirmAge()">Igen, elmúltam 18 éves ✓</button>
+      <button class="btn btn-outline" onclick="closeModal('modal-age')">Nem, vissza</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL: PREMIUM ══ -->
+<div class="modal-ov" id="modal-premium">
+  <div class="modal-box">
+    <div class="modal-ico">✨</div>
+    <div class="modal-ttl">Prémium tartalom</div>
+    <div class="prem-feats">
+      <div class="prem-feat"><span class="prem-feat-ico">💕</span><span>Romantikus — 100+ kérdés (20 ingyenes)</span></div>
+      <div class="prem-feat"><span class="prem-feat-ico">😂</span><span>Vicces — 100+ kérdés (20 ingyenes)</span></div>
+      <div class="prem-feat"><span class="prem-feat-ico">🔥</span><span>Pikáns kategória — felnőtt kérdések</span></div>
+      <div class="prem-feat"><span class="prem-feat-ico">✍️</span><span>Saját kérdések — A/B válaszokkal</span></div>
+      <div class="prem-feat"><span class="prem-feat-ico">🎲</span><span>Random mix — minden kategóriából</span></div>
+    </div>
+    <div><div class="prem-price">990 Ft</div><div class="prem-price-sub">egyszeri vásárlás · örök hozzáférés</div></div>
+    <div class="modal-acts">
+      <button class="btn btn-gold" onclick="unlockPremium()">Feloldás 🔓</button>
+      <button class="btn btn-outline" onclick="closeModal('modal-premium')">Nem most</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL: ALERT ══ -->
+<div class="modal-ov" id="modal-alert">
+  <div class="modal-box">
+    <div class="modal-ico" id="alert-ico">ℹ️</div>
+    <div class="modal-body" id="alert-body" style="font-size:15px;font-weight:500;color:var(--text)"></div>
+    <div class="modal-acts">
+      <button class="btn btn-outline" onclick="closeAlert()">OK</button>
+    </div>
+  </div>
+</div>
+
+<script>
+
+const Q = {
+  romantic: [
+    {q:"Mit szeretsz legjobban a párodban?",a:"Az érzékenységét, gondoskodását",b:"A humorát, lazaságát"},
+    {q:"Melyik randistílust részesíted előnyben?",a:"Otthon film + pizza kettesben",b:"Kint vacsora és séta"},
+    {q:"Ha elmehetnétek valahova, hova mennétek?",a:"Tengerpart, meleg ország",b:"Városnézés, kulturális élmény"},
+    {q:"Mikor érzed magad a legjobban?",a:"Nagy társaságban, buliban",b:"Kettesben, csendben otthon"},
+    {q:"Mi fontosabb neked egy kapcsolatban?",a:"Szavak, bókok, vallomások",b:"Tettek, meglepetések, figyelmesség"},
+    {q:"Hogyan mutatsz szeretetet?",a:"Fizikai közelséggel, öleléssel",b:"Apró dolgokkal, figyelmességgel"},
+    {q:"Mit csinálsz ha nagyon rossz napod volt?",a:"Elvonulsz és csendben vagy",b:"Mesélsz és kibeszéled magad"},
+    {q:"Ha meglepetést kapnál, mit preferálnál?",a:"Közös élmény, program, kirándulás",b:"Fizikai ajándék amit magadnak nem vennél"},
+    {q:"Reggel vagy este vagy jobb kedven?",a:"Reggel – frissen ébredsz",b:"Este – lassan melegszel be"},
+    {q:"Mi fontosabb egy hosszú kapcsolatban?",a:"Megőrizni az izgalmat és az újdonságot",b:"Elmélyíteni a bizalmat és a kényelmet"},
+    {q:"Hogyan kezeled a konfliktusokat?",a:"Azonnal megbeszéled, nem tarthatsz haragot",b:"Időt kérsz magadnak, majd nyugodtan tárgyalod meg"},
+    {q:"Melyik a jobb este kettesben?",a:"Hosszú vacsora ahol sokat beszélgettetek",b:"Csendben egymás mellett lenni, nem kell szó"},
+    {q:"Melyik közelebb áll hozzád?",a:"A függetlenség fontos, kellenek a saját terek",b:"Minél több időt tölteni együtt, annál jobb"},
+    {q:"Hogyan töltöd fel magad?",a:"Egyedül — csend és magány kell",b:"A párod társaságában — ő ad energiát"},
+    {q:"Melyik romantikusabb számodra?",a:"Váratlan virág vagy ajándék ok nélkül",b:"Egy hosszú ölelés ami mindent elmond"},
+    {q:"Hogyan jelzed ha szükséged van a párodra?",a:"Egyenesen megmondod — szükségem van rád most",b:"Közvetve jelzed, reméled hogy ő is érzi"},
+    {q:"Melyik jellemzőbb rád?",a:"Féltékeny típus vagy ha kell",b:"Nem vagy féltékeny, bízol a párodban mindig"},
+    {q:"Ha a párod szomorú, mit csinálsz?",a:"Megkérdezed mi a baj és megpróbálsz megoldást találni",b:"Egyszerűen ott vagy mellette, nem kell megoldani"},
+    {q:"Melyik fontosabb számodra?",a:"A párod legyen a legjobb barátod is",b:"A párod legyen a szerelmed — a barátság más emberekkel legyen"},
+    {q:"Melyik jellemzőbb rád?",a:"Könnyen megbocsátasz, nem tartasz haragot",b:"Nehezebben engedsz el dolgokat ha megbántottak"},
+    {q:"Mit tartasz fontosabbnak?",a:"Rendszeres minőségi idő kettesben",b:"Spontán közös pillanatok amikor épp úgy jön"},
+    {q:"Melyik a jobb reggel?",a:"Lassan ébredni egymás mellett csendben",b:"Reggeli és kávé melletti beszélgetés"},
+    {q:"Mi fontosabb számodra?",a:"Hogy a párod nyíltan megmutassa az érzéseit",b:"Hogy a párod érzelmileg stabil és nem hullámzó"},
+    {q:"Melyik a jobb módja a bocsánatkérésnek?",a:"Szavakkal — elmondod mi volt a hiba és sajnálod",b:"Tettekkel — megcsinálsz valamit ami mutatja hogy sajnálod"},
+    {q:"Mi fontosabb számodra?",a:"Hogy a párod kihívjon és ösztönözzön fejlődni",b:"Hogy a párod elfogadjon és ne akarjon megváltoztatni"},
+    {q:"Mi fontosabb számodra?",a:"Hogy a kapcsolatban legyenek közös rituálék és szokások",b:"Hogy minden nap más legyen, ne legyen rutin"},
+    {q:"Melyik jellemzőbb rád?",a:"Ha valaki fontos neked azt meg is mondod hangosan",b:"Ha valaki fontos neked azt inkább a tetteiden látszik"},
+    {q:"Melyik a jobb meglepetés?",a:"Spontán program amit azonnal csináltok",b:"Gondosan előre megtervezett különleges este"},
+    {q:"Mi fontosabb számodra?",a:"Sokat nevetni együtt",b:"Mélyen megérteni egymást"},
+    {q:"Melyik romantikusabb?",a:"Hosszú séta kettesben este",b:"Otthon főzni együtt valamit"},
+    {q:"Hogyan fejezed ki hogy valaki fontos neked?",a:"Sok időt töltesz vele",b:"Apró figyelmességekkel kedveskedsz neki"},
+    {q:"Hogyan fejezed ki hogy valami fáj?",a:"Azonnal megmondod mit éreztél",b:"Vársz míg feldolgoztad, majd akkor hozod szóba"},
+    {q:"Melyik boldogabb pillanat?",a:"Amikor valami újat fedeztek fel együtt",b:"Amikor egy régi kedvenc dolgot csináltok újra"},
+    {q:"Mi fontosabb számodra hosszú távon?",a:"Hogy a kapcsolat folyamatosan fejlődjön és változzon",b:"Hogy a kapcsolat stabil alapot adjon mindkettőtöknek"},
+    {q:"Melyik a jobb este?",a:"Tervezett különleges program kettesben",b:"Spontán véletlenszerű est ahol semmi sincs tervezve"},
+    {q:"Mi fontosabb számodra?",a:"Hogy a kapcsolatban legyenek közös rituálék",b:"Hogy minden nap más legyen, ne legyen rutin"},
+    {q:"Melyik inkább te?",a:"Szívesen mesélsz a párodnak a napi dolgokról",b:"Inkább akkor osztod meg a dolgokat ha valami fontos történt"},
+    {q:"Melyik jellemzőbb rád?",a:"Könnyen kimondod hogy szeretsz valakit",b:"Nehezebb szavakkal kifejezni az érzéseidet"},
+    {q:"Mi fontosabb számodra?",a:"Hogy a párod hasonló értékrenddel bírjon",b:"Hogy a párod más szemszögből látja a világot mint te"},
+    {q:"Melyik a jobb módja annak hogy a párod érezze a szerelmet?",a:"Rendszeresen kimondod hangosan",b:"Folyamatosan megmutatod tettekkel"},
+  ],
+  funny: [
+    {q:"Ha állat lennél, mi lennél?",a:"Macska – független, kényelemszerető",b:"Kutya – lojális, aktív, boldog"},
+    {q:"Mi bosszant jobban?",a:"Lassú internet vagy telefon",b:"Hangosan csámcsogó ember"},
+    {q:"Mit választanál inkább?",a:"Soha többé nem enni az egyik kedvenc ételed",b:"Soha többé nem nézni sorozatot vagy filmet"},
+    {q:"Ha milliárdos lennél, mit csinálnál először?",a:"Utaznál a világ körül",b:"Megvennéd az álomotthonod"},
+    {q:"Melyik illik rád inkább?",a:"Reggeli kávé nélkül nem létezik az élet",b:"Megvan kávé nélkül is simán"},
+    {q:"Melyik inkább te?",a:"Általában korán érsz mindenhova",b:"Általában az utolsó pillanatban érsz oda"},
+    {q:"Mit választanál inkább?",a:"Soha többé nem inni alkoholt",b:"Soha többé nem inni kávét vagy teát"},
+    {q:"Melyik típus vagy?",a:"Minden cipőt és ruhát megőrzöl hátha kelleni fog",b:"Ha 1 éve nem vetted fel, ki vele azonnal"},
+    {q:"Mi bosszant jobban?",a:"Ha valaki megszakít mikor mesélsz",b:"Ha valaki telefonozik mikor együtt vagytok"},
+    {q:"Melyik inkább te?",a:"Minden üzenetre gyorsan válaszolsz",b:"Órákat csúszik mire visszaírsz"},
+    {q:"Mit választanál inkább?",a:"Láthatatlan lehetsz ha akarsz",b:"Tudsz repülni ha akarsz"},
+    {q:"Melyik jellemzőbb rád?",a:"Ha vásárolsz mindent megveszel ami kell egyszerre",b:"Naponta többször is bemész a boltba mert elfelejtetted"},
+    {q:"Melyik inkább te?",a:"Elalvás előtt még tíz percet telefonozol",b:"Amint lefekszel azonnal elalszol"},
+    {q:"Melyik jellemzőbb rád?",a:"Teli van a táskád mindenféle dologgal",b:"Minimalista — csak ami szükséges kerül a táskába"},
+    {q:"Melyik inkább te?",a:"Mindent megőrzöl ami lehet hogy egyszer kelleni fog",b:"Ha nem kell most azonnal ki a szemétbe"},
+    {q:"Melyik jellemzőbb rád?",a:"Rögtön megeszed amit kapsz",b:"Elmented a legjobb falat a végére"},
+    {q:"Melyik inkább te?",a:"Sokat fotografálsz és videózol élményekből",b:"Inkább átéled a pillanatot, nem kell megörökíteni minden"},
+    {q:"Melyik jellemzőbb rád?",a:"Azonnal megnézed a telefont ha értesítés jön",b:"Tud gyűlni az értesítés, nem zavar"},
+    {q:"Melyik inkább te?",a:"Sokat gondolkodsz mielőtt szólsz valamit",b:"Inkább kimondod és utána gondolkodsz"},
+    {q:"Melyik jellemzőbb rád?",a:"Ha nem megy valami egyre dühösebben próbálod",b:"Ha nem megy félreteszed és visszatérsz hozzá"},
+    {q:"Melyik inkább te?",a:"Ha vásárolsz listával mész",b:"Fejből tudod mi kell, lista felesleges"},
+    {q:"Melyik jellemzőbb rád?",a:"Töltőn van a telefon amint 30% alá esik",b:"Szinte mindig kimerülőben megy a telefon"},
+    {q:"Melyik inkább te?",a:"Ha unatkozol azonnal kitalálsz valamit",b:"Ha unatkozol simán el tudsz lenni semmit csinálva"},
+    {q:"Mit választanál?",a:"Egy évig nem ehetnél semmilyen édeset",b:"Egy évig nem ehetnél semmilyen sósat"},
+    {q:"Melyik inkább te?",a:"Elolvasod a használati utasítást mielőtt összerakod",b:"Próba-szerencse alapon rakod össze anélkül hogy elolvastad"},
+    {q:"Melyik jellemzőbb rád?",a:"Ha mérsz valamit akkor mérőeszközzel",b:"Szemre, érzésre mérsz mindent"},
+    {q:"Melyik inkább te?",a:"Ha mozi — akkor pattogatott kukorica, kötelező",b:"Moziba sem kell enni, elvan enni nélkül"},
+    {q:"Melyik jellemzőbb rád?",a:"Szívesen festenél falat vagy bútort pakolnál át",b:"Ha lehet ne kelljen semmi ilyen munkával járó projekt"},
+    {q:"Melyik inkább te?",a:"Ha valami finom van megosztod a párodmal is",b:"Ha valami finom van nem szívesen osztod meg"},
+    {q:"Melyik jellemzőbb rád?",a:"Ha főzöl mindig sok lesz belőle",b:"Pontosan annyit főzöl amennyi kell, nem marad felesleg"},
+    {q:"Melyik inkább te?",a:"Ha fáradt vagy azonnal megmutatkozik rajtad",b:"Ha fáradt vagy is el tudod rejteni és normálisan viselkedsz"},
+    {q:"Mi bosszantóbb?",a:"Ha valaki folyamatosan késik",b:"Ha valaki folyamatosan előbb ér mint kellene"},
+    {q:"Melyik inkább te?",a:"Ha valamit meg lehet csinálni ma ne halaszd holnapra",b:"Ha valamit el lehet halasztani holnapra miért csináld ma"},
+    {q:"Melyik jellemzőbb rád?",a:"Szívesen tanítasz másokat valamire amit tudsz",b:"Inkább megcsinálod helyette minthogy elmagyarázd"},
+    {q:"Melyik jellemzőbb rád?",a:"Ha izgulsz az megmutatkozik a viselkedéseden",b:"Ha izgulsz kívülről nem lehet látni rajtad"},
+    {q:"Melyik inkább te?",a:"Ha vásárolsz szívesen kipróbálsz új dolgokat",b:"Ha vásárolsz inkább a bevált márkáknál maradsz"},
+    {q:"Melyik jellemzőbb rád?",a:"Ha valamit félbehagysz nehéz visszatérni és befejezni",b:"Ha valamit félbehagytál visszatérsz és befejezed"},
+    {q:"Melyik inkább te?",a:"Szívesen vezeted a helyzeteket és te döntesz",b:"Szívesen alkalmazkodsz ahhoz amit mások döntenek"},
+    {q:"Melyik jellemzőbb rád?",a:"Ha valaki megkér valamire általában igent mondasz",b:"Könnyedén mondasz nemet ha nem akarod megcsinálni"},
+    {q:"Melyik inkább te?",a:"Gyorsan megbarátkozol idegenekkel",b:"Nehezebben nyílsz meg, az ismerkedés időbe telik"},
+    {q:"Melyik jellemzőbb rád?",a:"Ha valami rossz történik rögtön megneveted utólag",b:"Ha valami rossz történik hosszabb ideig zavar mielőtt elviccelned"},
+  ],
+  spicy: [
+    {q:"Mit preferálsz jobban az ágyban?",a:"Te irányítasz",b:"A párod irányít"},
+    {q:"Mi izgatóbb számodra?",a:"Lassú, kínzó előjáték",b:"Gyors, szenvedélyes, azonnal"},
+    {q:"Melyik helyszín izgalmasabb?",a:"Nyilvános hely ahol lebukhatnátok",b:"Otthon de szokatlan helyen"},
+    {q:"Mit élveznél jobban?",a:"A párod meglepetésszerűen kezdeményez",b:"Te irányítod mikor és hogyan"},
+    {q:"Mi hozza lázba jobban?",a:"Suttogott dolgok a füledbe",b:"Amikor a párod egyszerűen csak ránéz és tudod mit akar"},
+    {q:"Melyiket választanád?",a:"Csak előjáték szex nélkül egy estén",b:"Gyors szex előjáték nélkül"},
+    {q:"Mit preferálsz?",a:"Világítás van — mindent lát mindenki",b:"Sötétben — csak érzetek"},
+    {q:"Mi izgalmasabb?",a:"A párod teljesen felöltözve de nagyon csábítóan",b:"A párod azonnal vetkőzik"},
+    {q:"Melyik forróbb?",a:"Amikor a párod megmondja pontosan mit akar",b:"Amikor csendben de egyértelműen mutatja"},
+    {q:"Mit választanál?",a:"Szex de nem szabad hangot adni ki",b:"Szex de nem szabad megérinteni egymást kézzel"},
+    {q:"Mi vonzóbb rajtad?",a:"Amikor magabiztos és vezeted a helyzetet",b:"Amikor engeded hogy a párod csinálja amit akar"},
+    {q:"Melyiket élveznéd jobban?",a:"A párod masszíroz végig lassan",b:"A párod csókolgatja végig lassan"},
+    {q:"Ha csak 5 percetek lenne, mit csinálnátok?",a:"Csók és ölelés — ennyi elég",b:"Belefér a szex is 😏"},
+    {q:"Mi tesz téged azonnal kívánóvá?",a:"Egy bizonyos tekintet a párodtól",b:"Fizikai érintés egy bizonyos helyen"},
+    {q:"Melyik izgalmasabb számodra?",a:"Szerepjáték — más karaktert játszani",b:"Meglepetés helyszín amit a párod választ"},
+    {q:"Mi vonzóbb?",a:"A párod szaga közvetlenül test után",b:"A párod parfümje amit szeret viselni"},
+    {q:"Melyiket élveznéd jobban?",a:"Szex reggel ébredés után",b:"Szex éjjel lefekvés előtt"},
+    {q:"Mit preferálsz?",a:"Lassú, kíméletes, gyengéd",b:"Erős, intenzív, szenvedélyes"},
+    {q:"Melyik csók a legjobb?",a:"Hosszú mély csók amikor csak álltok és csókoltok",b:"Rövidebb de intenzív csók mielőtt elmentek egymástól"},
+    {q:"Melyik inkább te?",a:"Szívesen kezdeményezel akkor is ha fáradt vagy",b:"Ha fáradt vagy inkább alszol, holnap is lehet"},
+    {q:"Mi vonzóbb?",a:"A párod hangja amikor suttog",b:"A párod hangja amikor kimondja hogy akar téged"},
+    {q:"Melyiket élveznéd jobban?",a:"Hosszú előjáték ami szinte kínzás",b:"Közvetlen azonnali, nincs várakozás"},
+    {q:"Mi izgalmasabb számodra?",a:"A párod kezei",b:"A párod szája"},
+    {q:"Melyiket választanád?",a:"Szex egy szokatlan helyen",b:"Szex otthon de valami új dolgot kipróbálva"},
+    {q:"Melyik inkább te?",a:"Szex után szívesen maradsz közel és elalszol együtt",b:"Szex után kell egy kis saját tér"},
+    {q:"Mi vonzóbb?",a:"A párod háta",b:"A párod nyaka"},
+    {q:"Melyik inkább te?",a:"Szívesen mondod hangosan mit szeretnél",b:"Inkább megmutatod szavak nélkül"},
+    {q:"Mi izgalmasabb?",a:"Amikor a párod nehezen tartja vissza magát",b:"Amikor a párod teljesen kontroll alatt van"},
+    {q:"Mi vonzóbb?",a:"A párod ahogy mozog",b:"A párod ahogy néz rád"},
+    {q:"Melyiket választanád?",a:"Hosszú intim este ahol van időtök mindenre",b:"Rövid intenzív pillanat ami váratlanul jön"},
+    {q:"Mi izgalmasabb számodra?",a:"Amikor a párod a neveden szólít közben",b:"Amikor a párod nem szól semmit csak érez"},
+    {q:"Mi vonzóbb?",a:"A párod mosolya közben",b:"A párod arca amikor teljesen elmerül az érzésben"},
+    {q:"Mi izgalmasabb?",a:"Amikor a párod kihív és provokál",b:"Amikor a párod gyengéd és odaadó"},
+    {q:"Melyik inkább te?",a:"Szívesen kísérletezel új dolgokkal",b:"A bevált és megbízható a legjobb"},
+    {q:"Mi vonzóbb?",a:"A párod hangjai",b:"A párod érintése"},
+    {q:"Mi izgalmasabb számodra?",a:"Amikor a párod kicsit megvárakoztat",b:"Amikor a párod azonnal reagál rád"},
+    {q:"Mi vonzóbb?",a:"A párod önbizalma az intim pillanatokban",b:"A párod sebezhetősége az intim pillanatokban"},
+    {q:"Mi vonzóbb?",a:"A párod erős kezei",b:"A párod gyengéd ujjai"},
+    {q:"Mi izgalmasabb számodra?",a:"Az a pillanat mielőtt elkezdődik",b:"Az a pillanat amikor teljesen csúcson vagytok"},
+    {q:"Melyik inkább te?",a:"Az előjáték a kedvenced — az a legjobb rész",b:"A szex maga a legjobb, az előjáték inkább bónusz"},
+    {q:"Mi vonzóbb?",a:"A párod ahogy leveszi a ruháit",b:"A párod ahogy felveszi a ruháit utána"},
+    {q:"Mi izgalmasabb?",a:"Amikor a párod irányítja és megmondja mit csinálj",b:"Amikor a párod hagy téged mindenben dönteni"},
+    {q:"Mi vonzóbb?",a:"A párod hangja amikor a nevedet mondja",b:"A párod hangja amikor nem mond szavakat csak hangot ad ki"},
+    {q:"Melyiket élveznéd jobban?",a:"Az az érzés ami az elején van — az izgalom, a várakozás",b:"Az az érzés ami a végén van — a teljesség, a megérkezés"},
+    {q:"Mi vonzóbb?",a:"A párod fizikai ereje",b:"A párod gyengédsége és figyelmessége"},
+    {q:"Melyik inkább te?",a:"Szívesen dicsérsz és visszajelzel közben",b:"Inkább csendben vagy és az érzések magukért beszélnek"},
+    {q:"Melyiket élveznéd jobban?",a:"Szex amibe valami új elemet viszel bele",b:"Szex ami a tökéletesen bevált kedvenc változat"},
+    {q:"Mi izgalmasabb?",a:"Intimitás ami sokáig építkezik egész este",b:"Intimitás ami hirtelen jön és azonnal intenzív"},
+    {q:"Melyik inkább te?",a:"Szívesen maradsz ébren utána és suttogva beszélgettetek",b:"Szex után szívesen elalszol gyorsan a párod mellett"},
+    {q:"Mi vonzóbb?",a:"A párod egész teste egyszerre",b:"A párod egy konkrét kedvenc testrészed rajta"},
+  ],
+};
+const FREE_PER_CAT = 20;
+
+
+// ── CATEGORY META ──────────────────────────────────────────────
+const CAT_META = {
+  romantic:{label:'💕 Romantikus',color:'#d4788a',bg:'rgba(212,120,138,0.15)'},
+  funny:   {label:'😂 Vicces',    color:'#c9933e',bg:'rgba(201,147,62,0.15)'},
+  spicy:   {label:'🔥 Pikáns',    color:'#c96060',bg:'rgba(201,96,96,0.15)'},
+  custom:  {label:'✍️ Saját',     color:'#6aadcc',bg:'rgba(106,173,204,0.15)'},
+  random:  {label:'🎲 Random',    color:'#c8a870',bg:'rgba(200,168,112,0.12)'},
+};
+const PREM_CATS = ['spicy','custom','random'];
+const FREE_CATS = ['romantic','funny'];
+
+// ── PREMIUM ─────────────────────────────────────────────────────
+function isPremium(){return localStorage.getItem('kb_premium')==='1'}
+function setPremium(){localStorage.setItem('kb_premium','1');refreshCatUI()}
+function isAgeOk(){return localStorage.getItem('kb_age')==='1'}
+function setAgeOk(){localStorage.setItem('kb_age','1')}
+
+let _pendingCat=null;
+function handleCat(cat){
+  if(PREM_CATS.includes(cat)&&!isPremium()){_pendingCat=cat;openModal('modal-premium');return}
+  if(cat==='spicy'&&!isAgeOk()){_pendingCat=cat;openModal('modal-age');return}
+  if(cat==='custom'){openCustomEditor();return}
+  startGame(cat);
+}
+function confirmAge(){setAgeOk();closeModal('modal-age');if(_pendingCat){const c=_pendingCat;_pendingCat=null;handleCat(c)}}
+function unlockPremium(){
+  // TODO: Replace with Play Billing API call before production
+  setPremium();closeModal('modal-premium');
+  if(_pendingCat){const c=_pendingCat;_pendingCat=null;handleCat(c)}
+}
+
+function refreshCatUI(){
+  if(isPremium()){
+    ['spicy','custom','random'].forEach(cat=>{
+      const card=document.getElementById('cat-'+cat);
+      if(!card)return;
+      card.classList.remove('locked');
+      ['badge','lock'].forEach(t=>{
+        const el=document.getElementById('cat-'+cat+'-'+t);
+        if(el)el.style.display='none';
+      });
+    });
+    ['romantic','funny'].forEach(cat=>{
+      const el=document.getElementById('cat-'+cat+'-limit');
+      if(el)el.style.display='none';
+    });
+  }
+}
+
+// ── CUSTOM QUESTIONS ────────────────────────────────────────────
+function loadCQ(){try{return JSON.parse(localStorage.getItem('kb_cq')||'[]')}catch{return[]}}
+function saveCQ(a){localStorage.setItem('kb_cq',JSON.stringify(a))}
+
+function openCustomEditor(){renderCQList();show('s-custom-edit')}
+
+function renderCQList(){
+  const items=loadCQ();
+  const list=document.getElementById('cq-list');
+  const count=document.getElementById('cq-count');
+  const playBtn=document.getElementById('cq-play-btn');
+  const catDesc=document.getElementById('custom-cat-desc');
+  count.textContent=items.length>0?`${items.length} kérdés hozzáadva`:'';
+  catDesc.textContent=items.length>0?`${items.length} saját kérdés`:'Add hozzá a saját kérdéseidet';
+  playBtn.disabled=items.length<2;
+  playBtn.style.opacity=items.length<2?'0.45':'1';
+  if(items.length===0){list.innerHTML='<div class="cq-empty">Még nincs kérdés hozzáadva.<br>Írj be egyet fent! ✍️</div>';return}
+  list.innerHTML=items.map((item,i)=>`
+    <div class="cq-item">
+      <div class="cq-item-info">
+        <div class="cq-item-q">${item.q}</div>
+        <div class="cq-item-opts">A: ${item.a} &nbsp;·&nbsp; B: ${item.b}</div>
+      </div>
+      <button class="cq-del-btn" onclick="cqDelete(${i})">×</button>
+    </div>`).join('');
+}
+
+function cqAdd(){
+  const qEl=document.getElementById('cq-input-q');
+  const aEl=document.getElementById('cq-input-a');
+  const bEl=document.getElementById('cq-input-b');
+  const q=qEl.value.trim(), a=aEl.value.trim(), b=bEl.value.trim();
+  if(!q||!a||!b){showAlert('Töltsd ki a kérdést és mindkét lehetőséget!','⚠️');return}
+  const items=loadCQ();
+  items.push({q,a,b});
+  saveCQ(items);
+  qEl.value='';aEl.value='';bEl.value='';
+  renderCQList();
+}
+function cqDelete(idx){
+  const items=loadCQ();items.splice(idx,1);saveCQ(items);renderCQList();
+}
+
+// ── STATS ───────────────────────────────────────────────────────
+function getStats(){try{return JSON.parse(localStorage.getItem('kb_stats')||'{}')}catch{return{}}}
+function addGameStats(matches,total,drinks){
+  const s=getStats();
+  s.games=(s.games||0)+1;s.matches=(s.matches||0)+matches;
+  s.total=(s.total||0)+total;s.drinks=(s.drinks||0)+drinks;
+  localStorage.setItem('kb_stats',JSON.stringify(s));
+}
+
+// ── MODALS ──────────────────────────────────────────────────────
+function openModal(id){document.getElementById(id).classList.add('active')}
+function closeModal(id){document.getElementById(id).classList.remove('active')}
+function closeAlert(){closeModal('modal-alert')}
+function showAlert(msg,ico='ℹ️'){
+  document.getElementById('alert-ico').textContent=ico;
+  document.getElementById('alert-body').textContent=msg;
+  openModal('modal-alert');
+}
+
+// ── DECK ────────────────────────────────────────────────────────
+let decks={};
+function getDeck(cat){
+  const isFree=!isPremium()&&FREE_CATS.includes(cat);
+  let src;
+  if(cat==='custom') src=loadCQ().map(q=>({...q,cat:'custom'}));
+  else if(cat==='random') src=buildRandom();
+  else src=Q[cat].map(q=>({...q,cat}));
+  const shuffled=shuffle([...src]);
+  return isFree?shuffled.slice(0,FREE_PER_CAT):shuffled;
+}
+function buildRandom(){
+  return shuffle([
+    ...shuffle(Q.romantic).slice(0,5).map(q=>({...q,cat:'romantic'})),
+    ...shuffle(Q.funny).slice(0,5).map(q=>({...q,cat:'funny'})),
+    ...shuffle(Q.spicy).slice(0,5).map(q=>({...q,cat:'spicy'})),
+    ...loadCQ().slice(0,5).map(q=>({...q,cat:'custom'})),
+  ]);
+}
+function shuffle(arr){
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+  return a;
+}
+
+// ── GAME STATE ──────────────────────────────────────────────────
+let G={cat:null,pool:[],round:0,total:10,answered:false,
+       sessionMatches:0,sessionDrinks:0,wasFree:false};
+
+function show(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function startGame(cat){
+  const deck=getDeck(cat);
+  if(deck.length<2){showAlert('Adj hozzá legalább 2 kérdést a játékhoz!','⚠️');return}
+  const total=cat==='random'?Math.min(deck.length,20):Math.min(deck.length,10);
+  const pool=deck.slice(0,total);
+  const isFree=!isPremium()&&FREE_CATS.includes(cat);
+  G={cat,pool,round:0,total,answered:false,sessionMatches:0,sessionDrinks:0,wasFree:isFree};
+  loadRound();
+  show('s-game');
+}
+
+// ── WHO LABEL LOGIC ─────────────────────────────────────────────
+// In single-phone: alternate TE / PÁROD based on round parity
+// In MP: host always TE, guest always PÁROD
+function getWhoLabel(){
+  if(G.mp){
+    return MP.role==='host'
+      ?{text:'🫵 TE',color:'#6aadcc',bg:'rgba(106,173,204,0.15)'}
+      :{text:'❤️ PÁROD',color:'#d4788a',bg:'rgba(212,120,138,0.15)'};
+  }
+  // single phone: alternate
+  const isAboutSelf = G.round % 2 === 0;
+  return isAboutSelf
+    ?{text:'🫵 TE',color:'#6aadcc',bg:'rgba(106,173,204,0.15)'}
+    :{text:'❤️ PÁROD',color:'#d4788a',bg:'rgba(212,120,138,0.15)'};
+}
+
+// ── PARTNER QUESTION TRANSFORM ──────────────────────────────────
+// Converts a self-perspective question to partner-perspective
+// Used in MP mode for the guest (who guesses what the host would answer)
+function partnerQ(q) {
+  // Exact replacements for structurally complex sentences
+  const exact = {
+    'Reggel vagy este vagy jobb kedven?':
+      'Reggel vagy este van jobb kedven a párod?',
+    'Melyik jellemzőbb rád?':
+      'Melyik jellemzőbb a párodra?',
+    'Melyik inkább te?':
+      'Melyik inkább a párod?',
+    'Ha a párod szomorú, mit csinálsz?':
+      'Ha te szomorú vagy, mit csinál a párod?',
+    'Mit szeretsz legjobban a párodban?':
+      'Mit szeret legjobban benned a párod?',
+    'Ha meglepetést kapnál, mit preferálnál?':
+      'Ha meglepetést kapna a párod, mit preferálna?',
+    'Ha 1 hónapig semmi internet, hogy lennél?':
+      'Ha 1 hónapig nem lenne internet, hogy lenne a párod?',
+    'Melyik illik rád inkább?':
+      'Melyik illik inkább a párodra?',
+    'Ha állat lennél, mi lennél?':
+      'Ha állat lenne a párod, mi lenne?',
+    'Mi vonzóbb rajtad?':
+      'Mi vonzóbb a párodban?',
+  };
+  if (exact[q]) return exact[q];
+
+  let r = q;
+
+  // ── Névmások / esetragok ──────────────────────────────
+  r = r.replace(/\bszámodra\b/g,   'a párod számára');
+  r = r.replace(/\bneked\b/g,      'a párodnak');
+  r = r.replace(/\bhozzád\b/g,     'a párodhoz');
+  r = r.replace(/\brólad\b/g,      'a párodról');
+  r = r.replace(/\brajtad\b/g,     'a párodon');
+  r = r.replace(/\btőled\b/g,      'a párodtól');
+  r = r.replace(/\bnálad\b/g,      'a párodhoz');
+  r = r.replace(/\bveled\b/g,      'a párodmal');
+  r = r.replace(/\bbenned\b/g,     'a párodban');
+
+  // ── Visszaható névmás & egyéb ────────────────────────
+  r = r.replace(/\bmagad\b/g,      'magát');
+  r = r.replace(/\bmagadnak\b/g,   'magának');
+  r = r.replace(/\bmagadban\b/g,   'magában');
+  r = r.replace(/\bnapod\b/g,      'napja');
+  r = r.replace(/\bszükséged\b/g,  'szüksége');
+
+  // ── Kifejezések ───────────────────────────────────────
+  r = r.replace(/jellemzőbb rád\b/g,      'jellemzőbb a párodra');
+  r = r.replace(/inkább te\b/g,           'inkább a párod');
+  r = r.replace(/közelebb áll hozzád\b/g, 'közelebb áll a párodhoz');
+  r = r.replace(/illik rád\b/g,           'illik a párodra');
+
+  // ── Hogyan + ige ──────────────────────────────────────
+  r = r.replace(/Hogyan kezeled\b/g,       'Hogyan kezeli a párod');
+  r = r.replace(/Hogyan fejezed ki\b/g,    'Hogyan fejezi ki a párod');
+  r = r.replace(/Hogyan mutatsz\b/g,       'Hogyan mutat a párod');
+  r = r.replace(/Hogyan jelzed\b/g,        'Hogyan jelzi a párod');
+  r = r.replace(/Hogyan reagálsz\b/g,      'Hogyan reagál a párod');
+  r = r.replace(/Hogyan töltöd fel\b/g,    'Hogyan tölti fel a párod');
+  r = r.replace(/Hogyan viselkedsz\b/g,    'Hogyan viselkedik a párod');
+  r = r.replace(/Hogyan ünnepelsz\b/g,     'Hogyan ünnepel a párod');
+  r = r.replace(/Hogyan fejezed\b/g,       'Hogyan fejezi a párod');
+
+  // ── Mit + ige ─────────────────────────────────────────
+  r = r.replace(/\bMit csinálsz\b/g,    'Mit csinál a párod');
+  r = r.replace(/\bmit csinálsz\b/g,    'mit csinál a párod');
+  r = r.replace(/\bMit preferálsz\b/g,  'Mit preferál a párod');
+  r = r.replace(/\bmit preferálsz\b/g,  'mit preferál a párod');
+  r = r.replace(/\bMit választanál\b/g, 'Mit választana a párod');
+  r = r.replace(/\bmit választanál\b/g, 'mit választana a párod');
+  r = r.replace(/\bMit tartasz\b/g,     'Mit tart a párod');
+  r = r.replace(/\bmit tartasz\b/g,     'mit tart a párod');
+
+  // ── Melyiket + ige ───────────────────────────────────
+  r = r.replace(/\bMelyiket élveznéd\b/g,   'Melyiket élvezné a párod');
+  r = r.replace(/\bMelyiket választanád\b/g, 'Melyiket választaná a párod');
+
+  // ── Egyéb igék ────────────────────────────────────────
+  r = r.replace(/\bválasztanál\b/g,  'választana a párod');
+  r = r.replace(/\bválasztanád\b/g,  'választaná a párod');
+  r = r.replace(/\bélveznéd\b/g,     'élvezné a párod');
+  r = r.replace(/\bélveznél\b/g,     'élvezne a párod');
+  r = r.replace(/\bpreferálnád\b/g,  'preferálná a párod');
+  r = r.replace(/\brészesíted\b/g,   'részesíti a párod');
+  r = r.replace(/\bérzed\b/g,        'érzi a párod');
+  r = r.replace(/\btöltöd\b/g,       'tölti a párod');
+  r = r.replace(/\bjelzed\b/g,       'jelzi a párod');
+  r = r.replace(/\bmutatsz\b/g,      'mutat a párod');
+  r = r.replace(/\blennél\b/g,       'lenne a párod');
+
+  // ── Szívesen + ige ───────────────────────────────────
+  r = r.replace(/\bszívesen kezdeményezel\b/g,   'szívesen kezdeményez a párod');
+  r = r.replace(/\bszívesen maradsz\b/g,          'szívesen marad a párod');
+  r = r.replace(/\bszívesen mondod\b/g,           'szívesen mondja a párod');
+  r = r.replace(/\bszívesen mondasz\b/g,          'szívesen mond a párod');
+  r = r.replace(/\bszívesen kérsz\b/g,            'szívesen kér a párod');
+  r = r.replace(/\bszívesen dicsérsz\b/g,         'szívesen dicsér a párod');
+  r = r.replace(/\bszívesen osztod\b/g,           'szívesen osztja a párod');
+  r = r.replace(/\bszívesen teszel\b/g,           'szívesen tesz a párod');
+  r = r.replace(/\bszívesen élsz\b/g,             'szívesen él a párod');
+  r = r.replace(/\bszívesen tanítasz\b/g,         'szívesen tanít a párod');
+  r = r.replace(/\bszívesen fizetsz\b/g,          'szívesen fizet a párod');
+  r = r.replace(/\bszívesen kísérletezel\b/g,     'szívesen kísérletezik a párod');
+  r = r.replace(/\bszívesen compromittálsz\b/g,   'szívesen compromittál a párod');
+
+  // Véletlen dupla "a párod" fix
+  r = r.replace(/a párod a párod/g, 'a párod');
+
+  return r;
+}
+
+function loadRound(){
+  const q=G.pool[G.round];
+  const catKey=q.cat||G.cat;
+  const m=CAT_META[catKey]||CAT_META[G.cat];
+  G.answered=false;
+
+  document.getElementById('round-badge').textContent=`${G.round+1} / ${G.total}`;
+  document.getElementById('prog-fill').style.width=`${((G.round+1)/G.total)*100}%`;
+  document.getElementById('prog-fill').style.background=m.color;
+
+  const badge=document.getElementById('q-badge');
+  badge.textContent=m.label;
+  badge.style.background=m.bg;
+  badge.style.color=m.color;
+
+  // MP guest: transform question to partner perspective
+  // MP host / single phone: show original question
+  let qText = q.q;
+  if (G.mp && MP.role === 'guest') {
+    qText = catKey === 'custom'
+      ? 'Párodra gondolj: ' + qText   // custom questions: prefix (user-written, can't auto-transform)
+      : partnerQ(qText);              // built-in questions: smart transform
+  }
+  document.getElementById('q-text').textContent=`„${qText}"`;
+  document.getElementById('opt-a-text').textContent=q.a;
+  document.getElementById('opt-b-text').textContent=q.b;
+
+  ['opt-a','opt-b'].forEach(id=>{
+    const el=document.getElementById(id);
+    el.className='opt-btn';el.disabled=false;
+  });
+  const rv=document.getElementById('result-reveal');
+  rv.className='result-reveal';rv.textContent='';
+  document.getElementById('next-row').style.display='none';
+  document.getElementById('drink-badge').textContent='🍺 '+G.sessionDrinks;
+}
+
+function selectOpt(idx){
+  if(G.answered)return;
+  if(G.mp){mpSelectOpt(idx);return}
+  G.answered=true;
+  document.getElementById('opt-a').disabled=true;
+  document.getElementById('opt-b').disabled=true;
+  document.getElementById(idx===0?'opt-a':'opt-b').classList.add('selected');
+  const rv=document.getElementById('result-reveal');
+  rv.textContent='Párod mondja meg a válaszát, majd nyomd meg a Következő-t!';
+  rv.className='result-reveal waiting';
+  const isLast=G.round>=G.total-1;
+  document.getElementById('next-btn').textContent=isLast?'🏆 Vége!':'Következő →';
+  document.getElementById('next-row').style.display='flex';
+}
+
+function nextRound(){
+  if(G.mp){mpNextRound();return}
+  G.round++;
+  if(G.round>=G.total){addGameStats(G.sessionMatches,G.total,G.sessionDrinks);showDoneScreen()}
+  else loadRound();
+}
+
+function showDoneScreen(){
+  const pct=G.total>0?Math.round((G.sessionMatches/G.total)*100):0;
+  document.getElementById('stat-match').textContent=G.sessionMatches+'/'+G.total;
+  document.getElementById('stat-pct').textContent=pct+'%';
+  document.getElementById('stat-drinks').textContent=G.sessionDrinks;
+  document.getElementById('stat-total').textContent=(getStats().games)||1;
+  const promo=document.getElementById('free-promo');
+  if(promo) promo.style.display=G.wasFree?'flex':'none';
+  show('s-done');
+}
+
+// ── MULTIPLAYER ─────────────────────────────────────────────────
+const SB_URL='https://qopahqzhpgcexkofecnr.supabase.co';
+const SB_KEY='sb_publishable_yhAL6uCJGgyMNrooh9PiAQ_W8YY-AH7';
+let sb=null,mpCh=null;
+let MP={active:false,role:null,roomId:null,myAnswer:null,partnerAnswer:null,partnerJoined:false,drinks:0};
+
+function sbInit(){if(!sb)sb=supabase.createClient(SB_URL,SB_KEY)}
+function randCode(){return Array.from({length:4},()=>'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[Math.floor(Math.random()*32)]).join('')}
+
+async function mpCreate(){
+  sbInit();
+  const code=randCode();
+  const {error}=await sb.from('game_rooms').upsert({id:code,question:{},answer_a:null,answer_b:null});
+  if(error){showAlert('Hiba: '+error.message,'❌');return}
+  MP={active:true,role:'host',roomId:code,myAnswer:null,partnerAnswer:null,partnerJoined:false,drinks:0};
+  document.getElementById('mp-room-code').textContent=code;
+  document.getElementById('mp-host-status').textContent='⏳ Várakozás a párodra...';
+  document.getElementById('mp-host-cats').style.display='none';
+  show('s-mp-host');mpConnect(code);
+}
+async function mpJoin(){
+  sbInit();
+  const code=document.getElementById('mp-join-input').value.toUpperCase().trim();
+  if(code.length!==4){showAlert('4 karakteres kódot adj meg!','⚠️');return}
+  const {data}=await sb.from('game_rooms').select('id').eq('id',code).single();
+  if(!data){showAlert('Nem található ez a szoba!','❌');return}
+  MP={active:true,role:'guest',roomId:code,myAnswer:null,partnerAnswer:null,partnerJoined:true,drinks:0};
+  document.getElementById('mp-guest-status').textContent='✅ Csatlakozva! Párod kategóriát választ...';
+  show('s-mp-guest');mpConnect(code);
+  setTimeout(()=>mpCh.send({type:'broadcast',event:'guest_joined',payload:{}}),600);
+}
+function mpConnect(code){
+  if(mpCh){mpCh.unsubscribe();mpCh=null}
+  mpCh=sb.channel('ivos-'+code)
+    .on('broadcast',{event:'guest_joined'},()=>{
+      if(MP.role!=='host')return;
+      MP.partnerJoined=true;
+      document.getElementById('mp-host-status').textContent='✅ Párod csatlakozott!';
+      document.getElementById('mp-host-cats').style.display='flex';
+    })
+    .on('broadcast',{event:'game_start'},({payload})=>{
+      if(MP.role!=='guest')return;
+      MP.myAnswer=null;MP.partnerAnswer=null;
+      G={cat:payload.cat,pool:payload.pool,round:0,total:payload.total,
+         answered:false,mp:true,sessionMatches:0,sessionDrinks:0,wasFree:false};
+      loadRound();show('s-game');
+    })
+    .on('broadcast',{event:'my_answer'},({payload})=>{
+      MP.partnerAnswer=payload.answer;
+      if(MP.myAnswer!==null)mpReveal();
+      else mpSetStatus('✅ Párod már választott — te következel!','var(--green)');
+    })
+    .on('broadcast',{event:'next_q'},({payload})=>{
+      if(MP.role!=='guest')return;
+      G.round=payload.round;G.answered=false;
+      MP.myAnswer=null;MP.partnerAnswer=null;
+      loadRound();mpHideReveal();
+    })
+    .on('broadcast',{event:'game_over'},()=>{
+      if(MP.role==='guest')show('s-done');
+    })
+    .subscribe();
+}
+function mpStartGame(cat){
+  const pool=getDeck(cat).slice(0,cat==='random'?20:10);
+  G={cat,pool,round:0,total:pool.length,answered:false,mp:true,sessionMatches:0,sessionDrinks:0,wasFree:false};
+  MP.myAnswer=null;MP.partnerAnswer=null;
+  mpCh.send({type:'broadcast',event:'game_start',payload:{cat,pool,total:pool.length}});
+  loadRound();show('s-game');
+}
+function mpSelectOpt(idx){
+  G.answered=true;
+  MP.myAnswer=idx===0?'A':'B';
+  document.getElementById('opt-a').disabled=true;
+  document.getElementById('opt-b').disabled=true;
+  document.getElementById(idx===0?'opt-a':'opt-b').classList.add('selected');
+  mpCh.send({type:'broadcast',event:'my_answer',payload:{answer:MP.myAnswer}});
+  if(MP.partnerAnswer!==null)mpReveal();
+  else mpSetStatus('✓ Választottál — várakozás a párodra...','var(--gold)');
+}
+function mpReveal(){
+  const my=MP.myAnswer,pt=MP.partnerAnswer,matched=my===pt;
+  if(!matched){MP.drinks++;G.sessionDrinks++;}else{G.sessionMatches++;}
+  const q=G.pool[G.round];
+  const myText=my==='A'?q.a:q.b,ptText=pt==='A'?q.a:q.b;
+  document.getElementById('mp-status-bar').style.display='none';
+  const panel=document.getElementById('mp-reveal');
+  panel.style.display='flex';
+  // Host = TE, Guest = PÁROD in the reveal labels
+  const hostLabel=MP.role==='host'?'🫵 TE':'❤️ PÁROD';
+  const guestLabel=MP.role==='host'?'❤️ PÁROD':'🫵 TE';
+  panel.innerHTML=`
+    <div class="mp-rev-row">
+      <div class="mp-rev-card me"><div class="mp-rev-who">${hostLabel} → ${my}</div><div class="mp-rev-ans">${myText}</div></div>
+      <div class="mp-rev-card partner"><div class="mp-rev-who">${guestLabel} → ${pt}</div><div class="mp-rev-ans">${ptText}</div></div>
+    </div>
+    <div class="mp-rev-result ${matched?'match':'nomatch'}">${matched?'✨ Egyezett!':'🍺 Nem egyezett — igyatok egyet!'}</div>`;
+  if(MP.role==='host'){
+    const isLast=G.round>=G.total-1;
+    document.getElementById('next-btn').textContent=isLast?'🏆 Vége!':'Következő →';
+    document.getElementById('next-btn').onclick=mpNextRound;
+    document.getElementById('next-row').style.display='flex';
+  }else{
+    mpSetStatus('⏳ Párod továbblép...','var(--muted)');
+  }
+}
+function mpHideReveal(){
+  const panel=document.getElementById('mp-reveal');
+  panel.style.display='none';panel.innerHTML='';
+  document.getElementById('mp-status-bar').style.display='none';
+  document.getElementById('next-row').style.display='none';
+}
+function mpNextRound(){
+  if(MP.role!=='host')return;
+  G.round++;MP.myAnswer=null;MP.partnerAnswer=null;
+  if(G.round>=G.total){
+    mpCh.send({type:'broadcast',event:'game_over',payload:{}});
+    show('s-done');return;
+  }
+  mpCh.send({type:'broadcast',event:'next_q',payload:{round:G.round}});
+  loadRound();mpHideReveal();
+}
+function mpSetStatus(text,color){
+  const bar=document.getElementById('mp-status-bar');
+  document.getElementById('mp-status-text').textContent=text;
+  document.getElementById('mp-status-text').style.color=color;
+  bar.style.display=text?'flex':'none';
+}
+function mpLeave(){
+  if(mpCh){mpCh.unsubscribe();mpCh=null}
+  MP={active:false,role:null,roomId:null,myAnswer:null,partnerAnswer:null,partnerJoined:false,drinks:0};
+}
+
+document.addEventListener('DOMContentLoaded',()=>refreshCatUI());
+
+// ══════════════════════════════════════════════
+//  QUIZ MODE
+// ══════════════════════════════════════════════
+const QUIZ_Q = [
+  // Személyiség
+  "Mi a kedvenc évszakod?",
+  "Ha állat lennél, mi lennél?",
+  "Ha stresszes vagy, hogyan vezeted le?",
+  "Spontán vagy inkább tervező vagy?",
+  "Milyen helyzetben veszíted el a türelmed?",
+  "Mi dühít fel a legjobban?",
+  "Mi a legnagyobb félelmeted?",
+  "Miben vagy a legmakacsabb?",
+  "Mi a legjobb tulajdonságod?",
+  "Mi a legnagyobb gyengeséged?",
+  "Miből merítesz energiát?",
+  "Miből lesz jobb a kedved?",
+  "Autóban inkább vezetsz vagy ülsz?",
+  "Ha megbántanak, hogyan reagálsz?",
+  "Milyen döntéshozó vagy?",
+  // Ételek
+  "Mi a kedvenc ételed?",
+  "Mit nem ennél meg soha?",
+  "Mi a kedvenc desszerted?",
+  "Milyen konyhát szeretsz a legjobban?",
+  "Milyen pizzát rendelsz általában?",
+  "Ha alkoholt iszol, mit választasz?",
+  "Mit főznél egy romantikus vacsorára?",
+  "Melyik gyorsétterem a kedvenced?",
+  "Mi az első szempont ha éttermet választasz?",
+  "Mi a kedvenc nassod?",
+  // Szórakozás
+  "Mi a kedvenc filmműfajod?",
+  "Melyik sorozatot nézted végig legtöbbször?",
+  "Milyen zenét hallgatsz a legtöbbet?",
+  "Ki a kedvenc előadód?",
+  "Milyen könyvet olvasol szívesen?",
+  "Mi a legjobb film amit valaha láttál?",
+  "Mi a kedvenc videojátékod?",
+  "Melyik műsor elé ülsz le mindig?",
+  // Utazás
+  "Mi az álomutazásod?",
+  "Melyik országba mennél el a legjobban?",
+  "Repülőn ablak vagy folyosó?",
+  "Melyik városban élhetnél külföldön?",
+  "Mire költesz legtöbbet utazás közben?",
+  "Szeretsz repülni?",
+  "Melyik helyre mennél vissza szívesen?",
+  "Mennyire tervezed meg az utazást előre?",
+  // Kapcsolat
+  "Hol találkoztatok először?",
+  "Mi volt az első benyomásod a párodról?",
+  "Ki mondott szerelmet először?",
+  "Mi volt az első veszekedésetek tárgya?",
+  "Kinek van igaza vitában általában?",
+  "Mi a kedvenc közös programotok?",
+  "Mikor érezted először hogy ez komoly?",
+  "Mi a közös álmotok a jövőben?",
+  "Mit szeretsz a legjobban a párodban?",
+  "Mi az ami mindig összehoz titeket?",
+  // Munka
+  "Szereted a munkádat?",
+  "Mi lenne az álommunkád?",
+  "Mi a legnagyobb szakmai álmod?",
+  "Mi volt az első munkád?",
+  "Melyik területen vagy a legtehetségesebb?",
+  "Mit csinálnál ha nem kellene dolgoznod?",
+  // Gyerekkor
+  "Hol nőttél fel?",
+  "Van testvéred?",
+  "Mi volt a kedvenc játékod gyerekként?",
+  "Jó tanuló voltál?",
+  "Mi akartál lenni gyerekként?",
+  "Mi a legszebb gyerekkori emléked?",
+  "Volt kedvenc tanárod?",
+  "Milyen voltál középiskolás korban?",
+  "Ki volt a kedvenc mesehősöd?",
+  "Volt háziállatod gyerekként?",
+  "Sportoltál fiatalon?",
+  "Mi a legszégyenteljesebb gyerekkori emléked?",
+  "Ki volt a legjobb barátod gyerekkorban?",
+  "Min csaltál kicsit gyerekként?",
+  // Napi rutin
+  "Hány órakor ébredsz általában?",
+  "Hány órakor mész el aludni?",
+  "Hány ébresztőt állítasz be?",
+  "Mi az első dolgod reggel?",
+  "Mikor szoktál ruhákat vásárolni?",
+  "Van napi rutinod?",
+  "Mennyit vagy a telefonon naponta?",
+  "Hány pohár vizet iszol naponta?",
+  "Mit csinálsz ha nem tudsz elaludni?",
+  // Értékek és élet
+  "Mi a legfontosabb dolog az életedben?",
+  "Szeretnél gyereket?",
+  "Hol képzeled el magad 10 év múlva?",
+  "Miről nem tudnál lemondani?",
+  "Mit tartasz az élet legszebb pillanatának?",
+  "Miben szeretnél fejlődni?",
+  "Mi az életcélod röviden?",
+  "Melyik ember hatott rád a legjobban?",
+  "Mire vagy a legbüszkébb magadban?",
+  "Ha egy dolgot taníthatnál a gyerekeidnek, mi lenne az?",
+  "Milyen örökséget hagynál magad után?",
+  "Mi az életed mottója?",
+  "Mi az amit még mindenképpen meg akarsz csinálni az életedben?",
+  // Barátok és család
+  "Hány közeli barátod van?",
+  "Ki a legjobb barátod?",
+  "Milyen a kapcsolatod a szüleiddel?",
+  "Melyik rokonodhoz vagy a legközelebb?",
+  "Sok vagy kevés barátot preferálsz?",
+  "Milyen barát vagy te magad?",
+  "Hány éve van a leghosszabb barátságod?",
+  "Kit hívnál éjjel kettőkor ha bajban lennél?",
+  // Képzelet és játék
+  "Ha lottónyertes lennél, mit vennél meg először?",
+  "Melyik szupererőt választanád?",
+  "Ha egy napig más lehetnél, ki lennél?",
+  "Melyik korszakban éltél volna szívesen?",
+  "Ha csak egy dalt hallhatnál örökre, mi lenne az?",
+  "Melyik filmben élnél szívesen?",
+  "Túlélnél egy lakatlan szigeten egyedül?",
+  "Mit vinnél magaddal egy lakatlan szigetre?",
+  "Tudnál egy hétig telefon nélkül élni?",
+  "Mi az amit mindenki csinál, de te nem?",
+  "Ha visszamehetnél időben, mikor mennél vissza?",
+  "Mi a titkos tehetséged?",
+  "Miben gondolod hogy jobb vagy másoknál?",
+  "Ha átírnál egy dolgot a múltadban, mi lenne az?",
+  // Vicces és párkapcsolat
+  "Mi volt az utolsó hazugságod?",
+  "Mi volt az első gondolatod a párodról?",
+  "Mit titkolnál el szívesen a párod elől?",
+  "Mi nevettet meg a legjobban?",
+  "Melyik szokásodat utálja a párod a legjobban?",
+  "Mi a legostobább dolog amit valaha tettél?",
+  "Mit kérnél a Mikulástól idén?",
+  "Ha egy napig a párod lennél, mit csinálnál?",
+  "Mit tudnak csak rólad, amit más nem?",
+  "Melyik hírességgel csalnál — szabad lap?",
+  "Mi volt a legkínosabb randevú élményed?",
+  "Amin vitatkoztok a legtöbbet?",
+  "Ha be kellene mutatnod a párod egy mondatban, mit mondanál?",
+  "Mi volt az első ajándék amit a párodtól kaptál?",
+  "Mit gondolsz, mit mondana rólad a párod most?",
+  // Jövő
+  "Hol látnád magad 5 év múlva?",
+  "Mi a következő nagy álmod?",
+  "Milyen házban élnél szívesen?",
+  "Van valami amit mindenképpen meg akarsz tanulni?",
+  "Mi az amit idén még meg akarsz csinálni?",
+  "Nyitnál valaha saját vállalkozást?",
+  "Mibe fektetnéd a megtakarításaidat?",
+  "Mi az a projekt amit régóta halasztasz?",
+  // Önismeret
+  "Hogyan írnád le magad három szóval?",
+  "Miben változtál a legtöbbet az utóbbi években?",
+  "Mi az amit nehezen fogadsz el másoktól?",
+  "Milyen helyzetben érzed magad a legjobban?",
+  "Miben szoktál kételkedni magadban?",
+  "Mi az amit a legtöbben félreértenek benned?",
+  "Mitől szoktál igazán boldog lenni?",
+  "Mi az amit sosem hagynál annyiban?",
+  "Hogyan kezeled a kudarcot?",
+  "Milyen ember szeretnél lenni 10 év múlva?",
+  // Pikáns
+  "Melyik a legszokatlanabb hely, ahol szeretkeztél?",
+  "Milyen szexuális aktust csináltál, amit soha többé nem fogsz megtenni?",
+  "Mit szeretsz az előjáték során?",
+  "Mi a kedvenc pozíciód?",
+  "Melyik volt a legjobb orgazmusod?",
+  "Mi az első piszkos dolog, amit megtennél, ha ellenkező nemként ébrednél fel?",
+  "Melyik a legvadabb fantáziád, ami valóra vált?",
+  "Milyen volt az első szex élményed?",
+  "Mi a legőrültebb egyéjszakás történeted?",
+  "Melyik a legkalandosabb hely, ahol szívesen szexelnél?",
+  "Mi a kedvenc módja az intimitás kezdeményezésének?",
+  "Leghosszabb szex — meddig tartott?",
+  "Mi a legemlékezetesebb szexuális szerepjátékod?",
+  "Mi az a bűnös élvezet, ami beindít?",
+  "Mi a legnagyobb bizonytalanságod magaddal kapcsolatban az ágyban?",
+  "Ki volt a titkos szerelmed gyerekkorodban?",
+  "Melyik testrészt csókolnád szívesebben az ajkakon kívül?",
+  "Mikor volt az első orgazmusod?",
+  "Írd le a legforróbb outfitedet!",
+  "Mi volt eddig a legrosszabb szexuális élményed?",
+  "Mikor maszturbáltál utoljára?",
+  "Mennyi ideig bírtad ki szex nélkül?",
+  "Mi volt a legkülönlegesebb dolog, amit szex közben csináltál?",
+  "Mi a kedvenc pornófajtád?",
+  "Mi okoz neked orgazmust szex közben?",
+  "Milyen szexuális segédeszközt szeretnél legközelebb kipróbálni?",
+  "Ha a párod valamelyik híresség hasonmása lenne, ki lenne az?",
+  "Hány szex partnered volt?",
+  "Hány emberrel csókolóztál?",
+  "Hány emberrel irkáltál egyszerre egy időben?",
+  // Pikáns 2
+  "Mi az a helyzet, amikor a legjobban érzed magad az ágyban?",
+  "Mit gondolsz, melyik testrészed a legcsábítóbb?",
+  "Mikor volt az utolsó alkalom hogy igazán szenvedélyes volt a szex?",
+  "Mi volt a legrövidebb szex amiben részt vettél?",
+  "Mi tesz valakit azonnal vonzóvá számodra?",
+  "Melyik napszakban szeretsz a legjobban szexelni?",
+  "Mi volt a legmerészebb üzenet amit valaha küldtél?",
+  "Mi a legemlékezetesebb csókod?",
+  "Mi az a szexuális fantáziád amit még soha nem mondtál el senkinek?",
+  "Milyen ruhában érzed magad a legszexibbnek?",
+  "Mikor voltál utoljára igazán kívánt?",
+  "Mit tennél ha a párod egy egész napot az ágyban tölthetne veled?",
+  "Mi az a dolog amit a párod csinál ami azonnal beindít?",
+  "Mi a leghosszabb csók amiben részed volt?",
+  "Mi volt a legvadabb helyszín ahol csókolóztál?",
+  "Milyen intim szituációban érezted magad a legkényelmetlenebbül?",
+  "Mit mondanál ha a párod azt kérné tőled amit soha nem csináltál még?",
+  "Mi a legmerészebb dolog amit valaha tettél egy randin?",
+  "Mit tennél ha egy éjszakára teljesen szabad kezet kapnál?",
+  "Milyen hangokat adsz ki szex közben?",
+  "Melyik testrészt találod a legizgalmasabbnak a párodban?",
+  "Mi az amit sosem hagynál ki az előjátékból?",
+  "Milyen tempót preferálsz az ágyban?",
+  "Mitől lesz igazán emlékezetes egy szexuális élmény?",
+  "Mi az amit szívesen kipróbálnál de még sosem merted bevallani?",
+  "Hol szereted a legjobban ha megérintenek?",
+  "Mi az ami azonnal leállít téged szex közben?",
+  "Milyen érzés kell ahhoz hogy igazán átadd magad?",
+  "Mit tartasz a legnagyobb szexuális erényednek?",
+  "Mi az amit elvársz a partneredtől az ágyban?",
+];
+
+// ══════════════════════════════════════════════
+//  IGEN/NEM MODE
+// ══════════════════════════════════════════════
+const YESNO_ALAP = [
+  "Reggeli ember vagy?","Szoktál listát írni a teendőidről?","Szereted a rendet magad körül?",
+  "Szokott zavarni ha késnek?","Szoktál a telefonodra ébresztőt állítani?","Szoktál napközben aludni?",
+  "Szeret elmenni futni?","Rendszeresen sportolsz?","Szoktál naplót írni?","Szoktál meditálni?",
+  "Könnyű megnevettetni?","Szoktál sírni filmnézés közben?","Félénk ember vagy?","Szeretsz vitatkozni?",
+  "Szoktál bocsánatot kérni ha hibázol?","Nehezen engedsz el egy veszekedést?",
+  "Szoktál mások véleményére adni?","Szeretsz egyedül lenni néha?",
+  "Férsz hozzá a saját érzelmeidhez?","Szoktál sokat gondolkodni lefekvés előtt?",
+  "Szeretsz főzni?","Reggelizel minden nap?","Iszol kávét?","Szereted a fűszeres ételeket?",
+  "Eszel húst?","Próbáltál már vegetáriánus ételt szívesen?","Szoktál éjjel enni?",
+  "Szereted a tengeri herkentyűket?","Iszol alkoholt?","Szereted a bort?","Iszol sört?",
+  "Szereted az édességeket?","Szoktál diétázni?","Számolod a kalóriákat?","Szeretsz étterembe menni?",
+  "Inkább otthon eszel?","Kipróbálnál egzotikus ételeket?","Szereted a csípős ételeket?",
+  "Szoktál reggeli helyett kávéval beérni?","Szereted a csokoládét?",
+  "Szeretsz utazni?","Voltál már külföldön?","Szeretnél egyszer Ázsiában járni?","Szeretsz repülni?",
+  "Inkább a tengerparton pihensz?","Szívesebben mennél hegyekbe?","Szeretsz kempingezni?",
+  "Tudnál egy hétig internet nélkül élni?","Szeretsz fotózni útközben?","Elveszel ismeretlen helyen?",
+  "Tervezed meg az utazást előre?","Voltál már teljesen egyedül nyaralni?",
+  "Szívesebben utaznál párban?","Kipróbálnád az autós utazást Európán át?","Szeretsz múzeumokba menni?",
+  "Fontosnak tartod a fizikai közelséget?","Szoktál random kedvességet mutatni a párodnak?",
+  "Szeretsz meglepetést kapni?","Szeretsz meglepetést csinálni?",
+  "Szoktad kimondani hogy szereted a párod?","Félsz az elköteleződéstől?",
+  "Fontosnak tartod a közös időt?","Szoktál féltékeny lenni?",
+  "Meg tudod bocsátani a hűtlenséget?","Hiszel a hosszú távú kapcsolatban?",
+  "Szeretnél egyszer megházasodni?","Fontosnak tartod az évfordulókat?",
+  "Szoktál románcos gesztusokat tenni?","Szereted ha dédelgetnek?",
+  "Szoktál a párodra gondolni napközben?","Könnyű neked kifejezni az érzelmeidet?",
+  "Fontosnak tartod a közös jövőtervezést?","Szoktál a párodnak írt üzenetekre gyorsan válaszolni?",
+  "Zavarna ha a párod sok időt tölt barátaival?","Hiszel a szerelmes levelek erejében?",
+  "Szereted a munkádat?","Szeretnél egyszer saját vállalkozást indítani?","Dolgoznál külföldön?",
+  "Fontosabb neked a karrier mint a magánélet?","Szoktál túlórázni?",
+  "Otthonról is dolgozol néha?","Szeretsz csapatban dolgozni?","Jobban szeretsz egyedül dolgozni?",
+  "Stresszel a munka?","Volt már olyan hogy szívesen otthagytad volna mindent?",
+  "Szívesebben dolgoznál kreatív területen?","Fontosnak tartod a fizetést a munkaválasztásnál?",
+  "Szeretnél valaha korán nyugdíjba menni?","Tanulnál mellette ha jó ajánlatot kapnál?",
+  "Bírálod magad ha hibázol a munkában?",
+  "Fontos neked a baráti kör?","Van egy legjobb barátod akiben teljesen megbízol?",
+  "Szoktál barátokkal rendszeresen találkozni?","Jóban vagy a szüleiddel?",
+  "Fontosak neked a családi összejövetelek?","Tartod a kapcsolatot a régi barátaiddal?",
+  "Könnyen barátkozol új emberekkel?","Segítettél már barátnak anyagilag?",
+  "Volt már olyan barátod akivel megszakadt a kapcsolat?","Szoktál barátoknak tanácsot adni?",
+  "Alszol eleget általában?","Szoktál vitamint szedni?","Jársz rendszeresen orvoshoz?",
+  "Odafigyelsz arra amit eszel?","Szoktál eleget mozogni?","Volt már komolyabb betegséged?",
+  "Dohányzol?","Szoktál kávézás helyett teát inni?",
+  "Elvennéd a fájdalomcsillapítót azonnal ha fáj valamid?","Szereted a saját tested?",
+  "Aktív vagy a közösségi médiában?","Poszolsz rendszeresen?",
+  "Zavar ha az ételt lefotózzák evés előtt?","Szoktál éjjel is telefonozni?",
+  "Követed az exedet a közösségi médiában?","Zavarna ha a párod az exét követi?",
+  "Szívesebben hívod fel az embereket mint hogy írsz?","Olvasol híreket naponta?",
+  "Volt már úgy hogy a telefon miatt veszekedtetek?","Szoktál fizetni telefonnal?",
+  "Van valami amitől nagyon félsz?","Félsz a magasságtól?","Félsz a pókoktól?",
+  "Félsz a sötétben?","Félsz a repüléstől?","Volt már pánikrohamod?",
+  "Szoktál rémálmot látni?","Van olyan titkod amit senki sem tud?",
+  "Csaltál már vizsgán?","Mondtál már olyat amire nem vagy büszke?",
+  "Boldog gyerekkorod volt?","Jó tanuló voltál?","Sokat verekedtél gyerekként?",
+  "Volt már komoly baleset gyerekként?","Hazudtál sokat a szüleidnek?",
+  "Volt kedvenc tanárod?","Sportoltál fiatalon?","Beleszerettél már tanárodba?",
+  "Volt titkos szerelmed?","Kerültél valaha büntetőbe az iskolában?",
+  "Hiszel a sorsban?","Hiszel a szerelmes első látásra?","Fontosnak tartod a hűséget?",
+  "Megbocsátó ember vagy?","Igazságos ember vagy?","Adsz pénzt hajléktalannak?",
+  "Hintedsz el apró jótetteket?","Fontosnak tartod a becsületet?",
+  "Van erős politikai véleményed?","Fontosnak tartod a vallást?",
+  "Szoktál fennhangon nevetni?","Nevetséges helyzetbe kerültél már nyilvánosan?",
+  "Vállalod a karaokét?","Táncolsz ha jó zene szól?","Énekelgetsz zuhany alatt?",
+  "Szoktál dallamot dúdolni menet közben?","Tudsz viccet mesélni jól?",
+  "Szívesen csináltál volna már valami őrültséget spontánul?",
+  "Voltál már úgy hogy nevettél a rossz pillanatban?","Szoktál magadon nevetni?",
+  "Szoktál béka- vagy cicavideókat nézni?","Van kedvenc mémed?",
+  "Csináltál már olyat ami után azt mondtad: 'ezt senkinek nem mondom el'?",
+  "Volt már véletlen küldtél üzenetet a rossz embernek?",
+  "Kaptál már visszautasítást és nevettél rajta?",
+  "Könnyen elfogadod a kritikát?","Szoktál elnézést kérni ha tévedtél?",
+  "Fejlődni akarsz folyamatosan?","Szoktál önmagadat elemezni?","Jártál már terápiára?",
+  "Megnéztél már önismereti könyvet?","Elégedett vagy az életeddel most?",
+  "Szoktál hálás lenni a mindennapokban?","Volt olyan döntésed ami megváltoztatta az életedet?",
+  "Tudsz nemet mondani ha kell?",
+  "Szeretsz bevásárolni?","Szoktál impulzusvásárlást csinálni?","Takarékos ember vagy?",
+  "Van megtakarításod?","Vezetsz autót?","Szeretsz autót vezeti?",
+  "Elvállalnál egy hosszú autóutat egyedül?","Élnél egy kisvárosban?",
+  "Álmodtál már nagyvárosban élni?","Van háziállatod?","Szeretnél háziállatot?",
+  "Szoktál virágot vásárolni magadnak?","Szeretsz kertészkedni?",
+  "Tudnál egy hónapig luxus nélkül élni?","Odafigyelsz a pénzügyi terveidre?",
+  "Csináltál már olyat amiről azt mondtad: 'soha többé'?","Segítesz idegeneknek is ha bajban vannak?",
+  "Szoktál elgondolkodni az élet értelmén?","Félsz a haláltól?",
+  "Volt már olyan hogy teljesen eleged lett mindenből?","Hiszel a második esélyekben?",
+  "Szoktál szívességet kérni másoktól?",
+  "Van olyan dolog amit nagyon szeretnél de még nem merted megtenni?",
+  "Boldog ember vagy?","Ha visszanézel az eddigi életedre — elégedett vagy?",
+];
+
+const YESNO_PIKANS = [
+  "Szeretsz csókolózni?","Fontos neked az előjáték?","Megcsaltál már valakit?",
+  "Szereted a vanília szexet?","Szereted az agresszívabb szexet?","Próbáltál már szerepjátékot?",
+  "Szereted ha a párod irányít?","Szívesebben irányítasz te?","Fontos neked a szex a kapcsolatban?",
+  "Tudnál egy hétig szex nélkül élni?","Szereted ha meglepnek?",
+  "Próbáltál már valami újat a hálószobában?","Volt már egésznapos ágyban maradós hétvégéd?",
+  "Szeretsz masszázst adni?","Szeretsz masszázst kapni?",
+  "Fontosabb neked az érzelmi intimitás mint a fizikai?","Hálóban való öltözékre odafigyelsz?",
+  "Szívesebben hallgatsz zenét közben?","Zavart már valaki közben?",
+  "Volt már emlékezetes helyszínes kalandod?","Szeretsz gyertyafényes légkört?",
+  "Küldenél pikáns üzenetet a párodnak?","Kaptál már olyat és meglepett?",
+  "Szereted a hosszú csókos jeleneteket filmekben?",
+  "Volt már olyan hogy a fáradtság ellenére is igen volt a válasz?",
+  "Szereted a közelséget alvás közben is?","Fontosnak tartod a fizikai vonzalmat a kapcsolatban?",
+  "Szeretsz bókot kapni a megjelenésedre?","Mondasz te is bókot a párodnak a megjelenéséről?",
+  "Van valami amit mindig is ki szerettél volna próbálni?",
+  "Szívesebben vagy reggel vagy este intim?","Zavarna ha a párod egy ex-baráttal van kettesben?",
+  "Féltékeny lettél már a párod munkatársára?",
+  "Volt már olyan álmod a párodról ami zavarba hozott?","Tartasz csábítónak magad?",
+  "Szoktad mondani a párodnak hogy vonzónak találod?",
+  "Szívesebben mutatod ki az érzelmeid szavakkal vagy tettel?",
+  "Volt már olyan hogy a veszekedés után szenvedélyesebb lett az este?",
+  "Fontos neked hogy a párod vonzónak tartson?",
+  "Szoktál a párodra gondolni napközben ilyen szempontból is?",
+  "Szereted ha hosszan csókolnak?","Zavarba jössz ha romantikus helyzetbe kerülsz nyilvánosan?",
+  "Szívesebben tartod a kezét a párodnak az utcán?",
+  "Volt már spontán romantikus pillanatotok amire nem számítottál?",
+  "Fontosnak tartod hogy a párod is kezdeményezzen?",
+  "Kellemetlen neked ha a párod flörtöl valaki mással ártatlanul?",
+  "Tudsz nyíltan beszélni a párodddal az igényeidről?",
+  "Van olyan dolog amit soha nem mondtál el a párodnak ebben a témában?",
+  "Azt gondolod hogy a fizikai kapcsolatotok az évek alatt fejlődött?",
+  "Boldog vagy a kettőtök intimitásával?",
+];
+
+let YN = {
+  role:null, roomCode:null, category:null,
+  questions:[], answers:[], currentIdx:0,
+  guestCorrect:0, guestDrinks:0,
+};
+let ynCh = null;
+
+function ynGetQuestions(cat) {
+  const pool = cat === 'pikans' ? YESNO_PIKANS : [...YESNO_ALAP, ...YESNO_PIKANS];
+  const key = 'kb_yn_used_' + cat;
+  let used = [];
+  try { used = JSON.parse(localStorage.getItem(key) || '[]'); } catch {}
+  let available = Array.from({length:pool.length},(_,i)=>i).filter(i=>!used.includes(i));
+  if (available.length < 10) { used=[]; localStorage.setItem(key,'[]'); available=Array.from({length:pool.length},(_,i)=>i); }
+  const picked = shuffle(available).slice(0,10);
+  localStorage.setItem(key, JSON.stringify([...used,...picked]));
+  return picked.map(i => pool[i]);
+}
+
+async function ynCreate(cat) {
+  sbInit();
+  const code = randCode();
+  const {error} = await sb.from('game_rooms').upsert({id:code, question:{status:'waiting',type:'yn'}, answer_a:null, answer_b:null});
+  if (error) { showAlert('Hiba: '+error.message,'❌'); return; }
+  YN = { role:'host', roomCode:code, category:cat,
+    questions: ynGetQuestions(cat), answers:[], currentIdx:0, guestCorrect:0, guestDrinks:0 };
+  ynConnectCh(code);
+  document.getElementById('yn-host-code').textContent = code;
+  ynShowHostQ();
+  show('s-yesno-host-play');
+}
+
+async function ynJoin() {
+  sbInit();
+  const code = document.getElementById('yn-join-input').value.toUpperCase().trim();
+  if (code.length !== 4) { showAlert('4 karakteres kódot adj meg!','⚠️'); return; }
+  const {data,error} = await sb.from('game_rooms').select('question').eq('id',code).single();
+  if (error||!data) { showAlert('Nem található ez a szoba!','❌'); return; }
+  if (data.question?.complete) {
+    YN.questions = data.question.questions;
+    YN.answers   = data.question.answers;
+    ynConnectCh(code);
+    ynShowGuestQ();
+    show('s-yesno-guest-play');
+    return;
+  }
+  YN = { role:'guest', roomCode:code, category:null,
+    questions:[], answers:[], currentIdx:0, guestCorrect:0, guestDrinks:0 };
+  ynConnectCh(code);
+  setTimeout(()=>ynCh.send({type:'broadcast',event:'yn_guest_joined',payload:{}}),500);
+  show('s-yesno-guest-wait');
+}
+
+function ynConnectCh(code) {
+  if (ynCh) { ynCh.unsubscribe(); ynCh=null; }
+  ynCh = sb.channel('yn-'+code)
+    .on('broadcast',{event:'yn_progress'},({payload})=>{
+      if (YN.role!=='guest') return;
+      const pct=(payload.n/10)*100;
+      document.getElementById('yn-hostprog-fill').style.width=pct+'%';
+      document.getElementById('yn-hostprog-txt').textContent=payload.n+' / 10';
+    })
+    .on('broadcast',{event:'yn_host_complete'},({payload})=>{
+      if (YN.role!=='guest') return;
+      YN.questions=payload.questions; YN.answers=payload.answers;
+      ynShowGuestQ(); show('s-yesno-guest-play');
+    })
+    .on('broadcast',{event:'yn_guest_progress'},({payload})=>{
+      if (YN.role!=='host') return;
+      const pct=(payload.n/10)*100;
+      document.getElementById('yn-guestprog-fill').style.width=pct+'%';
+      document.getElementById('yn-guestprog-txt').textContent=payload.n+' / 10';
+      const el=document.getElementById('yn-guest-ans-'+payload.questionIdx);
+      if (el) {
+        el.textContent=(payload.answer==='igen'?'✅ Igen':'❌ Nem')+' — '+(payload.correct?'✅ Egyezett':'❌ Nem egyezett');
+        el.style.color=payload.correct?'var(--green)':'var(--red)';
+      }
+    })
+    .subscribe();
+}
+
+function ynShowHostQ() {
+  const idx=YN.currentIdx;
+  document.getElementById('yn-round-badge').textContent=`${idx+1} / 10`;
+  document.getElementById('yn-prog-fill').style.width=`${((idx+1)/10)*100}%`;
+  document.getElementById('yn-host-q').textContent=`„${YN.questions[idx]}"`;
+  document.getElementById('yn-cat-lbl') && (document.getElementById('yn-cat-lbl').textContent = YN.category==='pikans'?'🔥 Pikáns':'✅ Igen / Nem');
+  ['yn-igen-btn','yn-nem-btn'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el){el.disabled=false;el.style.opacity='1';}
+  });
+}
+
+function ynHostAnswer(answer) {
+  ['yn-igen-btn','yn-nem-btn'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el){el.disabled=true;el.style.opacity='.4';}
+  });
+  const selected=document.getElementById(answer==='igen'?'yn-igen-btn':'yn-nem-btn');
+  if(selected)selected.style.opacity='1';
+  YN.answers.push({q:YN.questions[YN.currentIdx], hostAnswer:answer});
+  ynCh.send({type:'broadcast',event:'yn_progress',payload:{n:YN.currentIdx+1}});
+  YN.currentIdx++;
+  if(YN.currentIdx>=10){
+    sb.from('game_rooms').update({question:{complete:true,type:'yn',questions:YN.questions,answers:YN.answers}}).eq('id',YN.roomCode);
+    ynCh.send({type:'broadcast',event:'yn_host_complete',payload:{questions:YN.questions,answers:YN.answers}});
+    const review=document.getElementById('yn-host-review');
+    if(review) review.innerHTML=YN.answers.map((a,i)=>`
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r-md);padding:12px 14px">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:4px">${i+1}. kérdés</div>
+        <div style="font-size:13px;color:var(--text2);margin-bottom:6px;line-height:1.4">${a.q}</div>
+        <div style="font-size:14px;font-weight:700;color:var(--gold)">${a.hostAnswer==='igen'?'✅ Igen':'❌ Nem'}</div>
+        <div id="yn-guest-ans-${i}" style="font-size:13px;font-weight:600;color:var(--muted);margin-top:4px">⏳ Párod még nem válaszolt</div>
+      </div>`).join('');
+    show('s-yesno-host-done');
+  } else {
+    setTimeout(()=>ynShowHostQ(),200);
+  }
+}
+
+function ynShowGuestQ() {
+  const idx=YN.currentIdx;
+  const d=YN.answers[idx];
+  document.getElementById('yn-guest-round').textContent=`${idx+1} / 10`;
+  document.getElementById('yn-guest-prog').style.width=`${((idx+1)/10)*100}%`;
+  document.getElementById('yn-drinks').textContent='🍺 '+YN.guestDrinks;
+  document.getElementById('yn-guest-q').textContent=`„${d.q}"`;
+  ['yn-guest-igen','yn-guest-nem'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el){el.disabled=false;el.style.opacity='1';el.style.borderWidth='2px';}
+  });
+  document.getElementById('yn-reveal').style.display='none';
+}
+
+function ynGuestAnswer(answer) {
+  const d=YN.answers[YN.currentIdx];
+  const correct=answer===d.hostAnswer;
+  if(correct) YN.guestCorrect++;
+  else YN.guestDrinks++;
+  ['yn-guest-igen','yn-guest-nem'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el){el.disabled=true;el.style.opacity='.4';}
+  });
+  document.getElementById('yn-drinks').textContent='🍺 '+YN.guestDrinks;
+  const rev=document.getElementById('yn-reveal');
+  rev.style.display='flex';
+  const banner=document.getElementById('yn-reveal-banner');
+  banner.textContent=correct?'✨ Egyezett!':'🍺 Nem egyezett — igyál egyet!';
+  banner.className='result-reveal '+(correct?'match':'nomatch');
+  const ansEl=document.getElementById('yn-reveal-answer');
+  ansEl.textContent=d.hostAnswer==='igen'?'✅ Igen':'❌ Nem';
+  ansEl.style.color=d.hostAnswer==='igen'?'var(--green)':'var(--red)';
+  ynCh.send({type:'broadcast',event:'yn_guest_progress',payload:{
+    n:YN.currentIdx+1, questionIdx:YN.currentIdx, answer, correct
+  }});
+  document.getElementById('yn-next-btn').textContent=YN.currentIdx>=9?'🏆 Eredmény!':'Következő →';
+}
+
+function ynGuestNext() {
+  YN.currentIdx++;
+  if(YN.currentIdx>=10) ynShowResults();
+  else ynShowGuestQ();
+}
+
+function ynShowResults() {
+  const pct=Math.round((YN.guestCorrect/10)*100);
+  document.getElementById('yn-correct').textContent=YN.guestCorrect+'/10';
+  document.getElementById('yn-pct').textContent=pct+'%';
+  document.getElementById('yn-drinks-r').textContent=YN.guestDrinks;
+  const msgs=[[90,'Lenyűgöző! Szinte telepátia van köztetek! 🏆'],[70,'Nagyon jól ismeritek egymást! ❤️'],[50,'Jó alap! Még van mit megismerni 😄'],[0,'Úgy látszik még sok titok van egymásban 😅']];
+  document.getElementById('yn-result-msg').textContent=msgs.find(([m])=>pct>=m)?.[1]||'';
+  show('s-yesno-results');
+}
+
+function ynLeave() {
+  if(ynCh){ynCh.unsubscribe();ynCh=null;}
+  YN={role:null,roomCode:null,category:null,questions:[],answers:[],currentIdx:0,guestCorrect:0,guestDrinks:0};
+}
+
+
+// Tracks used questions in localStorage so they don't repeat
+// for at least floor(149/10) = 14 games
+function pick10QuizQ() {
+  const total = QUIZ_Q.length;
+  let used = [];
+  try { used = JSON.parse(localStorage.getItem('kb_quiz_used') || '[]'); } catch {}
+
+  // Available = all indices not yet used
+  let available = Array.from({length: total}, (_,i) => i).filter(i => !used.includes(i));
+
+  // If fewer than 10 left, reset the pool
+  if (available.length < 10) {
+    used = [];
+    localStorage.setItem('kb_quiz_used', '[]');
+    available = Array.from({length: total}, (_,i) => i);
+  }
+
+  // Pick 10 random
+  const picked = shuffle(available).slice(0, 10);
+
+  // Save picked as used
+  localStorage.setItem('kb_quiz_used', JSON.stringify([...used, ...picked]));
+
+  return picked.map(i => QUIZ_Q[i]);
+}
+
+let QUIZ = {
+  role:null, roomCode:null, apiKey:null,
+  questions:[], answers:[], currentIdx:0,
+  guestCorrect:0, guestDrinks:0,
+};
+let quizCh = null;
+
+// ── Create / Join ───────────────────────────────────────────────
+async function quizCreate() {
+  const apiKey = document.getElementById('quiz-api-key').value.trim();
+  if (!apiKey) { showAlert('Add meg az OpenRouter API kulcsot!','⚠️'); return; }
+  sbInit();
+  const code = randCode();
+  const {error} = await sb.from('game_rooms').upsert({
+    id: code, question:{status:'waiting',type:'quiz'}, answer_a:null, answer_b:null
+  });
+  if (error) { showAlert('Hiba: '+error.message,'❌'); return; }
+  QUIZ = { role:'host', roomCode:code, apiKey,
+    model: document.getElementById('quiz-model').value.trim() || 'grok-4.20-0309-non-reasoning',
+    questions: pick10QuizQ(),
+    answers:[], currentIdx:0, guestCorrect:0, guestDrinks:0 };
+  quizConnectCh(code);
+  // Show code prominently before starting
+  document.getElementById('quiz-code-display').textContent = code;
+  openModal('modal-quiz-code');
+}
+
+function quizStartAnswering() {
+  closeModal('modal-quiz-code');
+  document.getElementById('quiz-host-code').textContent = QUIZ.roomCode;
+  quizShowHostQ();
+  show('s-quiz-host-play');
+}
+
+async function quizJoin() {
+  sbInit();
+  const code = document.getElementById('quiz-join-code').value.toUpperCase().trim();
+  if (code.length !== 4) { showAlert('4 karakteres kódot adj meg!','⚠️'); return; }
+  const {data, error} = await sb.from('game_rooms').select('question').eq('id', code).single();
+  if (error || !data) { showAlert('Nem található ez a szoba! Ellenőrizd a kódot.','❌'); return; }
+  QUIZ = { role:'guest', roomCode:code, apiKey:null,
+    questions:[], answers:[], currentIdx:0, guestCorrect:0, guestDrinks:0 };
+  // If host already done, load directly
+  if (data.question?.complete) {
+    QUIZ.questions = data.question.questions;
+    QUIZ.answers   = data.question.answers;
+    quizConnectCh(code);
+    quizShowGuestQ();
+    show('s-quiz-guest-play');
+    return;
+  }
+  quizConnectCh(code);
+  setTimeout(()=>quizCh.send({type:'broadcast',event:'quiz_guest_joined',payload:{}}),500);
+  show('s-quiz-guest-wait');
+}
+
+// ── Channel ─────────────────────────────────────────────────────
+function quizConnectCh(code) {
+  if (quizCh) { quizCh.unsubscribe(); quizCh = null; }
+  quizCh = sb.channel('quiz-'+code)
+    .on('broadcast',{event:'quiz_progress'},({payload})=>{
+      if (QUIZ.role!=='guest') return;
+      const pct=(payload.n/10)*100;
+      document.getElementById('quiz-hostprog-fill').style.width=pct+'%';
+      document.getElementById('quiz-hostprog-txt').textContent=payload.n+' / 10';
+    })
+    .on('broadcast',{event:'quiz_host_complete'},({payload})=>{
+      if (QUIZ.role!=='guest') return;
+      QUIZ.questions=payload.questions;
+      QUIZ.answers=payload.answers;
+      quizShowGuestQ();
+      show('s-quiz-guest-play');
+    })
+    .on('broadcast',{event:'quiz_guest_progress'},({payload})=>{
+      if (QUIZ.role!=='host') return;
+      const pct=(payload.n/10)*100;
+      document.getElementById('quiz-guestprog-fill').style.width=pct+'%';
+      document.getElementById('quiz-guestprog-txt').textContent=payload.n+' / 10';
+      // Update the review card with guest's answer
+      if (payload.questionIdx !== undefined) {
+        const guestEl = document.getElementById('quiz-guest-ans-'+payload.questionIdx);
+        if (guestEl) {
+          guestEl.textContent = '❤️ Párod: ' + payload.answerText;
+          guestEl.style.color = payload.correct ? 'var(--green)' : 'var(--red)';
+        }
+      }
+    })
+    .subscribe();
+}
+
+// ── Host: show question ─────────────────────────────────────────
+function quizShowHostQ() {
+  const idx = QUIZ.currentIdx;
+  document.getElementById('quiz-round-badge').textContent=`${idx+1} / 10`;
+  document.getElementById('quiz-prog-fill').style.width=`${((idx+1)/10)*100}%`;
+  document.getElementById('quiz-host-q').textContent=`„${QUIZ.questions[idx]}"`;
+  document.getElementById('quiz-host-answer').value='';
+  setQuizHostUI('idle');
+}
+
+function setQuizHostUI(state) {
+  const submitBtn = document.getElementById('quiz-host-submit-btn');
+  const loading   = document.getElementById('quiz-loading');
+  const error     = document.getElementById('quiz-error');
+  submitBtn.style.display = state==='loading' ? 'none' : 'flex';
+  submitBtn.disabled = false;
+  loading.style.display  = state==='loading' ? 'flex' : 'none';
+  error.style.display    = state==='error'   ? 'flex' : 'none';
+}
+
+let _lastAnswer = '';
+
+async function quizSubmitAnswer() {
+  const answer = document.getElementById('quiz-host-answer').value.trim();
+  if (!answer) { showAlert('Írj be egy választ!','⚠️'); return; }
+  _lastAnswer = answer;
+  setQuizHostUI('loading');
+
+  try {
+    const opts = await quizGenerateOptions(QUIZ.questions[QUIZ.currentIdx], answer);
+    QUIZ.answers.push({
+      q: QUIZ.questions[QUIZ.currentIdx],
+      hostAnswer: answer,
+      options: opts.shuffled,
+      correctIdx: opts.correctIdx,
+    });
+
+    // Broadcast progress to guest
+    quizCh.send({type:'broadcast',event:'quiz_progress',payload:{n: QUIZ.currentIdx+1}});
+
+    QUIZ.currentIdx++;
+
+    if (QUIZ.currentIdx >= 10) {
+      // Save to Supabase so late-joining guests can load
+      await sb.from('game_rooms').update({
+        question:{ complete:true, type:'quiz', questions:QUIZ.questions, answers:QUIZ.answers }
+      }).eq('id', QUIZ.roomCode);
+
+      quizCh.send({type:'broadcast',event:'quiz_host_complete',
+        payload:{questions:QUIZ.questions, answers:QUIZ.answers}});
+
+      // Show host's own answers as review
+      const review = document.getElementById('quiz-host-review');
+      if (review) {
+        review.innerHTML = QUIZ.answers.map((a,i) => `
+          <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r-md);padding:12px 14px">
+            <div style="font-size:11px;color:var(--muted);margin-bottom:4px">${i+1}. kérdés</div>
+            <div style="font-size:13px;color:var(--text2);margin-bottom:8px;line-height:1.4">${a.q}</div>
+            <div style="font-size:14px;font-weight:600;color:var(--gold);margin-bottom:4px">✍️ Te: ${a.hostAnswer}</div>
+            <div id="quiz-guest-ans-${i}" style="font-size:14px;font-weight:600;color:var(--muted)">⏳ Párod még nem válaszolt</div>
+          </div>`).join('');
+      }
+
+      show('s-quiz-host-done');
+    } else {
+      setQuizHostUI('idle');
+      quizShowHostQ();
+    }
+  } catch(err) {
+    document.getElementById('quiz-error-msg').textContent = err.message || 'Hiba történt. Próbáld újra!';
+    setQuizHostUI('error');
+  }
+}
+
+function quizRetry() {
+  setQuizHostUI('idle');
+  // Keep the answer the user typed
+  document.getElementById('quiz-host-answer').value = _lastAnswer;
+}
+
+// ── AI: generate 3 distractors ──────────────────────────────────
+async function quizCallModel(model, question, correct) {
+  const res = await fetch('https://api.x.ai/v1/chat/completions', {
+    method:'POST',
+    headers:{
+      'Authorization':'Bearer '+QUIZ.apiKey,
+      'Content-Type':'application/json',
+    },
+    body: JSON.stringify({
+      model,
+      messages:[{
+        role:'user',
+        content:(()=>{
+          const hasAccent = /[áéíóöőúüű]/i.test(correct);
+          const accentRule = hasAccent
+            ? `ÉKEZET: A helyes válaszban van ékezet. A hamis válaszokban IS legyenek magyar ékezetek (á,é,í,ó,ö,ő,ú,ü,ű).`
+            : `ÉKEZET — KRITIKUS: A helyes válaszban NINCS ékezet. A hamis válaszokban TILOS az á,é,í,ó,ö,ő,ú,ü,ű betűk használata. Csak a-z és a-z betűk megengedettek.`;
+          return `Te egy felnőtt páros társasjáték (18+) asszisztense vagy. Egy pár egymásról tippel — az egyik fél válaszol egy személyes kérdésre, a másik kitalálja mit mondott. Generálj pontosan 3 hamis de hihetőnek tűnő választ.
+
+Kérdés: "${question}"
+Helyes válasz: "${correct}"
+
+Szabályok:
+1. KATEGÓRIA: Ugyanolyan típusú válasz. Ha szám → számok. Ha étel → ételek. Ha intim → intimek.
+2. ${accentRule}
+3. HOSSZ: Közel azonos hossz és stílus.
+4. HIHETŐSÉG: Nehéz legyen kitalálni melyik a valódi.
+5. NEM ISMÉTLÉS: Ne fogalmazd át a helyes választ.
+Csak a 3 hamis választ írd, soronként egyet, semmi más szöveget.`;
+        })()
+      }],
+      max_tokens:300,
+      temperature:0.85,
+    })
+  });
+
+  const data = await res.json().catch(()=>({}));
+  if (data.error) throw new Error(data.error.message || 'Grok API hiba');
+  if (!res.ok)    throw new Error(`HTTP ${res.status}`);
+
+  const text = data.choices?.[0]?.message?.content || '';
+  return text;
+}
+
+async function quizGenerateOptions(question, correct) {
+  // Ha szám a válasz → JS generálja a hamis számokat, nem kell AI
+  const num = parseFloat(correct.trim().replace(',', '.'));
+  if (!isNaN(num) && /^[\d.,]+$/.test(correct.trim())) {
+    const fakes = new Set();
+    while (fakes.size < 3) {
+      const offset = Math.floor(Math.random() * 8) + 1;
+      const sign = Math.random() > 0.5 ? 1 : -1;
+      const fake = Math.max(0, Math.round(num + sign * offset));
+      if (fake !== num) fakes.add(String(fake));
+    }
+    const distractors = [...fakes];
+    const all = shuffle([correct, ...distractors]);
+    return { shuffled: all, correctIdx: all.indexOf(correct) };
+  }
+
+  const MODELS = [
+    QUIZ.model || 'grok-4.20-0309-non-reasoning',
+  ].filter((m,i,a) => m && a.indexOf(m)===i);
+
+  let text = '';
+  let lastErr = '';
+
+  for (const model of MODELS) {
+    try {
+      text = await quizCallModel(model, question, correct);
+      if (text) break;
+    } catch(e) {
+      lastErr = `[${model}] ${e.message}`;
+    }
+  }
+
+  if (!text) throw new Error('Minden modell hibát adott: ' + lastErr);
+
+  // Robust parsing — handles newlines, commas, semicolons, numbered lists
+  let distractors = text
+    .split(/[\n\r,;|]+/)
+    .map(l => l.replace(/^[-•*\d.):\s]+/, '').replace(/["„"]/g, '').trim())
+    .filter(l => l.length > 0 && l.toLowerCase() !== correct.toLowerCase())
+    .slice(0, 3);
+
+  // Ha kevesebb mint 3 jött vissza, elfogadjuk amit kaptunk
+  if (distractors.length === 0) throw new Error('Próbáld újra!');
+
+  // Ha csak 1-2 van, duplikáljuk egy kis variációval
+  while (distractors.length < 3) {
+    distractors.push(distractors[0]);
+  }
+
+  const all = shuffle([correct, ...distractors]);
+  return { shuffled: all, correctIdx: all.indexOf(correct) };
+}
+
+// ── Guest: show question ────────────────────────────────────────
+function quizShowGuestQ() {
+  const idx = QUIZ.currentIdx;
+  const d   = QUIZ.answers[idx];
+
+  document.getElementById('quiz-guest-round').textContent=`${idx+1} / 10`;
+  document.getElementById('quiz-guest-prog').style.width=`${((idx+1)/10)*100}%`;
+  document.getElementById('quiz-drinks').textContent='🍺 '+QUIZ.guestDrinks;
+  document.getElementById('quiz-guest-q').textContent=`„${d.q}"`;
+
+  const cont = document.getElementById('quiz-options-container');
+  cont.innerHTML = d.options.map((opt,i)=>`
+    <button class="quiz-opt-btn" id="qopt-${i}" onclick="quizGuestPick(${i})">
+      <div class="opt-letter">${String.fromCharCode(65+i)}</div>
+      <span>${opt}</span>
+    </button>`).join('');
+
+  document.getElementById('quiz-reveal').style.display='none';
+}
+
+function quizGuestPick(selectedIdx) {
+  const d = QUIZ.answers[QUIZ.currentIdx];
+  const correct = selectedIdx === d.correctIdx;
+
+  // Lock all buttons, highlight correct + wrong
+  d.options.forEach((_,i)=>{
+    const btn=document.getElementById('qopt-'+i);
+    if(!btn)return;
+    btn.disabled=true;
+    if (i===d.correctIdx) btn.classList.add('correct');
+    else if (i===selectedIdx) btn.classList.add('wrong');
+  });
+
+  if (correct) QUIZ.guestCorrect++;
+  else         QUIZ.guestDrinks++;
+
+  document.getElementById('quiz-drinks').textContent='🍺 '+QUIZ.guestDrinks;
+
+  // Reveal
+  const banner = document.getElementById('quiz-reveal-banner');
+  banner.textContent = correct
+    ? '✨ Eltaláltad! Jól ismered a párod!'
+    : '🍺 Nem találtad el — igyál egyet!';
+  banner.className = 'result-reveal '+(correct?'match':'nomatch');
+  document.getElementById('quiz-reveal-correct').textContent = d.hostAnswer;
+
+  const rev = document.getElementById('quiz-reveal');
+  rev.style.display='flex';
+
+  const isLast = QUIZ.currentIdx >= 9;
+  document.getElementById('quiz-next-btn').textContent = isLast ? '🏆 Eredmény!' : 'Következő →';
+
+  // Notify host with answer details
+  quizCh.send({type:'broadcast',event:'quiz_guest_progress',payload:{
+    n: QUIZ.currentIdx+1,
+    questionIdx: QUIZ.currentIdx,
+    answerText: d.options[selectedIdx],
+    correct,
+  }});
+}
+
+function quizGuestNext() {
+  QUIZ.currentIdx++;
+  if (QUIZ.currentIdx >= 10) quizShowResults();
+  else quizShowGuestQ();
+}
+
+// ── Results ─────────────────────────────────────────────────────
+function quizShowResults() {
+  const pct = Math.round((QUIZ.guestCorrect/10)*100);
+  document.getElementById('qr-correct').textContent = QUIZ.guestCorrect+'/10';
+  document.getElementById('qr-pct').textContent = pct+'%';
+  document.getElementById('qr-drinks').textContent = QUIZ.guestDrinks;
+  const msgs = [
+    [90,'Lenyűgöző! Szinte telepátia van köztetek! 🏆'],
+    [70,'Nagyon jól ismeritek egymást! ❤️'],
+    [50,'Jó alap! Még van mit felfedezni egymásban 😄'],
+    [0, 'Úgy látszik még sok titok van egymásban 😅 — érdemes játszani tovább!'],
+  ];
+  document.getElementById('quiz-result-msg').textContent =
+    msgs.find(([min])=>pct>=min)?.[1] || '';
+  show('s-quiz-results');
+}
+
+// ── Cleanup ──────────────────────────────────────────────────────
+function quizLeave() {
+  if (quizCh) { quizCh.unsubscribe(); quizCh=null; }
+  QUIZ = { role:null,roomCode:null,apiKey:null,
+           questions:[],answers:[],currentIdx:0,
+           guestCorrect:0,guestDrinks:0 };
+}
+
+</script>
+<!-- ══════════════════════════════════════
+     IGEN/NEM MODE SCREENS
+══════════════════════════════════════ -->
+
+<!-- YESNO: Lobby -->
+<div class="screen" id="s-yesno-lobby" style="justify-content:flex-start;gap:20px;padding-top:28px">
+  <div style="display:flex;align-items:center;gap:14px;width:100%">
+    <button class="back-btn" onclick="show('s-know-mode')">←</button>
+    <div>
+      <div class="s-title" style="font-size:22px;color:var(--green)">✅ Igen / Nem kérdések</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:3px">Személyiség, kapcsolat, mindennapok — megspékelve pár pikáns kérdéssel</div>
+    </div>
+  </div>
+
+  <div class="lobby-mode-card" onclick="ynCreate('alap')" style="border-color:rgba(90,189,112,.35);background:rgba(90,189,112,.07)">
+    <div style="display:flex;align-items:center;gap:16px">
+      <div class="lobby-mode-ico" style="background:rgba(90,189,112,.15);color:var(--green);font-size:24px">🏠</div>
+      <div style="flex:1">
+        <div class="lobby-mode-title" style="color:var(--green)">Szoba létrehozása</div>
+        <div class="lobby-mode-desc">Te hozod létre — párod csatlakozik a kóddal</div>
+      </div>
+      <div style="color:var(--green);font-size:20px;opacity:.6">→</div>
+    </div>
+  </div>
+
+  <div class="mp-divider"><span>VAGY CSATLAKOZZ</span></div>
+
+  <div class="lobby-join-card">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+      <span style="font-size:18px">❤️</span>
+      <div class="lobby-mode-title" style="color:var(--romantic)">Csatlakozás</div>
+    </div>
+    <div class="lobby-mode-desc" style="margin-bottom:14px">Van szobakódod? Írd be itt</div>
+    <input class="join-input" id="yn-join-input" maxlength="4" placeholder="XXXX"
+      oninput="this.value=this.value.toUpperCase()"
+      style="width:100%;font-size:28px;letter-spacing:.2em;margin-bottom:12px">
+    <button class="btn btn-primary" onclick="ynJoin()">Csatlakozás →</button>
+  </div>
+</div>
+
+<!-- YESNO: Host Playing -->
+<div class="screen" id="s-yesno-host-play" style="justify-content:flex-start;gap:16px;padding-top:18px">
+  <div class="game-topbar">
+    <button class="back-btn" onclick="ynLeave();show('s-yesno-lobby')">←</button>
+    <div class="round-num" id="yn-round-badge">1 / 10</div>
+    <div class="quiz-code-chip">Kód: <strong id="yn-host-code">----</strong></div>
+  </div>
+  <div class="prog-track"><div class="prog-fill" id="yn-prog-fill" style="width:10%;background:var(--green)"></div></div>
+  <div class="q-card" style="margin-top:8px">
+    <div class="q-cat-lbl" id="yn-host-cat-lbl" style="background:rgba(90,189,112,.15);color:var(--green)">✅ Igen / Nem</div>
+    <div class="q-text" id="yn-host-q"></div>
+  </div>
+  <div style="width:100%;display:flex;gap:12px;margin-top:8px">
+    <button class="btn" id="yn-igen-btn" onclick="ynHostAnswer('igen')"
+      style="background:rgba(90,189,112,.15);border:2px solid rgba(90,189,112,.4);color:var(--green);font-size:20px;font-weight:700;padding:24px 0;flex:1">
+      ✅ Igen
+    </button>
+    <button class="btn" id="yn-nem-btn" onclick="ynHostAnswer('nem')"
+      style="background:rgba(201,96,96,.12);border:2px solid rgba(201,96,96,.35);color:var(--red);font-size:20px;font-weight:700;padding:24px 0;flex:1">
+      ❌ Nem
+    </button>
+  </div>
+</div>
+
+<!-- YESNO: Host Done Waiting -->
+<div class="screen" id="s-yesno-host-done">
+  <div style="text-align:center;margin-top:4px">
+    <div style="font-size:48px;animation:hFloat 3s ease-in-out infinite">✅</div>
+    <div class="s-title" style="margin-top:12px;color:var(--green)">Mind a 10 kérdést megválaszoltad!</div>
+    <div style="font-size:13px;color:var(--muted);margin-top:6px">Párod most válaszolgat...</div>
+  </div>
+  <div class="card" style="display:flex;flex-direction:column;gap:10px;text-align:center">
+    <div style="font-size:12px;color:var(--muted)">Párod haladása</div>
+    <div class="prog-track"><div class="prog-fill" id="yn-guestprog-fill" style="width:0%;background:var(--romantic)"></div></div>
+    <div style="font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:700;color:var(--gold)" id="yn-guestprog-txt">0 / 10</div>
+  </div>
+  <div style="width:100%;font-size:12px;color:var(--muted);text-align:center;letter-spacing:.06em;text-transform:uppercase;font-weight:700">A te válaszaid</div>
+  <div style="width:100%;display:flex;flex-direction:column;gap:8px" id="yn-host-review"></div>
+  <button class="btn btn-outline" onclick="ynLeave();show('s-yesno-lobby')">← Kilépés</button>
+</div>
+
+<!-- YESNO: Guest Waiting -->
+<div class="screen" id="s-yesno-guest-wait">
+  <div style="text-align:center;margin-top:20px">
+    <div class="s-title" style="color:var(--romantic)">Csatlakozva! 🎉</div>
+    <div style="font-size:13px;color:var(--muted);margin-top:4px">Párod most válaszolja meg a kérdéseket</div>
+  </div>
+  <div style="font-size:64px;animation:hFloat 3s ease-in-out infinite;text-align:center">⏳</div>
+  <div class="card" style="display:flex;flex-direction:column;gap:10px;text-align:center">
+    <div style="font-size:12px;color:var(--muted)">Párod haladása</div>
+    <div class="prog-track"><div class="prog-fill" id="yn-hostprog-fill" style="width:10%;background:var(--green)"></div></div>
+    <div style="font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:700;color:var(--gold)" id="yn-hostprog-txt">1 / 10</div>
+  </div>
+  <div style="font-size:13px;color:var(--text2);text-align:center;padding:0 8px;line-height:1.6">
+    💭 Mit gondolsz — Igent vagy Nemet nyomott a párod?
+  </div>
+  <button class="btn btn-outline" onclick="ynLeave();show('s-yesno-lobby')">← Kilépés</button>
+</div>
+
+<!-- YESNO: Guest Playing -->
+<div class="screen" id="s-yesno-guest-play" style="justify-content:center;gap:20px;padding-top:18px">
+  <div class="game-topbar">
+    <div style="width:38px"></div>
+    <div class="round-num" id="yn-guest-round">1 / 10</div>
+    <div class="drink-badge" id="yn-drinks">🍺 0</div>
+  </div>
+  <div class="prog-track"><div class="prog-fill" id="yn-guest-prog" style="width:10%;background:var(--romantic)"></div></div>
+  <div style="align-self:center;padding:6px 18px;border-radius:50px;background:rgba(212,120,138,.12);border:1.5px solid rgba(212,120,138,.35);font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--romantic)">❤️ Mit nyomott a párod?</div>
+  <div class="q-card" style="margin-top:4px">
+    <div class="q-cat-lbl" style="background:rgba(90,189,112,.15);color:var(--green)">✅ Igen / Nem</div>
+    <div class="q-text" id="yn-guest-q"></div>
+  </div>
+  <div style="width:100%;display:flex;gap:12px;margin-top:8px" id="yn-guest-btns">
+    <button class="btn" id="yn-guest-igen" onclick="ynGuestAnswer('igen')"
+      style="background:rgba(90,189,112,.12);border:2px solid rgba(90,189,112,.35);color:var(--green);font-size:20px;font-weight:700;padding:24px 0;flex:1">
+      ✅ Igen
+    </button>
+    <button class="btn" id="yn-guest-nem" onclick="ynGuestAnswer('nem')"
+      style="background:rgba(201,96,96,.1);border:2px solid rgba(201,96,96,.3);color:var(--red);font-size:20px;font-weight:700;padding:24px 0;flex:1">
+      ❌ Nem
+    </button>
+  </div>
+  <div id="yn-reveal" style="display:none;width:100%;flex-direction:column;gap:10px">
+    <div class="result-reveal" id="yn-reveal-banner"></div>
+    <div class="card" style="text-align:center;padding:16px">
+      <div style="font-size:11px;color:var(--muted);margin-bottom:6px">Párod válasza:</div>
+      <div style="font-size:28px;font-weight:700" id="yn-reveal-answer"></div>
+    </div>
+    <button class="btn btn-gold" id="yn-next-btn" onclick="ynGuestNext()">Következő →</button>
+  </div>
+</div>
+
+<!-- YESNO: Results -->
+<div class="screen" id="s-yesno-results" style="justify-content:center;gap:20px;padding-top:32px">
+  <div class="done-trophy">✅</div>
+  <div class="done-title">Eredmény!</div>
+  <div style="font-size:14px;color:var(--text2);text-align:center;line-height:1.65;padding:0 8px" id="yn-result-msg"></div>
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-val" id="yn-correct">—</div><div class="stat-lbl">Egyező<br>válasz</div></div>
+    <div class="stat-card"><div class="stat-val" id="yn-pct">—</div><div class="stat-lbl">Egyezési<br>arány</div></div>
+    <div class="stat-card"><div class="stat-val" id="yn-drinks-r">—</div><div class="stat-lbl">Ivás<br>ebben a körben</div></div>
+    <div class="stat-card"><div class="stat-val">10</div><div class="stat-lbl">Megválaszolt<br>kérdés</div></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-outline" onclick="ynLeave();show('s-start')">Főmenü</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     QUIZ MODE SCREENS
+══════════════════════════════════════ -->
+
+<!-- QUIZ: Create / Join -->
+<div class="screen" id="s-quiz-create" style="justify-content:flex-start;gap:20px;padding-top:28px;overflow-y:auto">
+
+  <div style="display:flex;align-items:center;gap:14px;width:100%">
+    <button class="back-btn" onclick="show('s-know-mode')">←</button>
+    <div>
+      <div class="s-title" style="font-size:22px;color:#4a9f8a">🧠 Mennyire ismered a párod?</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:3px">Találd ki mit válaszolt a párod</div>
+    </div>
+  </div>
+
+  <!-- Create -->
+  <div style="width:100%;display:flex;flex-direction:column;gap:10px;background:rgba(74,159,138,.06);border:1.5px solid rgba(74,159,138,.3);border-radius:var(--r-lg);padding:18px">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:4px">
+      <div class="lobby-mode-ico" style="background:rgba(74,159,138,.15);color:#4a9f8a;font-size:22px;width:42px;height:42px">🏠</div>
+      <div>
+        <div class="lobby-mode-title" style="color:#4a9f8a">Szoba létrehozása</div>
+        <div class="lobby-mode-desc">Te hozod létre — párod csatlakozik a kóddal</div>
+      </div>
+    </div>
+    <div style="font-size:12px;color:var(--muted)">xAI API kulcs:</div>
+    <input class="q-input" id="quiz-api-key" type="password" placeholder="xai-..." style="font-size:13px;padding:12px 14px">
+    <div style="font-size:12px;color:var(--muted)">AI modell:</div>
+    <input class="q-input" id="quiz-model" placeholder="grok-4.20-0309-non-reasoning" style="font-size:12px;padding:10px 14px;color:var(--muted)">
+    <button class="btn btn-quiz" onclick="quizCreate()" style="margin-top:4px">Szoba létrehozása →</button>
+  </div>
+
+  <div class="mp-divider"><span>VAGY CSATLAKOZZ</span></div>
+
+  <!-- Join -->
+  <div class="lobby-join-card">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+      <span style="font-size:18px">❤️</span>
+      <div class="lobby-mode-title" style="color:var(--romantic)">Csatlakozás</div>
+    </div>
+    <div class="lobby-mode-desc" style="margin-bottom:14px">Van szobakódod? Írd be itt</div>
+    <input class="join-input" id="quiz-join-code" maxlength="4" placeholder="XXXX"
+      oninput="this.value=this.value.toUpperCase()"
+      style="width:100%;font-size:28px;letter-spacing:.2em;margin-bottom:12px">
+    <button class="btn btn-primary" onclick="quizJoin()">Csatlakozás →</button>
+  </div>
+
+</div>
+
+<!-- QUIZ: Host Answering -->
+<div class="screen" id="s-quiz-host-play" style="justify-content:flex-start;gap:16px;padding-top:18px">
+  <div class="game-topbar">
+    <button class="back-btn" onclick="quizLeave();show('s-quiz-create')">←</button>
+    <div class="round-num" id="quiz-round-badge">1 / 10</div>
+    <div class="quiz-code-chip">Kód: <strong id="quiz-host-code">----</strong></div>
+  </div>
+  <div class="prog-track"><div class="prog-fill" id="quiz-prog-fill" style="width:10%;background:var(--gold)"></div></div>
+
+  <div class="q-card" style="margin-top:8px">
+    <div class="q-text" id="quiz-host-q"></div>
+  </div>
+
+  <textarea class="q-input" id="quiz-host-answer" placeholder="Írd be a válaszod..." rows="3" maxlength="120" style="resize:none;margin-top:4px"></textarea>
+
+  <div class="btn-row">
+    <button class="btn btn-gold" id="quiz-host-submit-btn" onclick="quizSubmitAnswer()">Küldés →</button>
+  </div>
+
+  <!-- Loading -->
+  <div id="quiz-loading" style="display:none;text-align:center;padding:16px 0;flex-direction:column;align-items:center;gap:10px">
+    <div class="quiz-spinner"></div>
+  </div>
+
+  <!-- Error -->
+  <div id="quiz-error" style="display:none;width:100%;padding:14px 16px;background:rgba(201,96,96,.1);border:1px solid rgba(201,96,96,.25);border-radius:var(--r-md);text-align:center;flex-direction:column;gap:10px">
+    <div style="font-size:13px;color:var(--red);font-weight:600" id="quiz-error-msg">Hiba történt. Próbáld újra!</div>
+    <button class="btn btn-outline" onclick="quizRetry()" style="padding:10px 20px;width:auto;align-self:center">↺ Újrapróbálás</button>
+  </div>
+</div>
+
+<!-- QUIZ: Host Waiting (after finishing) -->
+<div class="screen" id="s-quiz-host-done">
+  <div style="text-align:center;margin-top:4px">
+    <div style="font-size:48px;animation:hFloat 3s ease-in-out infinite">✅</div>
+    <div class="s-title" style="margin-top:12px;color:var(--green)">Mind a 10 kérdést megválaszoltad!</div>
+    <div style="font-size:13px;color:var(--muted);margin-top:6px">Párod most tippelget...</div>
+  </div>
+
+  <!-- Progress bar -->
+  <div class="card" style="display:flex;flex-direction:column;gap:10px;text-align:center">
+    <div style="font-size:12px;color:var(--muted)">Párod haladása</div>
+    <div class="prog-track"><div class="prog-fill" id="quiz-guestprog-fill" style="width:0%;background:var(--romantic)"></div></div>
+    <div style="font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:700;color:var(--gold)" id="quiz-guestprog-txt">0 / 10</div>
+  </div>
+
+  <!-- Host's own answers review -->
+  <div style="width:100%;font-size:12px;color:var(--muted);text-align:center;letter-spacing:.06em;text-transform:uppercase;font-weight:700">A te válaszaid</div>
+  <div style="width:100%;display:flex;flex-direction:column;gap:8px" id="quiz-host-review"></div>
+
+  <button class="btn btn-outline" onclick="quizLeave();show('s-start')">Főmenü</button>
+</div>
+
+<!-- QUIZ: Guest Waiting -->
+<div class="screen" id="s-quiz-guest-wait" style="justify-content:center;gap:22px">
+  <div style="text-align:center">
+    <div class="s-title" style="color:var(--romantic)">Csatlakozva! 🎉</div>
+    <div style="font-size:13px;color:var(--muted);margin-top:6px">Párod most válaszolja meg a kérdéseket</div>
+  </div>
+  <div style="font-size:64px;animation:hFloat 3s ease-in-out infinite;text-align:center">⏳</div>
+  <div class="card" style="display:flex;flex-direction:column;gap:12px;text-align:center">
+    <div style="font-size:13px;color:var(--muted)">Párod haladása</div>
+    <div class="prog-track"><div class="prog-fill" id="quiz-hostprog-fill" style="width:10%;background:var(--gold)"></div></div>
+    <div style="font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:var(--gold)" id="quiz-hostprog-txt">1 / 10</div>
+  </div>
+  <div style="font-size:13px;color:var(--text2);text-align:center;padding:0 8px;line-height:1.6">
+    💭 Amíg várakozol, gondolj bele — vajon mit válaszolna a párod a kérdésekre?
+  </div>
+  <button class="btn btn-outline" onclick="quizLeave();show('s-quiz-create')">← Kilépés</button>
+</div>
+
+<!-- QUIZ: Guest Playing -->
+<div class="screen" id="s-quiz-guest-play" style="justify-content:flex-start;gap:14px;padding-top:18px">
+  <div class="game-topbar">
+    <div style="width:38px"></div>
+    <div class="round-num" id="quiz-guest-round">1 / 10</div>
+    <div class="drink-badge" id="quiz-drinks">🍺 0</div>
+  </div>
+  <div class="prog-track"><div class="prog-fill" id="quiz-guest-prog" style="width:10%;background:var(--romantic)"></div></div>
+  <div style="align-self:center;padding:6px 18px;border-radius:50px;background:rgba(212,120,138,.12);border:1.5px solid rgba(212,120,138,.35);font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--romantic)">❤️ Mit válaszolt a párod?</div>
+  <div class="q-card" style="margin-top:4px">
+    <div class="q-text" id="quiz-guest-q"></div>
+  </div>
+
+  <div style="width:100%;display:flex;flex-direction:column;gap:10px" id="quiz-options-container"></div>
+
+  <!-- Reveal (hidden until answer) -->
+  <div id="quiz-reveal" style="display:none;width:100%;flex-direction:column;gap:10px">
+    <div class="result-reveal" id="quiz-reveal-banner"></div>
+    <div class="card" style="text-align:center;padding:16px">
+      <div style="font-size:11px;color:var(--muted);margin-bottom:6px">Párod válasza:</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--gold)" id="quiz-reveal-correct"></div>
+    </div>
+    <button class="btn btn-gold" id="quiz-next-btn" onclick="quizGuestNext()">Következő →</button>
+  </div>
+</div>
+
+<!-- QUIZ: Results -->
+<div class="screen" id="s-quiz-results" style="justify-content:center;gap:20px;padding-top:32px">
+  <div class="done-trophy">🧠</div>
+  <div class="done-title">Eredmény!</div>
+  <div style="font-size:14px;color:var(--text2);text-align:center;line-height:1.65;padding:0 8px" id="quiz-result-msg"></div>
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-val" id="qr-correct">—</div><div class="stat-lbl">Helyes<br>tipp</div></div>
+    <div class="stat-card"><div class="stat-val" id="qr-pct">—</div><div class="stat-lbl">Egyezési<br>arány</div></div>
+    <div class="stat-card"><div class="stat-val" id="qr-drinks">—</div><div class="stat-lbl">Ivás<br>ebben a körben</div></div>
+    <div class="stat-card"><div class="stat-val">10</div><div class="stat-lbl">Megválaszolt<br>kérdés</div></div>
+  </div>
+  <div class="btn-row" style="margin-top:8px">
+    <button class="btn btn-outline" onclick="quizLeave();show('s-start')">Főmenü</button>
+  </div>
+</div>
+
+<!-- QUIZ: Code Modal (shown after room creation) -->
+<div class="modal-ov" id="modal-quiz-code">
+  <div class="modal-box">
+    <div class="modal-ico">🏠</div>
+    <div class="modal-ttl">Szoba kész!</div>
+    <div class="modal-body">Mutasd ezt a kódot a párodnak mielőtt elkezded a válaszolást!</div>
+    <div class="room-code-big" id="quiz-code-display">----</div>
+    <div style="font-size:12px;color:var(--muted)">A párod írja be a Csatlakozás mezőbe</div>
+    <div class="modal-acts">
+      <button class="btn btn-quiz" onclick="quizStartAnswering()">Párom tudja a kódot — Kezdjük! ✍️</button>
+      <button class="btn btn-outline" onclick="quizLeave();closeModal('modal-quiz-code');show('s-quiz-create')">← Mégsem</button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
